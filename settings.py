@@ -3,7 +3,7 @@ import sqlite3, datetime
 TOKEN = ('5656787289:AAE8wT3rHr92ic0FkqGCIAcHDbYQtwZ5G5s')
 admin = [510441193]
 tworfive = [1612734022, 712230934, 510441193]
-homeworker = [510441193]
+homeworker = [510441193, 1918316145]
 BAN = [1620818073]
 
 

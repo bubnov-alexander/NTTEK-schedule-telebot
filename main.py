@@ -83,6 +83,7 @@ def bot_message(message):
 
                 elif message_to_bot == '📖дз📖' or message_to_bot == 'дз':
                     homework(bot, message.chat.id, InlineKeyboardMarkup, InlineKeyboardButton)
+                    print(f'Пользователь {message.from_user.username} запросил ДЗ! В', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
 
                 #Студенты группы 
                 elif message_to_bot == '👬студенты группы👬' or message_to_bot == 'студенты группы':

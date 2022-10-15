@@ -271,6 +271,7 @@ def mycallback(bot, callback):
                 f.close
                 bot.reply_to(message, f'Задание которое я добавил в Базу Данных:\n{message.text}', parse_mode='markdown')
                 homework(bot, message.chat.id, InlineKeyboardMarkup, InlineKeyboardButton)
+                print(f'Пользователь {message.from_user.username} изменил ДЗ! В', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
             bot.register_next_step_handler(callback.message, writehomework)
 
         if callback.data == (f'{predmeti[i]}DZ'):
