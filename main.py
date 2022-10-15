@@ -56,10 +56,10 @@ def bot_message(message):
 
                 #Меню
                 elif message_to_bot == '🔙назад' or message_to_bot == 'назад':
-                    menu(bot, message.chat.id, message.from_user)
+                    menu(bot, message, message)
 
                 elif message_to_bot == 'меню' or message_to_bot == 'menu':
-                    menu(bot, message.chat.id, message.from_user)
+                    menu(bot, message, message)
                 
                 #Пользователи из БД
                 elif message_to_bot == 'user' or message_to_bot == 'пользователи':
@@ -118,5 +118,3 @@ while True:
     except Exception as e:
         print(e)
         tm.sleep(15)
-
-# bot.polling(none_stop=True)

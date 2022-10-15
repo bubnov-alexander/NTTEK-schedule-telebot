@@ -23,10 +23,10 @@ def menu(bot, argument1, argument2):
     if argument1 in admin:
         item6 = KeyboardButton("Admin panel")
         markup.add(item1, item2, item3, item4, item5, item6)
-        bot.send_message(argument1, 'Выбери то, вот что я могу тебе предложить: '.format(argument2),  parse_mode='html', reply_markup=markup)
+        bot.send_message(argument1.chat.id, 'Выбери то, вот что я могу тебе предложить: '.format(argument2.from_user),  parse_mode='html', reply_markup=markup)
     else:
         markup.add(item1, item2, item3, item4, item5)
-        bot.send_message(argument1, 'Выбери то, вот что я могу тебе предложить: '.format(argument2),  parse_mode='html', reply_markup=markup)
+        bot.send_message(argument1.chat.id, 'Выбери то, вот что я могу тебе предложить: '.format(argument2.from_user),  parse_mode='html', reply_markup=markup)
 
 
 #Пары
@@ -227,10 +227,10 @@ def mycallback(bot, callback):
         zvonok(bot, callback)
 
     elif callback.data == 'back':
-        menu(bot, callback.message.chat.id, callback.from_user)
+        menu(bot, callback.message, callback)
 
     elif callback.data == 'close':
-        menu(bot, callback.message.chat.id, callback.from_user)
+        menu(bot, callback.message, callback)
 
     elif callback.data == '+1':
         global page 
