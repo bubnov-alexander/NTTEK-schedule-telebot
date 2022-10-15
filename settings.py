@@ -1,6 +1,6 @@
 import sqlite3, datetime
 
-TOKEN = ('5641742733:AAFjF171LR2NxdLKtu-6zSGrnx63U-W137U')
+TOKEN = ('5656787289:AAE8wT3rHr92ic0FkqGCIAcHDbYQtwZ5G5s')
 admin = [510441193]
 tworfive = [1612734022, 712230934, 510441193]
 homeworker = [510441193]
@@ -26,7 +26,7 @@ def db_table_val(message, bot):
     username = message.from_user.username
     people_id = message.chat.id
     today = datetime.date.today()
-    joindate = today.strftime('%d.%#m.%Y')
+    joindate = today.strftime('%d.%-m.%Y')
     cursor.execute(f'SELECT id FROM users WHERE user_id = {people_id} ')
     data = cursor.fetchone()
     if data is None:

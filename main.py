@@ -111,12 +111,11 @@ def bot_message(message):
 
 print ('Бот запущен\n', time.strftime('%d/%#m/%Y %H:%M'))
 
-# while True:
-#     try:
-#         bot.polling(none_stop=True)
-#     except Exception as e:
-#         print(e)
-#         tm.sleep(15)
+while True:
+    try:
+        bot.polling(none_stop=True)
+    except Exception as e:
+        print(e)
+        tm.sleep(15)
 
-
-bot.polling(none_stop=True)
+# bot.polling(none_stop=True)
