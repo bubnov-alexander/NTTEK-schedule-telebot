@@ -10,7 +10,6 @@ time = (datetime.datetime.now(tz))
 
 bot = telebot.TeleBot(TOKEN)
 
-
 #Действия после start
 @bot.message_handler(commands=['start'])
 def start_message(message):
@@ -67,19 +66,23 @@ def bot_message(message):
 
                 #Все группы у которых можно узнать расписание
                 elif message_to_bot == 'группы':
-                    # group(bot, message)
-                    markup = InlineKeyboardMarkup()
-                    url1 = InlineKeyboardButton (text = 'Сайт с расписанием: ', url= 'https://a.nttek.ru/')
-                    markup.add(url1)
-                    bot.send_message(message.chat.id, 'К сожелению сайт с парами сейчас недоступен, но ты можешь воспольззоваться другими функциями бота. \nДля этого напиши "меню"', parse_mode='html',reply_markup=markup)
+                    try:
+                        group(bot, message)
+                    except:
+                        markup = InlineKeyboardMarkup()
+                        url1 = InlineKeyboardButton (text = 'Сайт с расписанием: ', url= 'https://a.nttek.ru/')
+                        markup.add(url1)
+                        bot.send_message(message.chat.id, 'К сожелению сайт с парами сейчас недоступен, но ты можешь воспольззоваться другими функциями бота. \nДля этого напиши "меню"', parse_mode='html',reply_markup=markup)
 
                 #Все группы у которых можно узнать расписание
                 elif message_to_bot == '📋пары📋' or message_to_bot == 'пары':
-                    # group(bot, message)
-                    markup = InlineKeyboardMarkup()
-                    url1 = InlineKeyboardButton (text = 'Сайт с расписанием: ', url= 'https://a.nttek.ru/')
-                    markup.add(url1)
-                    bot.send_message(message.chat.id, 'К сожелению сайт с парами сейчас недоступен, но ты можешь воспольззоваться другими функциями бота. \nДля этого напиши "меню"', parse_mode='html',reply_markup=markup)
+                    try:
+                        group(bot, message)
+                    except:
+                        markup = InlineKeyboardMarkup()
+                        url1 = InlineKeyboardButton (text = 'Сайт с расписанием: ', url= 'https://a.nttek.ru/')
+                        markup.add(url1)
+                        bot.send_message(message.chat.id, 'К сожелению сайт с парами сейчас недоступен, но ты можешь воспольззоваться другими функциями бота. \nДля этого напиши "меню"', parse_mode='html',reply_markup=markup)
 
                 elif message_to_bot == '📖дз📖' or message_to_bot == 'дз':
                     homework(bot, message.chat.id, InlineKeyboardMarkup, InlineKeyboardButton)
@@ -110,7 +113,7 @@ def bot_message(message):
         bot.send_message(message.chat.id, 'Ты в БАНЕ чучело!!! \n Пиши @Kinoki445', parse_mode='html')   
         print(f'Забаненый пользователь {message.from_user.username} написал {message.text} в', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
 
-print ('Бот запущен\n', time.strftime('%d/%#m/%Y %H:%M'))
+print ('Бот запущен\n', time.strftime('%d/%-m/%Y %H:%M'))
 
 while True:
     try:
@@ -118,3 +121,6 @@ while True:
     except Exception as e:
         print(e)
         tm.sleep(15)
+
+
+# bot.polling(none_stop=True)

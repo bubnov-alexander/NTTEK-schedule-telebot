@@ -1,14 +1,16 @@
-from parser2 import *
-from myrandom import *
-from openfile import *
+from test import *
 from settings import *
-import pytz
+from parser import *
+import pytz,requests,json,time,random
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton, KeyboardButton, ReplyKeyboardMarkup
 
 tz = pytz.timezone('Asia/Yekaterinburg')
 page = 1
-
 predmeti = ['Теория вероятностей', 'Математика', 'Сопровождение ИС', 'ОС и среды ', 'Информационные технологии', 'ОБЖ']
+
+site = requests.get(f'https://erp.nttek.ru/api/schedule/legacy').text
+sitedate = json.loads(site)
+sitedate.sort(key=lambda x: time.mktime(time.strptime(x,"%d.%m.%Y")))
 
 #ГЛАВНОЕ МЕНЮ
 #argument1.chat.id
@@ -32,7 +34,7 @@ def menu(bot, argument1, argument2):
 #Пары
 def group(bot, message):
     markup = InlineKeyboardMarkup(row_width=3)
-    item1 = InlineKeyboardButton(text = "2ИС6", callback_data = '2is6')
+    item1 = InlineKeyboardButton(text = "2ИС6", callback_data = '2ИС6')
     item2 = InlineKeyboardButton(text = "2Р5", callback_data = "2r5")
     item3 = InlineKeyboardButton(text = "Расписание куратора", callback_data = "teacher")
     item4 = InlineKeyboardButton(text = "🔔Расписание звонков", callback_data = 'bells')
@@ -42,12 +44,14 @@ def group(bot, message):
 
 
 #ВЫБОР РАСПИСАНИЯ
-def parimiy(InlineKeyboardMarkup, InlineKeyboardButton, pari1, bot, callback, group, who):
+def parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, group, who):
     keyboard = InlineKeyboardMarkup()
     keyboard.row_width = 2
-    parserdef2(who, group)
-    for i in range(0, len(pari1)):
-        keyboard.add (InlineKeyboardButton(pari1[i], callback_data = f'{pari1[i]} {who}'))
+    site = requests.get(f'https://erp.nttek.ru/api/schedule/legacy').text
+    sitedate = json.loads(site)
+    sitedate.sort(key=lambda x: time.mktime(time.strptime(x,"%d.%m.%Y")))
+    for i in range(0, len(sitedate)):
+        keyboard.add (InlineKeyboardButton(f'{sitedate[i]} {who}', callback_data = f'{sitedate[i]} {who}'))
     bot.send_message(callback.message.chat.id, 'Выберите день на который хотите узнать расписание', parse_mode='html', reply_markup = keyboard)
 
 #ПРЕПОДЫ
@@ -78,11 +82,14 @@ def groupstudents(bot, message):
 
 #РАНДОМ
 def myrandom(bot, message):
-    randomman()
-    f1 = open('data/random.txt', 'r', encoding='UTF-8')
-    facts = f1.read()
+    file = open('data/Student.txt', 'r', encoding='UTF-8')
+    lines = []
+    for line in file:
+        lines.append(line)
+    random_line = random.choice(lines)
+    file.close()
     markup = ReplyKeyboardMarkup(resize_keyboard=True)
-    bot.send_message(message.chat.id, facts, parse_mode='html', reply_markup=markup)
+    bot.send_message(message.chat.id, random_line, parse_mode='html', reply_markup=markup)
 
 #О БОТЕ
 def aboutbot(bot, message):
@@ -194,34 +201,32 @@ def defuser2(bot, callback, InlineKeyboardMarkup, InlineKeyboardButton):
 
 # callback
 def mycallback(bot, callback):
-    if callback.data == '2is6':
-        parimiy(InlineKeyboardMarkup, InlineKeyboardButton, pari1, bot, callback, '.1.3.54', '2is6')
+    if callback.data == '2ИС6':
+        parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, 'group', '2ИС6')
         print(f'Пользователь {callback.from_user.username} запросил 2is6! В', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
-        for i in range(0, len(pari1)):
-            if callback.data == f"{pari1[i]} 2is6":
-                who  = '2is6'
-                openfile(f'par{who}/{pari1[i]}.txt', bot, callback, who)
+    for i in range(0, len(sitedate)):
+        if callback.data == (f'{sitedate[i]} 2ИС6'):
+            getpari(sitedate[i], 'group', "2ИС6", InlineKeyboardMarkup, InlineKeyboardButton, bot, callback)
 
-    elif callback.data == '2r5':
+    if callback.data == '2r5':
         if callback.message.chat.id not in tworfive:
             bot.send_message(callback.message.chat.id, 'Прости ты не из той группы!!! Хочешь смотреть расписание группы 2Р5 пиши создателю! @kinoki445', parse_mode='html')
             print(f'Пользователь {callback.from_user.username} запросил 2r5, но не смог получить, в', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
         else:
-            parimiy(InlineKeyboardMarkup, InlineKeyboardButton, pari1, bot, callback, '.2.3.45', '2r5')
-            print(f'Пользователь {callback.from_user.username} запросил 2r5! В', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
-        for i in range(0, len(pari1)):
-            if callback.data == f"{pari1[i]} 2r5":
-                who  = '2r5'
-                openfile(f'par{who}/{pari1[i]}.txt', bot, callback, who)
+            parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, 'group', '2Р5')
+            print(f'Пользователь {callback.from_user.username} запросил 2Р5! В', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
+    for i in range(0, len(sitedate)):
+        if callback.data == (f'{sitedate[i]} 2Р5'):
+            getpari(sitedate[i], 'group', "2Р5", InlineKeyboardMarkup, InlineKeyboardButton, bot, callback)
+                
 
-    
-    elif callback.data == 'teacher':
-        parimiy(InlineKeyboardMarkup, InlineKeyboardButton, pari1, bot, callback, '.16', 'teacher')
-        print(f'Пользователь {callback.from_user.username} запросил teacher! В', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
-        for i in range(0, len(pari1)):
-            if callback.data == f"{pari1[i]} teacher":
-                who = 'teacher'
-                openfile(f'par{who}/{pari1[i]}.txt', bot, callback, who)
+    if callback.data == 'teacher':
+        pass
+    #     parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, 'teacher', 'Зятикова ТЮ')
+    #     print(f'Пользователь {callback.from_user.username} запросил Зятикова ТЮ! В', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
+    # for i in range(0, len(sitedate)):
+    #     if callback.data == (f'{sitedate[i]} Зятикова ТЮ'):
+    #         getpari(sitedate[i], 'teacher', "Зятикова ТЮ", InlineKeyboardMarkup, InlineKeyboardButton, bot, callback)
     
     elif callback.data == 'bells':
         zvonok(bot, callback)
@@ -267,9 +272,9 @@ def mycallback(bot, callback):
                 text = message.text
                 f = open(f'data/homework/{para}.txt', 'a+', encoding='UTF-8')
                 date = datetime.datetime.now(tz).strftime('%d.%m.%Y')
-                f.write(f'Задание заданное {date} числа:\n{text}\n')
+                f.write(f'Задание заданное {date} числа:\n\n{text}\n')
                 f.close
-                bot.reply_to(message, f'Задание которое я добавил в Базу Данных:\n{message.text}', parse_mode='markdown')
+                bot.reply_to(message, f'Задание которое я добавил в Базу Данных:\n\n{message.text}', parse_mode='markdown')
                 homework(bot, message.chat.id, InlineKeyboardMarkup, InlineKeyboardButton)
                 print(f'Пользователь {message.from_user.username} изменил ДЗ! В', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
             bot.register_next_step_handler(callback.message, writehomework)
@@ -279,7 +284,6 @@ def mycallback(bot, callback):
             try:
                 f = open(f'data/homework/{para}.txt', 'r+', encoding='UTF-8')
                 text = f.read()
-                print(text)
                 bot.send_message(callback.message.chat.id, text, parse_mode='markdown')
                 f.close
             except:
