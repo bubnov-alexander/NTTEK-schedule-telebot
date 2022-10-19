@@ -20,19 +20,19 @@ def getpari(date, group, group_name, InlineKeyboardMarkup, InlineKeyboardButton,
                 name = i['name']
                 room = i['rooms']
                 teacher = i['teachers']
-                text = (text + '\n' + (str(f'Номер пары: {lesson}\nПара: {name} {room}\nПрепод: {teacher}\n')))
+                text = (text + '\n' + (f'**Номер пары:** {lesson}\n**Пара:** {name} {room}\n**Препод:** {teacher}\n'))
         
             keyboard = InlineKeyboardMarkup()
             keyboard.row_width = 2
             for i in range(0, len(sitedate)):
                 keyboard.add (InlineKeyboardButton(f'{sitedate[i]} {group_name}',callback_data = f'{sitedate[i]} {group_name}'))
-            bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'Расписание:\n {text} \nВыберите день на который хотите узнать расписание', reply_markup = keyboard)
+            bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'Расписание на {date}:\n __{text}__ \nВыберите день на который хотите узнать расписание', parse_mode='Markdown', reply_markup = keyboard)
         except:
             keyboard = InlineKeyboardMarkup()
             keyboard.row_width = 2
             for i in range(0, len(sitedate)):
                 keyboard.add (InlineKeyboardButton(f'{sitedate[i]} {group_name}',callback_data = f'{sitedate[i]} {group_name}'))
-            bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'Расписания НЕТУ!\nВыберите день на который хотите узнать расписание', reply_markup = keyboard)
+            bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'Расписания НЕТУ!\nВыберите день на который хотите узнать расписание', parse_mode='Markdown', reply_markup = keyboard)
     else:
         site = requests.get(f'https://erp.nttek.ru/api/schedule/legacy').text
         sitedate = json.loads(site)
