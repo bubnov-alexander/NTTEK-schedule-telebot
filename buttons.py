@@ -276,6 +276,7 @@ def mycallback(bot, callback):
                 f.close
                 bot.reply_to(message, f'Задание которое я добавил в Базу Данных:\n\n{message.text}', parse_mode='markdown')
                 homework(bot, message.chat.id, InlineKeyboardMarkup, InlineKeyboardButton)
+                bot.send_message(chat_id = 510441193, text = f'Зарегестрировался новый пользователь! {message.from_user.username}, {message.from_user.first_name}', parse_mode='Markdown')
                 print(f'Пользователь {message.from_user.username} изменил ДЗ! В', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
             bot.register_next_step_handler(callback.message, writehomework)
 
