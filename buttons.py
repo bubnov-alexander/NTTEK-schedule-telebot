@@ -8,9 +8,7 @@ tz = pytz.timezone('Asia/Yekaterinburg')
 page = 1
 predmeti = ['Теория вероятностей', 'Математика', 'Сопровождение ИС', 'ОС и среды ', 'Информационные технологии', 'ОБЖ']
 
-site = requests.get(f'https://erp.nttek.ru/api/schedule/legacy').text
-sitedate = json.loads(site)
-sitedate.sort(key=lambda x: time.mktime(time.strptime(x,"%d.%m.%Y")))
+
 
 #ГЛАВНОЕ МЕНЮ
 #argument1.chat.id
@@ -201,6 +199,9 @@ def defuser2(bot, callback, InlineKeyboardMarkup, InlineKeyboardButton):
 
 # callback
 def mycallback(bot, callback):
+    site = requests.get(f'https://erp.nttek.ru/api/schedule/legacy').text
+    sitedate = json.loads(site)
+    sitedate.sort(key=lambda x: time.mktime(time.strptime(x,"%d.%m.%Y")))
     if callback.data == '2ИС6':
         parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, 'group', '2ИС6')
         print(f'Пользователь {callback.from_user.username} запросил 2is6! В', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
@@ -211,7 +212,7 @@ def mycallback(bot, callback):
     if callback.data == '2r5':
         if callback.message.chat.id not in tworfive:
             bot.send_message(callback.message.chat.id, 'Прости ты не из той группы!!! Хочешь смотреть расписание группы 2Р5 пиши создателю! @kinoki445', parse_mode='html')
-            print(f'Пользователь {callback.from_user.username} запросил 2r5, но не смог получить, в', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
+            print(f'Пользователь {callback.from_user.username} запросил 2Р5, но не смог получить, в', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
         else:
             parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, 'group', '2Р5')
             print(f'Пользователь {callback.from_user.username} запросил 2Р5! В', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
@@ -272,11 +273,11 @@ def mycallback(bot, callback):
                 text = message.text
                 f = open(f'data/homework/{para}.txt', 'a+', encoding='UTF-8')
                 date = datetime.datetime.now(tz).strftime('%d.%m.%Y')
-                f.write(f'Задание заданное {date} числа:\n\n{text}\n')
+                f.write(f'Задание заданное {date} числа:\n\{text}\n\n')
                 f.close
-                bot.reply_to(message, f'Задание которое я добавил в Базу Данных:\n\n{message.text}', parse_mode='markdown')
+                bot.reply_to(message, f'Задание которое я добавил в Базу Данных:\n\n{message.text}\n', parse_mode='markdown')
                 homework(bot, message.chat.id, InlineKeyboardMarkup, InlineKeyboardButton)
-                bot.send_message(chat_id = 510441193, text = f'Зарегестрировался новый пользователь! {message.from_user.username}, {message.from_user.first_name}', parse_mode='Markdown')
+                bot.send_message(chat_id = 510441193, text = f'Добавил новое ДЗ! {message.from_user.username}, {message.from_user.first_name}', parse_mode='Markdown')
                 print(f'Пользователь {message.from_user.username} изменил ДЗ! В', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
             bot.register_next_step_handler(callback.message, writehomework)
 
@@ -288,7 +289,7 @@ def mycallback(bot, callback):
                 bot.send_message(callback.message.chat.id, text, parse_mode='markdown')
                 f.close
             except:
-                bot.send_message(callback.message.chat.id, 'Дз пока что нету!', parse_mode='markdown')
+                bot.send_message(callback.message.chat.id, f'Дз по {para} пока что нету!', parse_mode='markdown')
             
     cursor.execute('''SELECT * FROM users''')
     user = cursor.fetchall()
