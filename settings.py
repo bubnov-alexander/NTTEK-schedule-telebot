@@ -1,12 +1,6 @@
 import sqlite3, datetime
 
-TOKEN = ('5641742733:AAFjF171LR2NxdLKtu-6zSGrnx63U-W137U')
-PAYMENTS_TOKEN = ('3975332bf0807fb44f7fa347c2414a16')
-PHONE = '+79030785665'
-
-# 5656787289:AAE8wT3rHr92ic0FkqGCIAcHDbYQtwZ5G5s
-# 5641742733:AAFjF171LR2NxdLKtu-6zSGrnx63U-W137U
-
+TOKEN = ('5656787289:AAE8wT3rHr92ic0FkqGCIAcHDbYQtwZ5G5s')
 
 database = sqlite3.connect('db/database.db', check_same_thread=False)
 cursor = database.cursor()
