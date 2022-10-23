@@ -1,13 +1,11 @@
 import sqlite3, datetime
 
-TOKEN = ('5656787289:AAE8wT3rHr92ic0FkqGCIAcHDbYQtwZ5G5s')
+TOKEN = ('5641742733:AAFjF171LR2NxdLKtu-6zSGrnx63U-W137U')
+PAYMENTS_TOKEN = ('3975332bf0807fb44f7fa347c2414a16')
+PHONE = '+79030785665'
 
 # 5656787289:AAE8wT3rHr92ic0FkqGCIAcHDbYQtwZ5G5s
 # 5641742733:AAFjF171LR2NxdLKtu-6zSGrnx63U-W137U
-admin = [510441193]
-tworfive = [1612734022, 712230934, 510441193]
-homeworker = [510441193, 1918316145]
-BAN = []
 
 
 database = sqlite3.connect('db/database.db', check_same_thread=False)
@@ -22,6 +20,43 @@ cursor.execute ("""CREATE TABLE IF NOT EXISTS users(
     join_date DATETIME NOT NULL
     )""")
 database.commit()
+
+cursor.execute ("""CREATE TABLE IF NOT EXISTS admin(
+    id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
+    user_id INTEGER UNIQUE NOT NULL,
+    user_name TEXT NOT NULL,
+    username STRING,
+    join_date DATETIME NOT NULL
+    )""")
+database.commit()
+
+cursor.execute ("""CREATE TABLE IF NOT EXISTS tworfive(
+    id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
+    user_id INTEGER UNIQUE NOT NULL,
+    user_name TEXT NOT NULL,
+    username STRING,
+    join_date DATETIME NOT NULL
+    )""")
+database.commit()
+
+cursor.execute ("""CREATE TABLE IF NOT EXISTS homeworker(
+    id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
+    user_id INTEGER UNIQUE NOT NULL,
+    user_name TEXT NOT NULL,
+    username STRING,
+    join_date DATETIME NOT NULL
+    )""")
+database.commit()
+
+cursor.execute ("""CREATE TABLE IF NOT EXISTS ban(
+    id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
+    user_id INTEGER UNIQUE NOT NULL,
+    user_name TEXT NOT NULL,
+    username STRING,
+    join_date DATETIME NOT NULL
+    )""")
+database.commit()
+
 
 def db_table_val(message, bot):
     us_id = message.from_user.id

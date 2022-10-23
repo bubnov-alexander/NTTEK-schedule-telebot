@@ -13,6 +13,8 @@ bot = telebot.TeleBot(TOKEN)
 #Действия после start
 @bot.message_handler(commands=['start'])
 def start_message(message):
+    cursor.execute('''SELECT user_id FROM admin WHERE user_id = ?''', (message.chat.id, ))
+    admin = cursor.fetchall()[0]
     if message.chat.id not in admin:
         bot.send_message(message.from_user.id, f'Добро пожаловать, {message.from_user.first_name}', parse_mode='html')
         db_table_val(message, bot)
@@ -35,12 +37,14 @@ def callback(callback):
 #Действия когда пришёл текст
 @bot.message_handler(content_types=["text"])
 def bot_message(message):
-    cursor.execute(f'SELECT id FROM users WHERE user_id = {message.chat.id} ')
-    data = cursor.fetchone()
+    cursor.execute(f'''SELECT user_id FROM users''')
+    data = cursor.fetchall()
     message_to_bot = message.text.lower()
 
 #Проверка на список забаненых пользователей, а так же есть ли они в БД
-    if message.chat.id not in BAN:
+    cursor.execute(f'SELECT user_id FROM ban WHERE user_id = {message.chat.id} ')
+    ban = cursor.fetchall()
+    if message.chat.id not in ban:
         if data is None:
             bot.send_message(message.from_user.id, 'Привет, тебя нету в базе данных, не мог бы ты написать /start ?', parse_mode='html')
             print(f'Пользователь {message.from_user.username} {message.from_user.first_name} зарегестрировался! в', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
@@ -62,7 +66,13 @@ def bot_message(message):
                 
                 #Пользователи из БД
                 elif message_to_bot == 'user' or message_to_bot == 'пользователи':
-                    defuser(bot, message.chat.id, InlineKeyboardMarkup, InlineKeyboardButton)
+                    defuser(bot, message, InlineKeyboardMarkup, InlineKeyboardButton)
+
+                elif message_to_bot == 'права доступа' or message_to_bot == 'root':
+                    root(bot, message, message)
+
+                elif message_to_bot == 'admin panel':
+                    adminpanel(bot, message, message)
 
                 #Все группы у которых можно узнать расписание
                 elif message_to_bot == 'группы':
@@ -85,7 +95,7 @@ def bot_message(message):
                         bot.send_message(message.chat.id, 'К сожелению сайт с парами сейчас недоступен, но ты можешь воспольззоваться другими функциями бота. \nДля этого напиши "меню"', parse_mode='html',reply_markup=markup)
 
                 elif message_to_bot == '📖дз📖' or message_to_bot == 'дз':
-                    homework(bot, message.chat.id, InlineKeyboardMarkup, InlineKeyboardButton)
+                    homework(bot, message, InlineKeyboardMarkup, InlineKeyboardButton)
                     print(f'Пользователь {message.from_user.username} {message.from_user.first_name} запросил ДЗ! В', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
 
                 #Студенты группы 
@@ -115,13 +125,13 @@ def bot_message(message):
 
 print ('Бот запущен:',time.strftime('%d/%m/%Y %H:%M'))
 
-while True:
-    try:
-        bot.polling(none_stop=True)
-    except Exception as e:
-        print(e)
-        bot.send_message(chat_id = 510441193, text = f'В боте появилась ошибка\n{e}', parse_mode='Markdown')
-        tm.sleep(15)
+# while True:
+#     try:
+#         bot.polling(none_stop=True)
+#     except Exception as e:
+#         print(e)
+#         error(bot, e)
+#         tm.sleep(15)
 
 
-# bot.polling(none_stop=True)
+bot.polling(none_stop=True)
