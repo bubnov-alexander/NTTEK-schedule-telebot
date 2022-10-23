@@ -20,7 +20,7 @@ def menu(bot, argument1, argument2):
     item4 = KeyboardButton("📖ДЗ📖")
     item5 = KeyboardButton("📒О боте📒")
     cursor.execute('''SELECT user_id FROM admin WHERE user_id = ?''', (argument1.chat.id, ))
-    admin = cursor.fetchall()[0]
+    admin = cursor.fetchone()
     if argument1.chat.id not in admin:
         markup.add(item1, item2, item3, item4, item5)
         bot.send_message(argument1.chat.id, 'Выбери то, вот что я могу тебе предложить: '.format(argument2.from_user),  parse_mode='html', reply_markup=markup)
