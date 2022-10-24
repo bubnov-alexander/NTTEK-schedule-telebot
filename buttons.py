@@ -56,7 +56,13 @@ def parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, group, wh
     site = requests.get(f'https://erp.nttek.ru/api/schedule/legacy').text
     sitedate = json.loads(site)
     sitedate.sort(key=lambda x: time.mktime(time.strptime(x,"%d.%m.%Y")))
-    for i in range(0, len(sitedate)):
+
+    if (len(sitedate)) <= 5:
+        a = 0
+    else:
+        a = ((len(sitedate)) - 5)
+
+    for i in range(a, len(sitedate)):
         keyboard.add (InlineKeyboardButton(f'{sitedate[i]} {who}', callback_data = f'{sitedate[i]} {who}'))
     bot.send_message(callback.message.chat.id, 'Выберите день на который хотите узнать расписание', parse_mode='html', reply_markup = keyboard)
 
@@ -131,8 +137,7 @@ def homework(bot, message, InlineKeyboardMarkup, InlineKeyboardButton):
     except:
         markup = InlineKeyboardMarkup()
         para = InlineKeyboardButton(text = 'Выбрать предмет ', callback_data='dz')
-        hw = InlineKeyboardButton(text = 'Добавить ДЗ', callback_data= 'addhw')
-        markup.add(para,hw, row_width = 3)
+        markup.add(para, row_width = 3)
         bot.send_message(message.chat.id, text = 'Выбери что-то из предложенного: ', parse_mode='html', reply_markup=markup)
 
 
@@ -236,25 +241,29 @@ def mycallback(bot, callback):
     site = requests.get(f'https://erp.nttek.ru/api/schedule/legacy').text
     sitedate = json.loads(site)
     sitedate.sort(key=lambda x: time.mktime(time.strptime(x,"%d.%m.%Y")))
+    if (len(sitedate)) <= 5:
+        a = 0
+    else:
+        a = ((len(sitedate)) - 5)
 
     if callback.data == '2ИС6':
         parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, 'group', '2ИС6')
         print(f'Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил 2is6! В', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
-    for i in range(0, len(sitedate)):
+    for i in range(a, len(sitedate)):
         if callback.data == (f'{sitedate[i]} 2ИС6'):
             getpari(sitedate[i], 'group', "2ИС6", InlineKeyboardMarkup, InlineKeyboardButton, bot, callback)
 
     if callback.data == '2r5':
             parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, 'group', '2Р5')
             print(f'Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил 2Р5! В', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
-    for i in range(0, len(sitedate)):
+    for i in range(a, len(sitedate)):
         if callback.data == (f'{sitedate[i]} 2Р5'):
             getpari(sitedate[i], 'group', "2Р5", InlineKeyboardMarkup, InlineKeyboardButton, bot, callback)
 
     if callback.data == '2pso12':
             parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, 'group', '2ПСО12')
             print(f'Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил 2ПСО12! В', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
-    for i in range(0, len(sitedate)):
+    for i in range(a, len(sitedate)):
         if callback.data == (f'{sitedate[i]} 2ПСО12'):
             getpari(sitedate[i], 'group', "2ПСО12", InlineKeyboardMarkup, InlineKeyboardButton, bot, callback)
                 
@@ -326,9 +335,9 @@ def mycallback(bot, callback):
         
             def writehomework(message):
                 text = message.text
-                f = open(f'data/homework/{para}.txt', 'a+', encoding='UTF-8')
+                f = open(f'data/homework/{para}.txt', 'w+', encoding='UTF-8')
                 date = datetime.datetime.now(tz).strftime('%d.%m.%Y')
-                f.write(f'Задание заданное {date} числа:\n{text}\n\n')
+                f.write(f'Задание заданное {date} числа:\n\n{text}\n\n')
                 f.close
                 bot.reply_to(message, f'Задание которое я добавил в Базу Данных:\n\n{message.text}\n', parse_mode='markdown')
                 homework(bot, message, InlineKeyboardMarkup, InlineKeyboardButton)

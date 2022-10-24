@@ -8,6 +8,12 @@ def getpari(date, group, group_name, InlineKeyboardMarkup, InlineKeyboardButton,
         site = requests.get(f'https://erp.nttek.ru/api/schedule/legacy').text
         sitedate = json.loads(site)
         sitedate.sort(key=lambda x: time.mktime(time.strptime(x,"%d.%m.%Y")))
+
+        if (len(sitedate)) <= 5:
+            a = 0
+        else:
+            a = ((len(sitedate)) - 5)
+
         date = date.replace('.','-')
         now = dt.datetime.strptime(date, '%d-%m-%Y')
         now = now.strftime('%Y-%m-%d')
@@ -24,19 +30,25 @@ def getpari(date, group, group_name, InlineKeyboardMarkup, InlineKeyboardButton,
         
             keyboard = InlineKeyboardMarkup()
             keyboard.row_width = 2
-            for i in range(0, len(sitedate)):
+            for i in range(a, len(sitedate)):
                 keyboard.add (InlineKeyboardButton(f'{sitedate[i]} {group_name}',callback_data = f'{sitedate[i]} {group_name}'))
             bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'Расписание на {date}:\n __{text}__ \nВыберите день на который хотите узнать расписание', parse_mode='Markdown', reply_markup = keyboard)
         except:
             keyboard = InlineKeyboardMarkup()
             keyboard.row_width = 2
-            for i in range(0, len(sitedate)):
+            for i in range(a, len(sitedate)):
                 keyboard.add (InlineKeyboardButton(f'{sitedate[i]} {group_name}',callback_data = f'{sitedate[i]} {group_name}'))
             bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'Расписания НЕТУ!\nВыберите день на который хотите узнать расписание', parse_mode='Markdown', reply_markup = keyboard)
     else:
         site = requests.get(f'https://erp.nttek.ru/api/schedule/legacy').text
         sitedate = json.loads(site)
         sitedate.sort(key=lambda x: time.mktime(time.strptime(x,"%d.%m.%Y")))
+
+        if (len(sitedate)) <= 5:
+            a = 0
+        else:
+            a = ((len(sitedate)) - 5)
+
         date = date.replace('.','-')
         now = dt.datetime.strptime(date, '%d-%m-%Y')
         now = now.strftime('%Y-%m-%d')
@@ -53,12 +65,12 @@ def getpari(date, group, group_name, InlineKeyboardMarkup, InlineKeyboardButton,
         
             keyboard = InlineKeyboardMarkup()
             keyboard.row_width = 2
-            for i in range(0, len(sitedate)):
+            for i in range(a, len(sitedate)):
                 keyboard.add (InlineKeyboardButton(f'{sitedate[i]} {group_name}',callback_data = f'{sitedate[i]} {group_name}'))
             bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'Расписание:\n {text} \nВыберите день на который хотите узнать расписание', reply_markup = keyboard)
         except:
             keyboard = InlineKeyboardMarkup()
             keyboard.row_width = 2
-            for i in range(0, len(sitedate)):
+            for i in range(a, len(sitedate)):
                 keyboard.add (InlineKeyboardButton(f'{sitedate[i]} {group_name}',callback_data = f'{sitedate[i]} {group_name}'))
             bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'Расписания НЕТУ!\nВыберите день на который хотите узнать расписание', reply_markup = keyboard)
