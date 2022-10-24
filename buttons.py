@@ -239,21 +239,21 @@ def mycallback(bot, callback):
 
     if callback.data == '2ИС6':
         parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, 'group', '2ИС6')
-        print(f'Пользователь {callback.message.from_user.username} {callback.message.from_user.first_name} запросил 2is6! В', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
+        print(f'Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил 2is6! В', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
     for i in range(0, len(sitedate)):
         if callback.data == (f'{sitedate[i]} 2ИС6'):
             getpari(sitedate[i], 'group', "2ИС6", InlineKeyboardMarkup, InlineKeyboardButton, bot, callback)
 
     if callback.data == '2r5':
             parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, 'group', '2Р5')
-            print(f'Пользователь {callback.message.from_user.username} {callback.message.from_user.first_name} запросил 2Р5! В', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
+            print(f'Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил 2Р5! В', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
     for i in range(0, len(sitedate)):
         if callback.data == (f'{sitedate[i]} 2Р5'):
             getpari(sitedate[i], 'group', "2Р5", InlineKeyboardMarkup, InlineKeyboardButton, bot, callback)
 
     if callback.data == '2pso12':
             parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, 'group', '2ПСО12')
-            print(f'Пользователь {callback.message.from_user.username} {callback.message.from_user.first_name} запросил 2ПСО12! В', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
+            print(f'Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил 2ПСО12! В', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
     for i in range(0, len(sitedate)):
         if callback.data == (f'{sitedate[i]} 2ПСО12'):
             getpari(sitedate[i], 'group', "2ПСО12", InlineKeyboardMarkup, InlineKeyboardButton, bot, callback)
@@ -262,7 +262,7 @@ def mycallback(bot, callback):
     if callback.data == 'teacher':
         pass
     #     parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, 'teacher', 'Зятикова ТЮ')
-    #     print(f'Пользователь {callback.from_user.username} запросил Зятикова ТЮ! В', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
+    #     print(f'Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил Зятикова ТЮ! В', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
     # for i in range(0, len(sitedate)):
     #     if callback.data == (f'{sitedate[i]} Зятикова ТЮ'):
     #         getpari(sitedate[i], 'teacher', "Зятикова ТЮ", InlineKeyboardMarkup, InlineKeyboardButton, bot, callback)
@@ -333,7 +333,7 @@ def mycallback(bot, callback):
                 bot.reply_to(message, f'Задание которое я добавил в Базу Данных:\n\n{message.text}\n', parse_mode='markdown')
                 homework(bot, message, InlineKeyboardMarkup, InlineKeyboardButton)
                 bot.send_message(chat_id = 510441193, text = f'Добавил новое ДЗ! В {para} {message.from_user.username}, {message.from_user.first_name}', parse_mode='Markdown')
-                print(f'Пользователь {callback.message.from_user.username} {callback.message.from_user.first_name} изменил ДЗ! В {para}', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
+                print(f'Пользователь {callback.message.chat.username} {callback.message.chat.first_name} изменил ДЗ! В {para}', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
             bot.register_next_step_handler(callback.message, writehomework)
 
         if callback.data == (f'{predmeti[i]}DZ'):
