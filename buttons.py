@@ -294,7 +294,7 @@ def mycallback(bot, callback):
         cursor.execute('''SELECT user_id FROM ban ''')
         ban = cursor.fetchall()
         for i in range(0, len(ban)):
-            markup.add(InlineKeyboardButton(str(ban[i][0]), callback_data = f'{ban[i]}'))
+            markup.add(InlineKeyboardButton(str(ban[i][0]), callback_data = f'{str(i[1])}'))
         markup.add(add_user, close, delete_user, row_width = 3)
         bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'Все пользователи Базы: ', parse_mode='markdown', reply_markup = markup)
 
@@ -339,7 +339,7 @@ def mycallback(bot, callback):
         cursor.execute('''SELECT user_id FROM homeworker ''')
         dz = cursor.fetchall()
         for i in range(0, len(dz)):
-            markup.add(InlineKeyboardButton(str(dz[i][0]), callback_data = f'{dz[i]}'))
+            markup.add(InlineKeyboardButton(str(dz[i][0]), callback_data = f'{str(i[1])}'))
         markup.add(add_user, close, delete_user, row_width = 3)
         bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'Все пользователи Базы: ', parse_mode='markdown', reply_markup = markup)
 
@@ -383,7 +383,7 @@ def mycallback(bot, callback):
         cursor.execute('''SELECT user_id FROM admin ''')
         admin = cursor.fetchall()
         for i in range(0, len(admin)):
-            markup.add(InlineKeyboardButton(str(admin[i][0]), callback_data = f'{admin[i]}'))
+            markup.add(InlineKeyboardButton(str(admin[i][0]), callback_data = f'{str(i[1])}'))
         markup.add(add_user, close, delete_user, row_width = 3)
         bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'Все пользователи Базы: ', parse_mode='markdown', reply_markup = markup)
     #ДОБАВИТЬ ПОЛЬЗОВАТЕЛЯ В DateBase admin
@@ -501,4 +501,13 @@ def mycallback(bot, callback):
             f'id: {str(i[1])}\n'
             f'Nickname: {str(i[3])}\n'
             f'Regist: {str(i[4])}\n'
+            ))
+        
+        elif callback.data == str(i[1]):
+            bot.send_message(callback.message.chat.id, text = 
+            (
+            f'Номер: {str(i[0])}\n'
+            f'Кто добавил: {str(i[2])}\n'
+            f'id: {str(i[1])}\n'
+            f'Regist: {str(i[3])}\n'
             ))
