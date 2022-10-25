@@ -171,7 +171,7 @@ def defuser(bot, message, InlineKeyboardMarkup, InlineKeyboardButton):
                 a = a + 1
                 b = b + a
             else:
-                string = str(i[1])
+                string = str(i[2])
                 markup.add (InlineKeyboardButton(text = f'{i[0]} | {string}', callback_data = string))
                 a = a + 1
                 b = b + a
@@ -214,7 +214,7 @@ def defuser2(bot, callback, InlineKeyboardMarkup, InlineKeyboardButton):
             markup.add (InlineKeyboardButton(text = f'{i[0]} | {string}', callback_data = string))
             a = a + 1
         else:
-            string = str(i[1])
+            string = str(i[2])
             markup.add (InlineKeyboardButton(text = f'{i[0]} | {string}', callback_data = string))
             a = a + 1
     if page == 1:
@@ -493,7 +493,7 @@ def mycallback(bot, callback):
             f'Regist: {str(i[4])}\n'
             ))
 
-        elif callback.data == str(i[1]):
+        elif callback.data == str(i[2]):
             bot.send_message(callback.message.chat.id, text = 
             (
             f'Номер: {str(i[0])}\n'
