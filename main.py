@@ -1,5 +1,5 @@
 import telebot, datetime, pytz, time as tm
-from telebot import types, telebot
+from telebot import telebot
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 from settings import *
 from buttons import *

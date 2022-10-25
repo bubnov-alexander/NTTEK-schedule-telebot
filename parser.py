@@ -1,5 +1,4 @@
 import requests, json, time
-from bs4 import BeautifulSoup as b
 import datetime as dt
 
 

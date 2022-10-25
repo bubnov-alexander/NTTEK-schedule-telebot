@@ -1,6 +1,6 @@
 import sqlite3, datetime
 
-TOKEN = ('5641742733:AAFjF171LR2NxdLKtu-6zSGrnx63U-W137U')
+TOKEN = ('5656787289:AAE8wT3rHr92ic0FkqGCIAcHDbYQtwZ5G5s')
 
 database = sqlite3.connect('db/database.db', check_same_thread=False)
 cursor = database.cursor()
@@ -19,16 +19,6 @@ cursor.execute ("""CREATE TABLE IF NOT EXISTS admin(
     id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
     user_id INTEGER UNIQUE NOT NULL,
     user_name TEXT NOT NULL,
-    username STRING,
-    join_date DATETIME NOT NULL
-    )""")
-database.commit()
-
-cursor.execute ("""CREATE TABLE IF NOT EXISTS tworfive(
-    id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
-    user_id INTEGER UNIQUE NOT NULL,
-    user_name TEXT NOT NULL,
-    username STRING,
     join_date DATETIME NOT NULL
     )""")
 database.commit()
@@ -37,7 +27,6 @@ cursor.execute ("""CREATE TABLE IF NOT EXISTS homeworker(
     id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
     user_id INTEGER UNIQUE NOT NULL,
     user_name TEXT NOT NULL,
-    username STRING,
     join_date DATETIME NOT NULL
     )""")
 database.commit()
@@ -46,7 +35,6 @@ cursor.execute ("""CREATE TABLE IF NOT EXISTS ban(
     id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
     user_id INTEGER UNIQUE NOT NULL,
     user_name TEXT NOT NULL,
-    username STRING,
     join_date DATETIME NOT NULL
     )""")
 database.commit()

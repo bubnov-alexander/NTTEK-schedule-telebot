@@ -29,7 +29,7 @@ def menu(bot, argument1, argument2):
         markup.add(item1, item2, item3, item4, item5, item6)
         bot.send_message(argument1.chat.id, 'Выбери то, вот что я могу тебе предложить: '.format(argument2.from_user),  parse_mode='html', reply_markup=markup)
         
-#Пары
+#ГРУППЫ
 def group(bot, message):
     markup = InlineKeyboardMarkup(row_width=3)
     item1 = InlineKeyboardButton(text = "2ИС6", callback_data = '2ИС6')
@@ -41,6 +41,7 @@ def group(bot, message):
     markup.add(item1, item2, item3, item4, back)
     bot.send_message(message.chat.id, 'Выбери расписание какой группы ты хочешь узнать: ',  parse_mode='html', reply_markup=markup)
 
+#АДМИН ПАНЕЛЬ
 def adminpanel(bot, argument1, argument2):
     markup = ReplyKeyboardMarkup(resize_keyboard=True)
     item1 = KeyboardButton('Пользователи')
@@ -49,7 +50,7 @@ def adminpanel(bot, argument1, argument2):
     markup.add(item1, item2, back)
     bot.send_message(argument1.chat.id, 'Выбери что-то из предложенного: ', parse_mode = 'html', reply_markup = markup)
 
-#ВЫБОР РАСПИСАНИЯ
+#ВЫВОД РАСПИСАНИЯ
 def parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, group, who):
     keyboard = InlineKeyboardMarkup()
     keyboard.row_width = 2
@@ -115,10 +116,11 @@ def aboutbot(bot, message):
     bot.send_message(message.chat.id, facts, parse_mode='html', reply_markup=markup_inline)
     f.close()
 
+#При появление ошибок
 def error(bot, e):
     bot.send_message(chat_id = 510441193, text = f'В боте появилась ошибка: \n{e}', parse_mode='html')
 
-#ДЗ
+#Панель ДЗ
 def homework(bot, message, InlineKeyboardMarkup, InlineKeyboardButton):
     try:
         cursor.execute('''SELECT user_id FROM homeworker WHERE user_id = ?''', (message.chat.id, ))
@@ -164,9 +166,15 @@ def defuser(bot, message, InlineKeyboardMarkup, InlineKeyboardButton):
 
         for i in user[min:max:]:
             string = str(i[3])
-            markup.add (InlineKeyboardButton(text = f'{i[0]} | {string}', callback_data = string))
-            a = a + 1
-            b = b + a
+            if string != 'None':
+                markup.add (InlineKeyboardButton(text = f'{i[0]} | {string}', callback_data = string))
+                a = a + 1
+                b = b + a
+            else:
+                string = str(i[1])
+                markup.add (InlineKeyboardButton(text = f'{i[0]} | {string}', callback_data = string))
+                a = a + 1
+                b = b + a
         if page == 1:
             amount_plus = InlineKeyboardButton(text = 'Вперёд -->', callback_data = '+1')
             close = InlineKeyboardButton(text = 'Закрыть', callback_data='close')
@@ -202,9 +210,13 @@ def defuser2(bot, callback, InlineKeyboardMarkup, InlineKeyboardButton):
 
     for i in user[min:max:]:
         string = str(i[3])
-        markup.add (InlineKeyboardButton(text = f'{i[0]} | {string}', callback_data = string))
-        a = a + 1
-
+        if string != 'None':
+            markup.add (InlineKeyboardButton(text = f'{i[0]} | {string}', callback_data = string))
+            a = a + 1
+        else:
+            string = str(i[1])
+            markup.add (InlineKeyboardButton(text = f'{i[0]} | {string}', callback_data = string))
+            a = a + 1
     if page == 1:
         amount_plus = InlineKeyboardButton(text = 'Вперёд -->', callback_data = '+1')
         close = InlineKeyboardButton(text = 'Закрыть', callback_data='close')
@@ -224,20 +236,20 @@ def defuser2(bot, callback, InlineKeyboardMarkup, InlineKeyboardButton):
         markup.add (amount_minus, close, amount_plus, row_width = 3)
         bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'**Список {page}**', parse_mode='markdown', reply_markup = markup)
 
+#Панель прав
 def root(bot, argument1, argument2):
     markup = InlineKeyboardMarkup(row_width=4)
-    item1 = InlineKeyboardButton(text = '2Р5', callback_data = '2r5base')
-    item2 = InlineKeyboardButton(text = 'BAN', callback_data = 'banbase')
-    item3 = InlineKeyboardButton(text = 'ДЗ', callback_data = 'dzbase')
-    item4 = InlineKeyboardButton(text = 'admin', callback_data = 'adminbase')
+    item1 = InlineKeyboardButton(text = 'BAN', callback_data = 'banbase')
+    item2 = InlineKeyboardButton(text = 'ДЗ', callback_data = 'dzbase')
+    item3 = InlineKeyboardButton(text = 'admin', callback_data = 'adminbase')
     back = InlineKeyboardButton(text = '🔙Назад', callback_data='close')
-    markup.add(item1, item2, item3, item4, back)
+    markup.add(item1, item2, item3, back)
     bot.send_message(argument1.chat.id, text = 'Выбери что-то из предложенного:  ', parse_mode='html', reply_markup=markup)
-
-
 
 # callback
 def mycallback(bot, callback):
+
+    #ПОЛУЧЕНИЕ ДНЕЙ НА КОТОРЫЕ ЕСТЬ РАСПИСАНИЕ
     site = requests.get(f'https://erp.nttek.ru/api/schedule/legacy').text
     sitedate = json.loads(site)
     sitedate.sort(key=lambda x: time.mktime(time.strptime(x,"%d.%m.%Y")))
@@ -246,29 +258,26 @@ def mycallback(bot, callback):
     else:
         a = ((len(sitedate)) - 5)
 
-    if callback.data == '2ИС6':
-        parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, 'group', '2ИС6')
-        print(f'Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил 2is6! В', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
+    #ВЫВОД ОПРЕДЕЛЁННОЙ ГРУППЫ (ДНЯ)
     for i in range(a, len(sitedate)):
         if callback.data == (f'{sitedate[i]} 2ИС6'):
             getpari(sitedate[i], 'group', "2ИС6", InlineKeyboardMarkup, InlineKeyboardButton, bot, callback)
+        elif callback.data == (f'{sitedate[i]} 2Р5'):
+            getpari(sitedate[i], 'group', "2Р5", InlineKeyboardMarkup, InlineKeyboardButton, bot, callback)
+        elif callback.data == (f'{sitedate[i]} 2ПСО12'):
+            getpari(sitedate[i], 'group', "2ПСО12", InlineKeyboardMarkup, InlineKeyboardButton, bot, callback)
 
-    if callback.data == '2r5':
+    #ВЫВОД ОПРЕДЕЛЁННОЙ ГРУППЫ (ДНЕЙ)
+    if callback.data == '2ИС6':
+        parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, 'group', '2ИС6')
+        print(f'Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил 2is6! В', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
+    elif callback.data == '2r5':
             parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, 'group', '2Р5')
             print(f'Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил 2Р5! В', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
-    for i in range(a, len(sitedate)):
-        if callback.data == (f'{sitedate[i]} 2Р5'):
-            getpari(sitedate[i], 'group', "2Р5", InlineKeyboardMarkup, InlineKeyboardButton, bot, callback)
-
-    if callback.data == '2pso12':
+    elif callback.data == '2pso12':
             parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, 'group', '2ПСО12')
             print(f'Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил 2ПСО12! В', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
-    for i in range(a, len(sitedate)):
-        if callback.data == (f'{sitedate[i]} 2ПСО12'):
-            getpari(sitedate[i], 'group', "2ПСО12", InlineKeyboardMarkup, InlineKeyboardButton, bot, callback)
-                
-
-    if callback.data == 'teacher':
+    elif callback.data == 'teacher':
         pass
     #     parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, 'teacher', 'Зятикова ТЮ')
     #     print(f'Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил Зятикова ТЮ! В', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
@@ -276,25 +285,158 @@ def mycallback(bot, callback):
     #     if callback.data == (f'{sitedate[i]} Зятикова ТЮ'):
     #         getpari(sitedate[i], 'teacher', "Зятикова ТЮ", InlineKeyboardMarkup, InlineKeyboardButton, bot, callback)
     
-    elif callback.data == '2r5base':
+    #Работа с DateBase BAN
+    elif callback.data == 'banbase':
         markup = InlineKeyboardMarkup()
-        add_user = InlineKeyboardButton(text = 'Adduser', callback_data= 'adduser_tworfive')
-        close = InlineKeyboardButton(text = '🔙Выйти', callback_data= 'close')
-        delete_user = InlineKeyboardButton(text = 'Deleteuser', callback_data= 'deleteuser_tworfive')
-        cursor.execute('''SELECT user_id FROM tworfive ''')
-        tworfive = cursor.fetchall()
-        for i in range(0, len(tworfive)):
-            markup.add(InlineKeyboardButton(str(tworfive[i]), callback_data = f'{tworfive[i]}'))
+        add_user = InlineKeyboardButton(text = 'Adduser', callback_data= 'add_user_ban')
+        close = InlineKeyboardButton(text = '🔙Выйти', callback_data= 'root')
+        delete_user = InlineKeyboardButton(text = 'Deleteuser', callback_data= 'del_user_ban')
+        cursor.execute('''SELECT user_id FROM ban ''')
+        ban = cursor.fetchall()
+        for i in range(0, len(ban)):
+            markup.add(InlineKeyboardButton(str(ban[i][0]), callback_data = f'{ban[i]}'))
         markup.add(add_user, close, delete_user, row_width = 3)
-        bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'Выбери пользователя: ', parse_mode='markdown', reply_markup = markup)
+        bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'Все пользователи Базы: ', parse_mode='markdown', reply_markup = markup)
 
-    elif callback.data == 'adduser_tworfive':
+    #ДОБАВИТЬ ПОЛЬЗОВАТЕЛЯ В DateBase ban
+    elif callback.data == 'add_user_ban':
         bot.reply_to(callback.message, 'Введи ID пользователя: ')
-        def addusertwofive(message):
-            tworfive.append(message.text)
-            bot.send_message(callback.message.chat.id, f'Я добавил в базу данных: {message.text}', parse_mode='html')
-        bot.register_next_step_handler(callback.message, addusertwofive)
-        
+        def add_user_ban(message):
+            try:
+                id_user = int(message.text)
+                today = datetime.date.today().strftime('%d.%m.%Y')
+                cursor.execute('INSERT INTO ban (user_id, user_name, join_date) VALUES (?, ?, ?)', (id_user, callback.message.chat.username, today))
+                database.commit()
+                bot.send_message(callback.message.chat.id, f'Я добавил в базу данных ban: {message.text}', parse_mode='html')
+                root(bot, callback.message, callback.message)
+            except:
+                bot.send_message(callback.message.chat.id, f'У тебя не получилось: {message.text}', parse_mode='html')
+                root(bot, callback.message, callback.message)
+        bot.register_next_step_handler(callback.message, add_user_ban)
+
+    #УДАЛИТЬ ПОЛЬЗОВАТЕЛЯ ИЗ DateBase ban
+    elif callback.data == 'del_user_ban':
+        bot.reply_to(callback.message, 'Введи ID пользователя: ')
+        def del_user_ban(message):
+            try:
+                id_user = int(message.text)
+                cursor.execute('DELETE from ban WHERE user_id = (?)', (id_user,))
+                database.commit()
+                bot.send_message(callback.message.chat.id, f'Я удалил из базы данных ban: {message.text}', parse_mode='html')
+                root(bot, callback.message, callback.message)
+            except:
+                bot.send_message(callback.message.chat.id, f'У тебя не получилось: {message.text}', parse_mode='html')
+                root(bot, callback.message, callback.message)
+        bot.register_next_step_handler(callback.message, del_user_ban)
+
+
+    #Работа с DateBase ДЗ
+    elif callback.data == 'dzbase':
+        markup = InlineKeyboardMarkup()
+        add_user = InlineKeyboardButton(text = 'Adduser', callback_data= 'add_user_dz')
+        close = InlineKeyboardButton(text = '🔙Выйти', callback_data= 'root')
+        delete_user = InlineKeyboardButton(text = 'Deleteuser', callback_data= 'del_user_dz')
+        cursor.execute('''SELECT user_id FROM homeworker ''')
+        dz = cursor.fetchall()
+        for i in range(0, len(dz)):
+            markup.add(InlineKeyboardButton(str(dz[i][0]), callback_data = f'{dz[i]}'))
+        markup.add(add_user, close, delete_user, row_width = 3)
+        bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'Все пользователи Базы: ', parse_mode='markdown', reply_markup = markup)
+
+    #ДОБАВИТЬ ПОЛЬЗОВАТЕЛЯ В DateBase дз
+    elif callback.data == 'add_user_dz':
+        bot.reply_to(callback.message, 'Введи ID пользователя: ')
+        def add_user_dz(message):
+            try:
+                id_user = int(message.text)
+                today = datetime.date.today().strftime('%d.%m.%Y')
+                cursor.execute('INSERT INTO homeworker (user_id, user_name, join_date) VALUES (?, ?, ?)', (id_user, callback.message.chat.username, today))
+                database.commit()
+                bot.send_message(callback.message.chat.id, f'Я добавил в базу данных dz: {message.text}', parse_mode='html')
+                root(bot, callback.message, callback.message)
+            except:
+                bot.send_message(callback.message.chat.id, f'У тебя не получилось: {message.text}', parse_mode='html')
+                root(bot, callback.message, callback.message)
+        bot.register_next_step_handler(callback.message, add_user_dz)
+
+    #УДАЛИТЬ ПОЛЬЗОВАТЕЛЯ ИЗ DateBase ДЗ
+    elif callback.data == 'del_user_dz':
+        bot.reply_to(callback.message, 'Введи ID пользователя: ')
+        def del_user_dz(message):
+            try:
+                id_user = int(message.text)
+                cursor.execute('DELETE from homeworker WHERE user_id = (?)', (id_user,))
+                database.commit()
+                bot.send_message(callback.message.chat.id, f'Я удалил из базы данных homeworker: {message.text}', parse_mode='html')
+                root(bot, callback.message, callback.message)
+            except:
+                bot.send_message(callback.message.chat.id, f'У тебя не получилось: {message.text}', parse_mode='html')
+                root(bot, callback.message, callback.message)
+        bot.register_next_step_handler(callback.message, del_user_dz)
+
+    #Работа с DateBase admin
+    elif callback.data == 'adminbase':
+        markup = InlineKeyboardMarkup()
+        add_user = InlineKeyboardButton(text = 'Adduser', callback_data= 'add_user_admin')
+        close = InlineKeyboardButton(text = '🔙Выйти', callback_data= 'root')
+        delete_user = InlineKeyboardButton(text = 'Deleteuser', callback_data= 'del_user_admin')
+        cursor.execute('''SELECT user_id FROM admin ''')
+        admin = cursor.fetchall()
+        for i in range(0, len(admin)):
+            markup.add(InlineKeyboardButton(str(admin[i][0]), callback_data = f'{admin[i]}'))
+        markup.add(add_user, close, delete_user, row_width = 3)
+        bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'Все пользователи Базы: ', parse_mode='markdown', reply_markup = markup)
+    #ДОБАВИТЬ ПОЛЬЗОВАТЕЛЯ В DateBase admin
+    elif callback.data == 'add_user_admin':
+        bot.reply_to(callback.message, 'Введи ID пользователя: ')
+        def add_user_admin(message):
+            try:
+                id_user = int(message.text)
+                today = datetime.date.today().strftime('%d.%m.%Y')
+                cursor.execute('INSERT INTO admin (user_id, user_name, join_date) VALUES (?, ?, ?)', (id_user, callback.message.chat.username, today))
+                database.commit()
+                bot.send_message(callback.message.chat.id, f'Я добавил в базу данных admin: {message.text}', parse_mode='html')
+                root(bot, callback.message, callback.message)
+            except:
+                bot.send_message(callback.message.chat.id, f'У тебя не получилось: {message.text}', parse_mode='html')
+                root(bot, callback.message, callback.message)
+        bot.register_next_step_handler(callback.message, add_user_admin)
+    #УДАЛИТЬ ПОЛЬЗОВАТЕЛЯ ИЗ DateBase admin
+    elif callback.data == 'del_user_admin':
+        bot.reply_to(callback.message, 'Введи ID пользователя: ')
+        def del_user_admin(message):
+            try:
+                id_user = int(message.text)
+                cursor.execute('DELETE from admin WHERE user_id = (?)', (id_user,))
+                database.commit()
+                bot.send_message(callback.message.chat.id, f'Я удалил из базы данных admin: {message.text}', parse_mode='html')
+                root(bot, callback.message, callback.message)
+            except:
+                bot.send_message(callback.message.chat.id, f'У тебя не получилось: {message.text}', parse_mode='html')
+                root(bot, callback.message, callback.message)
+        bot.register_next_step_handler(callback.message, del_user_admin)
+
+    #ВЫБОР ДЗ
+    elif callback.data == 'dz':
+        markup = InlineKeyboardMarkup()
+        close = InlineKeyboardButton(text = '🔙Выйти', callback_data= 'close')
+        for i in range(0, len(predmeti)):
+            markup.add(InlineKeyboardButton(predmeti[i], callback_data = f'{predmeti[i]}DZ'))
+        markup.add(close)
+        bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'Выбери предмет: ', parse_mode='markdown', reply_markup = markup)
+
+    #ДОБАВИТЬ ДЗ
+    elif callback.data == 'addhw':
+        markup = InlineKeyboardMarkup()
+        close = InlineKeyboardButton(text = '🔙Выйти', callback_data= 'close')
+        for i in range(0, len(predmeti)):
+            markup.add(InlineKeyboardButton(predmeti[i], callback_data = f'{predmeti[i]}HW'))
+        markup.add(close)
+        bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'Выбери предмет: ', parse_mode='markdown', reply_markup = markup)
+
+    #ВЫВОД СПИСКА ПРАВ 
+    elif callback.data == 'root':
+        root(bot, callback.message, callback.message)
 
     elif callback.data == 'bells':
         zvonok(bot, callback)
@@ -310,23 +452,6 @@ def mycallback(bot, callback):
     elif callback.data == '-1': 
         page -= 1
         defuser2(bot, callback, InlineKeyboardMarkup, InlineKeyboardButton)
-
-    elif callback.data == 'dz':
-        markup = InlineKeyboardMarkup()
-        close = InlineKeyboardButton(text = '🔙Выйти', callback_data= 'close')
-        for i in range(0, len(predmeti)):
-            markup.add(InlineKeyboardButton(predmeti[i], callback_data = f'{predmeti[i]}DZ'))
-        markup.add(close)
-        bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'Выбери предмет: ', parse_mode='markdown', reply_markup = markup)
-
-    elif callback.data == 'addhw':
-        markup = InlineKeyboardMarkup()
-        close = InlineKeyboardButton(text = '🔙Выйти', callback_data= 'close')
-        for i in range(0, len(predmeti)):
-            markup.add(InlineKeyboardButton(predmeti[i], callback_data = f'{predmeti[i]}HW'))
-        markup.add(close)
-        bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'Выбери предмет: ', parse_mode='markdown', reply_markup = markup)
-
 
     for i in range(0, len(predmeti)):
         if callback.data == (f"{predmeti[i]}HW"):
@@ -363,7 +488,17 @@ def mycallback(bot, callback):
             (
             f'Номер: {str(i[0])}\n'
             f'Имя: {str(i[2])}\n'
+            f'id: {str(i[1])}\n'
             f'Nickname: {str(i[3])}\n'
             f'Regist: {str(i[4])}\n'
-            )
-            , parse_mode='markdown')
+            ))
+
+        elif callback.data == str(i[1]):
+            bot.send_message(callback.message.chat.id, text = 
+            (
+            f'Номер: {str(i[0])}\n'
+            f'Имя: {str(i[2])}\n'
+            f'id: {str(i[1])}\n'
+            f'Nickname: {str(i[3])}\n'
+            f'Regist: {str(i[4])}\n'
+            ))
