@@ -4,7 +4,6 @@ from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 from settings import *
 from buttons import *
 
-
 tz = pytz.timezone('Asia/Yekaterinburg')
 time = (datetime.datetime.now(tz))
 
@@ -14,8 +13,8 @@ bot = telebot.TeleBot(TOKEN)
 @bot.message_handler(commands=['start'])
 def start_message(message):
     cursor.execute('''SELECT user_id FROM admin WHERE user_id = ?''', (message.chat.id, ))
-    admin = cursor.fetchall()[0]
-    if message.chat.id not in admin:
+    admin = 510441193
+    if message.chat.id != admin:
         bot.send_message(message.from_user.id, f'Добро пожаловать, {message.from_user.first_name}', parse_mode='html')
         db_table_val(message, bot)
         menu(bot, message, message)
@@ -37,8 +36,8 @@ def callback(callback):
 #Действия когда пришёл текст
 @bot.message_handler(content_types=["text"])
 def bot_message(message):
-    cursor.execute(f'''SELECT user_id FROM users''')
-    data = cursor.fetchall()
+    cursor.execute(f'SELECT id FROM users WHERE user_id = {message.chat.id} ')
+    data = cursor.fetchone()
     message_to_bot = message.text.lower()
 
 #Проверка на список забаненых пользователей, а так же есть ли они в БД

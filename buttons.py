@@ -20,8 +20,8 @@ def menu(bot, argument1, argument2):
     item4 = KeyboardButton("📖ДЗ📖")
     item5 = KeyboardButton("📒О боте📒")
     cursor.execute('''SELECT user_id FROM admin WHERE user_id = ?''', (argument1.chat.id, ))
-    admin = cursor.fetchone()
-    if argument1.chat.id not in admin:
+    admin = 510441193
+    if argument1.chat.id != admin:
         markup.add(item1, item2, item3, item4, item5)
         bot.send_message(argument1.chat.id, 'Выбери то, вот что я могу тебе предложить: '.format(argument2.from_user),  parse_mode='html', reply_markup=markup)
     else:
@@ -124,8 +124,8 @@ def error(bot, e):
 def homework(bot, message, InlineKeyboardMarkup, InlineKeyboardButton):
     try:
         cursor.execute('''SELECT user_id FROM homeworker WHERE user_id = ?''', (message.chat.id, ))
-        homeworker = cursor.fetchall()[0]
-        if message.chat.id not in homeworker:
+        homeworker = cursor.fetchall()
+        if homeworker is None:
             markup = InlineKeyboardMarkup()
             para = InlineKeyboardButton(text = 'Выбрать предмет ', callback_data='dz')
             markup.add(para, row_width = 3)
@@ -146,8 +146,8 @@ def homework(bot, message, InlineKeyboardMarkup, InlineKeyboardButton):
 #Получить информацию из базы данных о пользователе
 def defuser(bot, message, InlineKeyboardMarkup, InlineKeyboardButton):
     cursor.execute('''SELECT user_id FROM admin WHERE user_id = ?''', (message.chat.id, ))
-    admin = cursor.fetchall()[0]
-    if message.chat.id not in admin:
+    admin = 510441193
+    if message.chat.id != admin:
          bot.send_message(message.chat.id, f'У тебя нету доступа к такой команде', parse_mode='html')
          menu(bot, message, message)
     else:
