@@ -23,11 +23,11 @@ def menu(bot, argument1, argument2):
     admin = 510441193
     if argument1.chat.id != admin:
         markup.add(item1, item2, item3, item4, item5)
-        bot.send_message(argument1.chat.id, 'Выбери то, вот что я могу тебе предложить: '.format(argument2.from_user),  parse_mode='html', reply_markup=markup)
+        bot.send_message(argument1.chat.id, 'Вот что я могу сделать: '.format(argument2.from_user),  parse_mode='html', reply_markup=markup)
     else:
         item6 = KeyboardButton("Admin panel")
         markup.add(item1, item2, item3, item4, item5, item6)
-        bot.send_message(argument1.chat.id, 'Выбери то, вот что я могу тебе предложить: '.format(argument2.from_user),  parse_mode='html', reply_markup=markup)
+        bot.send_message(argument1.chat.id, 'Вот что я могу сделать: '.format(argument2.from_user),  parse_mode='html', reply_markup=markup)
         
 #ГРУППЫ
 def group(bot, message):
@@ -124,7 +124,7 @@ def error(bot, e):
 def homework(bot, message, InlineKeyboardMarkup, InlineKeyboardButton):
     try:
         cursor.execute('''SELECT user_id FROM homeworker WHERE user_id = ?''', (message.chat.id, ))
-        homeworker = cursor.fetchall()
+        homeworker = cursor.fetchone()
         if homeworker is None:
             markup = InlineKeyboardMarkup()
             para = InlineKeyboardButton(text = 'Выбрать предмет ', callback_data='dz')
