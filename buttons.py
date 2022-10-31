@@ -37,7 +37,7 @@ def group(bot, message):
     item3 = InlineKeyboardButton(text = "2Р5", callback_data = "2r5")
     item5 = InlineKeyboardButton(text = "Расписание куратора", callback_data = "teacher")
     item4 = InlineKeyboardButton(text = "🔔Расписание звонков", callback_data = 'bells')
-    back = InlineKeyboardButton(text = "🔙Назад", callback_data = 'back')
+    back = InlineKeyboardButton(text = "🔙Назад", callback_data = 'close')
     markup.add(item1, item2, item3, item4, back)
     bot.send_message(message.chat.id, 'Выбери расписание какой группы ты хочешь узнать: ',  parse_mode='html', reply_markup=markup)
 

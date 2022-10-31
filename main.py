@@ -122,15 +122,16 @@ def bot_message(message):
         bot.send_message(message.chat.id, 'Ты в БАНЕ чучело!!! \n Пиши @Kinoki445', parse_mode='html')   
         print(f'Забаненый пользователь {message.from_user.username} {message.from_user.first_name} написал {message.text} в', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
 
-print ('Бот запущен:',time.strftime('%d/%m/%Y %H:%M'))
+if __name__ == '__main__':
+    print ('Бот запущен:',time.strftime('%d/%m/%Y %H:%M'))
+    while True:
+        try:
+            bot.infinity_polling(none_stop=True, timeout=123)
+        except Exception as e:
+            print(e)
+            error(bot, e)
+            tm.sleep(15)
 
-while True:
-    try:
-        bot.polling(none_stop=True)
-    except Exception as e:
-        print(e)
-        error(bot, e)
-        tm.sleep(15)
 
 
 # bot.polling(none_stop=True)
