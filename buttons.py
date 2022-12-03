@@ -65,7 +65,9 @@ def parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, group, wh
 
     for i in range(a, len(sitedate)):
         keyboard.add (InlineKeyboardButton(f'{sitedate[i]} {who}', callback_data = f'{sitedate[i], who}'))
-    keyboard.add(InlineKeyboardButton('Другие группы', callback_data = 'another_group'))
+    item1 = (InlineKeyboardButton('Другие группы', callback_data = 'another_group'))
+    item2 = (InlineKeyboardButton('Меню', callback_data = 'close'))
+    keyboard.add (item1, item2)
     bot.send_message(callback.message.chat.id, 'Выберите день на который хотите узнать расписание', parse_mode='html', reply_markup = keyboard)
 
 #ПРЕПОДЫ
