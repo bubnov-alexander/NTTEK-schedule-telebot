@@ -32,19 +32,25 @@ def getpari(date, group, group_name, InlineKeyboardMarkup, InlineKeyboardButton,
                 keyboard.row_width = 2
                 for i in range(a, len(sitedate)):
                     keyboard.add (InlineKeyboardButton(f'{sitedate[i]} {group_name}',callback_data = f'{sitedate[i]} {group_name}'))
-                keyboard.add(InlineKeyboardButton('Другие группы', callback_data = 'another_group'))
+                item1 = (InlineKeyboardButton('Другие группы', callback_data = 'another_group'))
+                item2 = (InlineKeyboardButton('Меню', callback_data = 'close'))
+                keyboard.add (item1,item2)
                 bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'Расписание на {date}:\n __{text}__ \nВыберите день на который хотите узнать расписание', parse_mode='Markdown', reply_markup = keyboard)
             except:
                 keyboard = InlineKeyboardMarkup()
                 keyboard.row_width = 2
                 for i in range(a, len(sitedate)):
-                    keyboard.add (InlineKeyboardButton(f'{sitedate[i]} {group_name}',callback_data = f'{sitedate[i]} {group_name}'))
-                keyboard.add(InlineKeyboardButton('Другие группы', callback_data = 'another_group'))
+                    keyboard.add(InlineKeyboardButton(f'{sitedate[i]} {group_name}',callback_data = f'{sitedate[i]} {group_name}'))
+                item1 = (InlineKeyboardButton('Другие группы', callback_data = 'another_group'))
+                item2 = (InlineKeyboardButton('Меню', callback_data = 'close'))
+                keyboard.add(item1,item2)
                 bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'Расписания НЕТУ!\nВыберите день на который хотите узнать расписание', parse_mode='Markdown', reply_markup = keyboard)
         except:
             keyboard = InlineKeyboardMarkup()
             keyboard.row_width = 2
-            keyboard.add(InlineKeyboardButton('Другие группы', callback_data = 'another_group'))
+            item1 = (InlineKeyboardButton('Другие группы', callback_data = 'another_group'))
+            item2 = (InlineKeyboardButton('Меню', callback_data = 'close'))
+            keyboard.add (item1, item2)
             bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'Такой группы нету выбери другую', parse_mode='Markdown', reply_markup = keyboard)
     else:
         site = requests.get(f'https://erp.nttek.ru/api/schedule/legacy').text
@@ -73,11 +79,15 @@ def getpari(date, group, group_name, InlineKeyboardMarkup, InlineKeyboardButton,
             keyboard = InlineKeyboardMarkup()
             keyboard.row_width = 2
             for i in range(a, len(sitedate)):
-                keyboard.add (InlineKeyboardButton(f'{sitedate[i]} {group_name}',callback_data = f'{sitedate[i]} {group_name}'))
+                item1 = (InlineKeyboardButton(f'{sitedate[i]} {group_name}',callback_data = f'{sitedate[i]} {group_name}'))
+                item2 = (InlineKeyboardButton('Меню', callback_data = 'close'))
+                keyboard.add (item1, item2)
             bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'Расписание:\n {text} \nВыберите день на который хотите узнать расписание', reply_markup = keyboard)
         except:
             keyboard = InlineKeyboardMarkup()
             keyboard.row_width = 2
             for i in range(a, len(sitedate)):
-                keyboard.add (InlineKeyboardButton(f'{sitedate[i]} {group_name}',callback_data = f'{sitedate[i]} {group_name}'))
+                item1 = (InlineKeyboardButton(f'{sitedate[i]} {group_name}',callback_data = f'{sitedate[i]} {group_name}'))
+                item2 = (InlineKeyboardButton('Меню', callback_data = 'close'))
+                keyboard.add (item1, item2)
             bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'Расписания НЕТУ!\nВыберите день на который хотите узнать расписание', reply_markup = keyboard)
