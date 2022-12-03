@@ -8,7 +8,6 @@ page = 1
 predmeti = ['Теория вероятностей', 'Математика', 'Сопровождение ИС', 'ОС и среды ', 'Информационные технологии', 'ОБЖ']
 
 
-
 #ГЛАВНОЕ МЕНЮ
 #argument1.chat.id
 #argument2.from_user
@@ -37,9 +36,10 @@ def group(bot, message):
     item3 = InlineKeyboardButton(text = "2Р5", callback_data = "2r5")
     item5 = InlineKeyboardButton(text = "Расписание куратора", callback_data = "teacher")
     item4 = InlineKeyboardButton(text = "🔔Расписание звонков", callback_data = 'bells')
-    back = InlineKeyboardButton(text = "🔙Назад", callback_data = 'close')
+    back = InlineKeyboardButton(text = "Другая группа", callback_data = 'another_group')
     markup.add(item1, item2, item3, item4, back)
     bot.send_message(message.chat.id, 'Выбери расписание какой группы ты хочешь узнать: ',  parse_mode='html', reply_markup=markup)
+
 
 #АДМИН ПАНЕЛЬ
 def adminpanel(bot, argument1, argument2):
@@ -64,7 +64,8 @@ def parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, group, wh
         a = ((len(sitedate)) - 5)
 
     for i in range(a, len(sitedate)):
-        keyboard.add (InlineKeyboardButton(f'{sitedate[i]} {who}', callback_data = f'{sitedate[i]} {who}'))
+        keyboard.add (InlineKeyboardButton(f'{sitedate[i]} {who}', callback_data = f'{sitedate[i], who}'))
+    keyboard.add(InlineKeyboardButton('Другие группы', callback_data = 'another_group'))
     bot.send_message(callback.message.chat.id, 'Выберите день на который хотите узнать расписание', parse_mode='html', reply_markup = keyboard)
 
 #ПРЕПОДЫ
@@ -112,7 +113,8 @@ def aboutbot(bot, message):
     url1 = InlineKeyboardButton (text = 'Вк', url='https://vk.com/mem445')
     url2 = InlineKeyboardButton (text = 'Телеграмм', url= 'https://t.me/Kinoki445')
     url3 = InlineKeyboardButton (text = 'Вк куратора группы', url= 'https://vk.com/id31107453')
-    markup_inline.add(url1,url2, url3)
+    url4 = InlineKeyboardButton (text = 'Вк Аналог', url= 'https://vk.com/nttek_raspisanie')
+    markup_inline.add(url1,url2, url3, url4)
     bot.send_message(message.chat.id, facts, parse_mode='html', reply_markup=markup_inline)
     f.close()
 
@@ -148,8 +150,8 @@ def defuser(bot, message, InlineKeyboardMarkup, InlineKeyboardButton):
     cursor.execute('''SELECT user_id FROM admin WHERE user_id = ?''', (message.chat.id, ))
     admin = 510441193
     if message.chat.id != admin:
-         bot.send_message(message.chat.id, f'У тебя нету доступа к такой команде', parse_mode='html')
-         menu(bot, message, message)
+        bot.send_message(message.chat.id, f'У тебя нету доступа к такой команде', parse_mode='html')
+        menu(bot, message, message)
     else:
         cursor.execute('''SELECT * FROM users''')
         global user
@@ -248,7 +250,6 @@ def root(bot, argument1, argument2):
 
 # callback
 def mycallback(bot, callback):
-
     #ПОЛУЧЕНИЕ ДНЕЙ НА КОТОРЫЕ ЕСТЬ РАСПИСАНИЕ
     site = requests.get(f'https://erp.nttek.ru/api/schedule/legacy').text
     sitedate = json.loads(site)
@@ -259,13 +260,14 @@ def mycallback(bot, callback):
         a = ((len(sitedate)) - 5)
 
     #ВЫВОД ОПРЕДЕЛЁННОЙ ГРУППЫ (ДНЯ)
-    for i in range(a, len(sitedate)):
-        if callback.data == (f'{sitedate[i]} 2ИС6'):
-            getpari(sitedate[i], 'group', "2ИС6", InlineKeyboardMarkup, InlineKeyboardButton, bot, callback)
-        elif callback.data == (f'{sitedate[i]} 2Р5'):
-            getpari(sitedate[i], 'group', "2Р5", InlineKeyboardMarkup, InlineKeyboardButton, bot, callback)
-        elif callback.data == (f'{sitedate[i]} 2ПСО12'):
-            getpari(sitedate[i], 'group', "2ПСО12", InlineKeyboardMarkup, InlineKeyboardButton, bot, callback)
+    # for i in range(a, len(sitedate)):
+    #     if callback.data == (f'{sitedate[i]} 2ИС6'):
+    #         getpari(sitedate[i], 'group', "2ИС6", InlineKeyboardMarkup, InlineKeyboardButton, bot, callback)
+    #     elif callback.data == (f'{sitedate[i]} 2Р5'):
+    #         getpari(sitedate[i], 'group', "2Р5", InlineKeyboardMarkup, InlineKeyboardButton, bot, callback)
+    #     elif callback.data == (f'{sitedate[i]} 2ПСО12'):
+    #         getpari(sitedate[i], 'group', "2ПСО12", InlineKeyboardMarkup, InlineKeyboardButton, bot, callback)
+    #     else:
 
     #ВЫВОД ОПРЕДЕЛЁННОЙ ГРУППЫ (ДНЕЙ)
     if callback.data == '2ИС6':
@@ -285,8 +287,25 @@ def mycallback(bot, callback):
     #     if callback.data == (f'{sitedate[i]} Зятикова ТЮ'):
     #         getpari(sitedate[i], 'teacher', "Зятикова ТЮ", InlineKeyboardMarkup, InlineKeyboardButton, bot, callback)
     
+    elif callback.data == 'another_group':
+        bot.reply_to(callback.message, 'Введи название группы, пример (2ИС6): ')
+        def another_group(message):
+            try:
+                parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, 'group', message.text.upper())
+            except:
+                bot.send_message(callback.message.chat.id, f'Такой группы не существует', parse_mode='html')
+        bot.register_next_step_handler(callback.message, another_group)
+
+    for i in range(a, len(sitedate)):
+            if callback.data[0:10:] == f'{sitedate[i]}':
+                getpari(callback.data[0:10:], 'group', callback.data[11::], InlineKeyboardMarkup, InlineKeyboardButton, bot, callback)
+                print(f'Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил {callback.data[11::]}! В', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
+            elif callback.data[2:12:] == f'{sitedate[i]}':
+                print(f'Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил {callback.data[16:-2:]}! В', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
+                getpari(callback.data[2:12:], 'group', callback.data[16:-2:], InlineKeyboardMarkup, InlineKeyboardButton, bot, callback)
+        
     #Работа с DateBase BAN
-    elif callback.data == 'banbase':
+    if callback.data == 'banbase':
         markup = InlineKeyboardMarkup()
         add_user = InlineKeyboardButton(text = 'Adduser', callback_data= 'add_user_ban')
         close = InlineKeyboardButton(text = '🔙Выйти', callback_data= 'root')
