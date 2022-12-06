@@ -52,7 +52,7 @@ def db_table_val(message, bot):
     if data is None:
         cursor.execute('INSERT INTO users (user_id, user_name, username, join_date) VALUES (?, ?, ?, ?)', (us_id, us_name, username, joindate))
         database.commit()
-        bot.send_message(message.chat.id, 'Я тебя зарегистрировал!', parse_mode='html')
-        bot.send_message(chat_id = 510441193, text = f'Зарегестрировался новый пользователь! {username}, {us_name}', parse_mode='Markdown')
+        bot.send_message(message.chat.id, 'Я тебя зарегистрировал!')
+        bot.send_message(chat_id = 510441193, text = f'Зарегестрировался новый пользователь! {username}, {us_name}')
     else:
-        bot.send_message(message.chat.id, 'Ты уже зарегестрирован и можешь пользоваться функциями бота!', parse_mode='html')
+        bot.send_message(message.chat.id, 'Ты уже зарегестрирован и можешь пользоваться функциями бота!')
