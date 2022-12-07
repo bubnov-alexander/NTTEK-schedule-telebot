@@ -31,8 +31,8 @@ def menu(bot, argument1, argument2):
 #ГРУППЫ
 def group(bot, message):
     markup = InlineKeyboardMarkup(row_width=3)
-    item1 = InlineKeyboardButton(text = "2ИС6", callback_data = '2ИС6')
-    item2 = InlineKeyboardButton(text = "2ПСО12", callback_data = "2pso12")
+    item1 = InlineKeyboardButton(text = "2ИС6", callback_data = '2is6')
+    item2 = InlineKeyboardButton(text = "2ИС3", callback_data = "2is3")
     item3 = InlineKeyboardButton(text = "2Р5", callback_data = "2r5")
     item5 = InlineKeyboardButton(text = "Расписание куратора", callback_data = "teacher")
     item4 = InlineKeyboardButton(text = "🔔Расписание звонков", callback_data = 'bells')
@@ -272,25 +272,17 @@ def mycallback(bot, callback):
     #     else:
 
     #ВЫВОД ОПРЕДЕЛЁННОЙ ГРУППЫ (ДНЕЙ)
-    if callback.data == '2ИС6':
+    if callback.data == '2is6':
         parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, 'group', '2ИС6')
         print(f'Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил 2is6! В', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
     elif callback.data == '2r5':
             parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, 'group', '2Р5')
             print(f'Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил 2Р5! В', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
-    elif callback.data == '2pso12':
-            parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, 'group', '2ПСО12')
-            print(f'Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил 2ПСО12! В', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
-    elif callback.data == 'teacher':
-        pass
-    #     parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, 'teacher', 'Зятикова ТЮ')
-    #     print(f'Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил Зятикова ТЮ! В', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
-    # for i in range(0, len(sitedate)):
-    #     if callback.data == (f'{sitedate[i]} Зятикова ТЮ'):
-    #         getpari(sitedate[i], 'teacher', "Зятикова ТЮ", InlineKeyboardMarkup, InlineKeyboardButton, bot, callback)
-    
+    elif callback.data == '2is3':
+            parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, 'group', '2ИС3')
+            print(f'Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил 2ИС3! В', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
     elif callback.data == 'another_group':
-        bot.reply_to(callback.message, 'Введи название группы, пример (2ИС6): ')
+        bot.reply_to(callback.message, 'Введи название группы, пример "2ИС6" Без - и пробелов: ')
         def another_group(message):
             try:
                 parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, 'group', message.text.upper())
