@@ -42,8 +42,8 @@ def bot_message(message):
 
 #Проверка на список забаненых пользователей, а так же есть ли они в БД
     cursor.execute(f'SELECT user_id FROM ban WHERE user_id = {message.chat.id} ')
-    ban = cursor.fetchall()
-    if message.chat.id not in ban:
+    ban = 5322880119
+    if message.chat.id != ban:
         if data is None:
             bot.send_message(message.from_user.id, 'Привет, тебя нету в базе данных, не мог бы ты написать /start ?', parse_mode='html')
             print(f'Пользователь {message.from_user.username} {message.from_user.first_name} зарегестрировался! в', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
