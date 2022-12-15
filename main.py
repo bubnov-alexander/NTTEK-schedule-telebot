@@ -28,6 +28,12 @@ def help_message(message):
     bot.send_message(message.from_user.id, 'Привет, чтобы пользоваться функциями бота тебе достаточно написать "Меню" c большой буквы', parse_mode='html')
     print(f'Пользователь {message.from_user.username} {message.from_user.first_name} написал {message.text} в ', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
 
+@bot.message_handler(commands=['students'])
+def students(message):
+    groupstudents(bot, message)
+    print(f'Пользователь {message.from_user.username} {message.from_user.first_name} запросил студентов в', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
+                
+
 #Действия callback
 @bot.callback_query_handler(func=lambda callback: callback.data)
 def callback(callback):
@@ -43,7 +49,7 @@ def bot_message(message):
 #Проверка на список забаненых пользователей, а так же есть ли они в БД
     cursor.execute(f'SELECT user_id FROM ban WHERE user_id = {message.chat.id} ')
     ban = 5322880119
-    if message.chat.id != ban:
+    if message.chat.id != 5322880119:
         if data is None:
             bot.send_message(message.from_user.id, 'Привет, тебя нету в базе данных, не мог бы ты написать /start ?', parse_mode='html')
             print(f'Пользователь {message.from_user.username} {message.from_user.first_name} зарегестрировался! в', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
@@ -93,14 +99,14 @@ def bot_message(message):
                         markup.add(url1)
                         bot.send_message(message.chat.id, 'К сожелению сайт с парами сейчас недоступен, но ты можешь воспольззоваться другими функциями бота. \nДля этого напиши "меню"', parse_mode='html',reply_markup=markup)
 
-                elif message_to_bot == '📖дз📖' or message_to_bot == 'дз':
-                    homework(bot, message, InlineKeyboardMarkup, InlineKeyboardButton)
-                    print(f'Пользователь {message.from_user.username} {message.from_user.first_name} запросил ДЗ! В', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
+                # elif message_to_bot == '📖дз📖' or message_to_bot == 'дз':
+                #     homework(bot, message, InlineKeyboardMarkup, InlineKeyboardButton)
+                #     print(f'Пользователь {message.from_user.username} {message.from_user.first_name} запросил ДЗ! В', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
 
                 #Студенты группы 
-                elif message_to_bot == '👬студенты группы👬' or message_to_bot == 'студенты группы':
-                    groupstudents(bot, message)
-                    print(f'Пользователь {message.from_user.username} {message.from_user.first_name} запросил студентов в', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
+                # elif message_to_bot == '👬студенты группы👬' or message_to_bot == 'студенты группы':
+                #     groupstudents(bot, message)
+                #     print(f'Пользователь {message.from_user.username} {message.from_user.first_name} запросил студентов в', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
                 
                 #Рандом пользователя
                 elif message_to_bot == '🔁рандомно выбрать студента🔁':

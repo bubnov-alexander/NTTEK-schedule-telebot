@@ -21,7 +21,7 @@ def menu(bot, argument1, argument2):
     cursor.execute('''SELECT user_id FROM admin WHERE user_id = ?''', (argument1.chat.id, ))
     admin = 510441193
     if argument1.chat.id != admin:
-        markup.add(item1, item2, item3, item4, item5)
+        markup.add(item1, item2, item5)
         bot.send_message(argument1.chat.id, 'Вот что я могу сделать: '.format(argument2.from_user),  parse_mode='html', reply_markup=markup)
     else:
         item6 = KeyboardButton("Admin panel")
@@ -34,10 +34,10 @@ def group(bot, message):
     item1 = InlineKeyboardButton(text = "2ИС6", callback_data = '2is6')
     item2 = InlineKeyboardButton(text = "2ИС3", callback_data = "2is3")
     item3 = InlineKeyboardButton(text = "2Р5", callback_data = "2r5")
-    item5 = InlineKeyboardButton(text = "Расписание куратора", callback_data = "teacher")
+    item5 = InlineKeyboardButton(text = "Сайт с расписанием", url = 'https://a.nttek.ru/')
     item4 = InlineKeyboardButton(text = "🔔Расписание звонков", callback_data = 'bells')
     back = InlineKeyboardButton(text = "Другая группа", callback_data = 'another_group')
-    markup.add(item1, item2, item3, item4, back)
+    markup.add(item1, item2, item3, item4, item5, back)
     bot.send_message(message.chat.id, 'Выбери расписание какой группы ты хочешь узнать: ',  parse_mode='html', reply_markup=markup)
 
 
