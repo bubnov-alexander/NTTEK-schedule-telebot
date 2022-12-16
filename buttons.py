@@ -283,11 +283,12 @@ def mycallback(bot, callback):
     elif callback.data == '2is3':
             parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, 'group', '2ИС3')
             print(f'Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил 2ИС3! В', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
+    
     elif callback.data == 'another_group':
         bot.reply_to(callback.message, 'Введи название группы, пример "2ИС6" Без - и пробелов: ')
         def another_group(message):
             try:
-                parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, 'teacher', message.text.upper())
+                parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, 'group', message.text.upper())
             except:
                 bot.send_message(callback.message.chat.id, f'Такой группы не существует', parse_mode='html')
         bot.register_next_step_handler(callback.message, another_group)
