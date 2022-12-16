@@ -58,7 +58,7 @@ def bot_message(message):
             if message.content_type.lower() == 'text':
 
                 #Преподы
-                if message_to_bot == '👥преподы👥' or message_to_bot == 'преподы':
+                if message_to_bot == '👥Преподаватели👥' or message_to_bot == 'преподы':
                     prepod(bot, message)
                     print(f'Пользователь {message.from_user.username} {message.from_user.first_name} узнал преподов! В', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
 

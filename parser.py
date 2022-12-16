@@ -67,27 +67,29 @@ def getpari(date, group, group_name, InlineKeyboardMarkup, InlineKeyboardButton,
         now = now.strftime('%Y-%m-%d')
         r = requests.get(f'https://erp.nttek.ru/api/schedule/legacy/{now}/{group}/{group_name}').text
         data = json.loads(r)
-        try:
-            text = ''
-            for i in data:
-                Corpus = i['number']
-                Group = i['name']
-                Para = i['rooms']
-                Room = i['teachers']
-                text = (text + '\n' + (str(f'Корпус: {Corpus}\nГруппа: {Group}\nПара{Para}\nКабинет: {Room}\n')))
+        # try:
+        text = ''
+        a = 0
+        print(data[0])
+        for i in data['2']:
+            # Corpus = i['number']
+            Group = i['group']
+            Para = i['name']
+            Room = i['rooms']
+            text = (text + '\n' + (str(f'Корпус: \nГруппа: {Group}\nПара{Para}\nКабинет: {Room}\n')))
+            a += 1
         
-            keyboard = InlineKeyboardMarkup()
-            keyboard.row_width = 2
-            for i in range(a, len(sitedate)):
-                item1 = (InlineKeyboardButton(f'{sitedate[i]} {group_name}',callback_data = f'{sitedate[i]} {group_name}'))
-                item2 = (InlineKeyboardButton('Меню', callback_data = 'close'))
-                keyboard.add (item1, item2)
-            bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'Расписание:\n {text} \nВыберите день на который хотите узнать расписание', reply_markup = keyboard)
-        except:
-            keyboard = InlineKeyboardMarkup()
-            keyboard.row_width = 2
-            for i in range(a, len(sitedate)):
-                item1 = (InlineKeyboardButton(f'{sitedate[i]} {group_name}',callback_data = f'{sitedate[i]} {group_name}'))
-                item2 = (InlineKeyboardButton('Меню', callback_data = 'close'))
-                keyboard.add (item1, item2)
-            bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'Расписания НЕТУ!\nВыберите день на который хотите узнать расписание', reply_markup = keyboard)
+        keyboard = InlineKeyboardMarkup()
+        keyboard.row_width = 2
+        for i in range(a, len(sitedate)):
+            item1 = (InlineKeyboardButton(f'{sitedate[i]} {group_name}',callback_data = f'{sitedate[i]} {group_name}'))
+        item2 = (InlineKeyboardButton('Меню', callback_data = 'close'))
+        keyboard.add (item1, item2)
+        bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'Расписание:\n {text} \nВыберите день на который хотите узнать расписание', reply_markup = keyboard)
+        # except:
+        #     keyboard = InlineKeyboardMarkup()
+        #     keyboard.row_width = 2
+        #     item1 = (InlineKeyboardButton('Другие группы', callback_data = 'another_group'))
+        #     item2 = (InlineKeyboardButton('Меню', callback_data = 'close'))
+        #     keyboard.add (item1, item2)
+        #     bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'Такой группы нету выбери другую', parse_mode='Markdown', reply_markup = keyboard)
