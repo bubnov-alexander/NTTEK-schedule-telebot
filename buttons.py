@@ -295,12 +295,12 @@ def mycallback(bot, callback):
 
     elif callback.data == 'teacher':
         bot.reply_to(callback.message, 'Введи фамилию преподавателя, пример "Зятикова ТЮ" Без - и  через пробел: ')
-        def another_group(message):
+        def another_teacher(message):
             try:
                 parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, 'teacher', message.text)
             except:
                 bot.send_message(callback.message.chat.id, f'Такой группы не существует', parse_mode='html')
-        bot.register_next_step_handler(callback.message, another_group)
+        bot.register_next_step_handler(callback.message, another_teacher)
         
 
     for i in range(a, len(sitedate)):
