@@ -135,9 +135,7 @@ if __name__ == '__main__':
             bot.infinity_polling(none_stop=True, timeout=123)
         except Exception as e:
             print(e)
-            error(bot, e)
+            error(bot)
             tm.sleep(15)
-
-
 
 # bot.polling(none_stop=True)

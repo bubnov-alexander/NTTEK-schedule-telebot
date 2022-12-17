@@ -39,7 +39,7 @@ def group(bot, message):
     item6 = InlineKeyboardButton(text = "Преподаватель", callback_data = 'teacher')
     back = InlineKeyboardButton(text = "Другая группа", callback_data = 'another_group')
     markup.add(item1, item2, item3, item4, item5)
-    markup.add(back)
+    markup.add(back, item6)
     bot.send_message(message.chat.id, 'Выбери расписание какой группы ты хочешь узнать: ',  parse_mode='html', reply_markup=markup)
 
 
@@ -133,8 +133,9 @@ def aboutbot(bot, message):
     f.close()
 
 #При появление ошибок
-def error(bot, e):
-    bot.send_message(chat_id = 510441193, text = f'В боте появилась ошибка: \n{e}', parse_mode='html')
+def error(bot):
+    bot.send_message(chat_id = 510441193, text = f'В боте появилась ошибка!')
+    
 
 #Панель ДЗ
 def homework(bot, message, InlineKeyboardMarkup, InlineKeyboardButton):
@@ -267,6 +268,16 @@ def mycallback(bot, callback):
     #ПОЛУЧЕНИЕ ДНЕЙ НА КОТОРЫЕ ЕСТЬ РАСПИСАНИЕ
     site = requests.get(f'https://erp.nttek.ru/api/schedule/legacy').text
     sitedate = json.loads(site)
+
+    # a = int((sitedate[0])[0:2:])
+    # print (a)
+    # f = open("info.txt", "w+")
+    # b = f.readline()
+    # n = int(b)
+    # print(n)
+    # if a == n:
+    #     print('Равно')
+        
     sitedate.sort(key=lambda x: time.mktime(time.strptime(x,"%d.%m.%Y")))
     if (len(sitedate)) <= 5:
         a = 0
@@ -289,7 +300,8 @@ def mycallback(bot, callback):
         def another_group(message):
             try:
                 parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, 'group', message.text.upper())
-            except:
+            except Exception as e:
+                bot.send_message(chat_id = 510441193, text = f'Пользователь {message.from_user.username} {message.from_user.first_name} ввёл неверно группу {message.text}')
                 bot.send_message(callback.message.chat.id, f'Такой группы не существует', parse_mode='html')
         bot.register_next_step_handler(callback.message, another_group)
 
@@ -298,7 +310,8 @@ def mycallback(bot, callback):
         def another_teacher(message):
             try:
                 parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, 'teacher', message.text)
-            except:
+            except Exception as e:
+                bot.send_message(chat_id = 510441193, text = f'Пользователь {message.from_user.username} {message.from_user.first_name} ввёл неверно группу {message.text}')
                 bot.send_message(callback.message.chat.id, f'Такой группы не существует', parse_mode='html')
         bot.register_next_step_handler(callback.message, another_teacher)
         
@@ -307,14 +320,15 @@ def mycallback(bot, callback):
         if callback.data[0:6:] != 'препод':
             if callback.data[0:10:] == f'{sitedate[i]}':
                 getpari(callback.data[0:10:], 'group', callback.data[11::], InlineKeyboardMarkup, InlineKeyboardButton, bot, callback)
-                print(f'Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил {callback.data[11::]}! В', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
+                print(f'Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил ({callback.data[8::]}! В', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
 
             elif callback.data[2:12:] == f'{sitedate[i]}':
-                print(f'Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил {callback.data[16:-2:]}! В', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
+                print(f'Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил ({callback.data[13:-2:]}! В', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
                 getpari(callback.data[2:12:], 'group', callback.data[16:-2:], InlineKeyboardMarkup, InlineKeyboardButton, bot, callback)
-        else:
+        
+        elif callback.data[0:18:] == f"препод('{sitedate[i]}":
             getpari(callback.data[8:18:], 'teacher', callback.data[22:-2:], InlineKeyboardMarkup, InlineKeyboardButton, bot, callback)
-            print(f'Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил {callback.data[11::]}! В', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
+            print(f'Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил  ({callback.data[8::]}! В', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
         
     #Работа с DateBase BAN
     if callback.data == 'banbase':
