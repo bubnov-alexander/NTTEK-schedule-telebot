@@ -81,7 +81,7 @@ def getpari(date, group, group_name, InlineKeyboardMarkup, InlineKeyboardButton,
                     Group = data[i]['group']
                     Para = data[i]['name']
                     Room = data[i]['rooms']
-                    text = (text + '\n' + (str(f'Корпус: {Corpus}\nПара: {i}\nГруппа: {Group}\nПара: {Para}\nКабинет: {Room}\n')))
+                    text = (text + '\n' + (str(f'{Corpus}\nПара: {i}\nГруппа: {Group}\nПара: {Para}\nКабинет: {Room}\n')))
                 keyboard = InlineKeyboardMarkup()
                 keyboard.row_width = 2
                 for i in range(a, len(sitedate)):
