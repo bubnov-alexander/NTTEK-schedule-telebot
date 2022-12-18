@@ -38,8 +38,8 @@ def group(bot, message):
     item4 = InlineKeyboardButton(text = "🔔Расписание звонков", callback_data = 'bells')
     item6 = InlineKeyboardButton(text = "Преподаватель", callback_data = 'teacher')
     back = InlineKeyboardButton(text = "Другая группа", callback_data = 'another_group')
-    markup.add(item1, item2, item3, item4, item5)
-    markup.add(back, item6)
+    markup.add(item1, item2, item3, back, item6)
+    markup.add(item4, item5)
     bot.send_message(message.chat.id, 'Выбери расписание какой группы ты хочешь узнать: ',  parse_mode='html', reply_markup=markup)
 
 
@@ -69,16 +69,18 @@ def parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, group, wh
         for i in range(a, len(sitedate)):
             keyboard.add (InlineKeyboardButton(f'{sitedate[i]} {who}', callback_data = f'{sitedate[i], who}'))
         item1 = (InlineKeyboardButton('Другие группы', callback_data = 'another_group'))
+        item3 = (InlineKeyboardButton('Преподаватели', callback_data = 'teacher'))
         item2 = (InlineKeyboardButton('Меню', callback_data = 'close'))
-        keyboard.add (item1, item2)
+        keyboard.add(item1, item3, item2)
         bot.send_message(callback.message.chat.id, 'Выберите день на который хотите узнать расписание', parse_mode='html', reply_markup = keyboard)
 
     elif group == 'teacher':
         for i in range(a, len(sitedate)):
             keyboard.add (InlineKeyboardButton(f'{sitedate[i]} {who}', callback_data = f'препод{sitedate[i], who}'))
         item1 = (InlineKeyboardButton('Другие группы', callback_data = 'another_group'))
+        item3 = (InlineKeyboardButton('Преподаватели', callback_data = 'teacher'))
         item2 = (InlineKeyboardButton('Меню', callback_data = 'close'))
-        keyboard.add (item1, item2)
+        keyboard.add(item1, item3, item2)
         bot.send_message(callback.message.chat.id, 'Выберите день на который хотите узнать расписание', parse_mode='html', reply_markup = keyboard)
         
 
@@ -287,13 +289,10 @@ def mycallback(bot, callback):
     #ВЫВОД ОПРЕДЕЛЁННОЙ ГРУППЫ (ДНЕЙ)
     if callback.data == '2is6':
         parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, 'group', '2ИС6')
-        print(f'Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил 2is6! В', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
     elif callback.data == '2r5':
-            parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, 'group', '2Р5')
-            print(f'Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил 2Р5! В', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
+        parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, 'group', '2Р5')
     elif callback.data == '2is3':
-            parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, 'group', '2ИС3')
-            print(f'Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил 2ИС3! В', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
+        parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, 'group', '2ИС3')
     
     elif callback.data == 'another_group':
         bot.reply_to(callback.message, 'Введи название группы, пример "2ИС6" Без - и пробелов: ')
@@ -320,15 +319,15 @@ def mycallback(bot, callback):
         if callback.data[0:6:] != 'препод':
             if callback.data[0:10:] == f'{sitedate[i]}':
                 getpari(callback.data[0:10:], 'group', callback.data[11::], InlineKeyboardMarkup, InlineKeyboardButton, bot, callback)
-                print(f'Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил ({callback.data[8::]}! В', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
+                print(f'Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил {callback.data[11::]}! В', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
 
             elif callback.data[2:12:] == f'{sitedate[i]}':
-                print(f'Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил ({callback.data[13:-2:]}! В', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
+                print(f'Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил {callback.data[16:-2:]}! В', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
                 getpari(callback.data[2:12:], 'group', callback.data[16:-2:], InlineKeyboardMarkup, InlineKeyboardButton, bot, callback)
         
         elif callback.data[0:18:] == f"препод('{sitedate[i]}":
             getpari(callback.data[8:18:], 'teacher', callback.data[22:-2:], InlineKeyboardMarkup, InlineKeyboardButton, bot, callback)
-            print(f'Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил  ({callback.data[8::]}! В', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
+            print(f'Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил {callback.data[22:-2:]}! В', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
         
     #Работа с DateBase BAN
     if callback.data == 'banbase':
