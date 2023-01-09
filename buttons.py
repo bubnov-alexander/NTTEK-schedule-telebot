@@ -13,7 +13,7 @@ predmeti = ['Теория вероятностей', 'Математика', 'С
 #argument2.from_user
 def menu(bot, argument1, argument2):
     markup=ReplyKeyboardMarkup(resize_keyboard=True)
-    item1 = KeyboardButton("📋Пары📋")
+    item1 = KeyboardButton("📋Расписание📋")
     item2 = KeyboardButton("👥Преподаватели👥")
     item3 = KeyboardButton("👬Студенты группы👬")
     item4 = KeyboardButton("📖ДЗ📖")
