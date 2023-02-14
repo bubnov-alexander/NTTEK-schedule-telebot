@@ -1,5 +1,5 @@
 from settings import *
-from parser import *
+from myparser import *
 import pytz,requests,json,time,random
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton, KeyboardButton, ReplyKeyboardMarkup
 
@@ -42,15 +42,24 @@ def group(bot, message):
     markup.add(item4, item5)
     bot.send_message(message.chat.id, 'Выбери расписание какой группы ты хочешь узнать: ',  parse_mode='html', reply_markup=markup)
 
+def send_message_users(bot, message):
+    markup = InlineKeyboardMarkup(row_width=2)
+    item1 = InlineKeyboardButton(text = "Отправить", callback_data = 'sm')
+    back = InlineKeyboardButton(text = "Назад", callback_data = 'another_group')
+    markup.add(item1, back)
+    bot.send_message(message.chat.id, 'Что ты хочешь?',  parse_mode='html', reply_markup=markup)
+
 
 #АДМИН ПАНЕЛЬ
 def adminpanel(bot, argument1, argument2):
     markup = ReplyKeyboardMarkup(resize_keyboard=True)
     item1 = KeyboardButton('Пользователи')
     item2 = KeyboardButton('Права доступа')
+    item3 = KeyboardButton('Отправить сообщение')
     back = KeyboardButton('🔙Назад')
-    markup.add(item1, item2, back)
+    markup.add(item1, item2, item3, back)
     bot.send_message(argument1.chat.id, 'Выбери что-то из предложенного: ', parse_mode = 'html', reply_markup = markup)
+
 
 #ВЫВОД РАСПИСАНИЯ
 def parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, group, who):
@@ -136,8 +145,7 @@ def aboutbot(bot, message):
 
 #При появление ошибок
 def error(bot):
-    bot.send_message(chat_id = 510441193, text = f'В боте появилась ошибка!')
-    
+    bot.send_message(chat_id = 510441193, text = f'В боте появилась ошибка!')  
 
 #Панель ДЗ
 def homework(bot, message, InlineKeyboardMarkup, InlineKeyboardButton):
@@ -358,6 +366,28 @@ def mycallback(bot, callback):
                 root(bot, callback.message, callback.message)
         bot.register_next_step_handler(callback.message, add_user_ban)
 
+    elif callback.data == 'sm':
+        cursor.execute('''SELECT user_id FROM admin WHERE user_id = ?''', (callback.message.chat.id, ))
+        admin = cursor.fetchone()
+        if admin is None:
+            bot.send_message(callback.message.chat.id, text = 'У тебя нету прав', parse_mode='html')
+            menu(bot, callback.message, callback.message)
+        else:
+                    bot.reply_to(callback.message, 'Что ты хочешь написать?')
+                    def send(message, count = 0):
+                        cursor.execute('''SELECT * FROM users''')
+                        lol = cursor.fetchall()
+                        count = 0
+                        while count != len(lol):
+                                for row in lol:
+                                    try:
+                                        bot.send_message(row[1], text = f'{message.text}', parse_mode='html')
+                                        count += 1
+                                    except:
+                                        count += 1
+                        menu(bot, message, message)
+                    bot.register_next_step_handler(callback.message, send)
+
     #УДАЛИТЬ ПОЛЬЗОВАТЕЛЯ ИЗ DateBase ban
     elif callback.data == 'del_user_ban':
         bot.reply_to(callback.message, 'Введи ID пользователя: ')
@@ -430,6 +460,7 @@ def mycallback(bot, callback):
             markup.add(InlineKeyboardButton(str(admin[i][0]), callback_data = f'{admin[i]}'))
         markup.add(add_user, close, delete_user, row_width = 3)
         bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'Все пользователи Базы: ', parse_mode='markdown', reply_markup = markup)
+
     #ДОБАВИТЬ ПОЛЬЗОВАТЕЛЯ В DateBase admin
     elif callback.data == 'add_user_admin':
         bot.reply_to(callback.message, 'Введи ID пользователя: ')

@@ -79,6 +79,9 @@ def bot_message(message):
                 elif message_to_bot == 'admin panel':
                     adminpanel(bot, message, message)
 
+                elif message_to_bot == 'отправить сообщение':
+                    send_message_users(bot, message)
+
                 #Все группы у которых можно узнать расписание
                 elif message_to_bot == 'группы':
                     try:
