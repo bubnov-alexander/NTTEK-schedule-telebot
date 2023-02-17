@@ -6,8 +6,6 @@ from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton, KeyboardBu
 tz = pytz.timezone('Asia/Yekaterinburg')
 page = 1
 predmeti = ['Теория вероятностей', 'Математика', 'Сопровождение ИС', 'ОС и среды ', 'Информационные технологии', 'ОБЖ']
-TIME = (datetime.datetime.now(tz)).strftime('%H:%M:%S')
-
 
 #ГЛАВНОЕ МЕНЮ
 #argument1.chat.id
@@ -276,6 +274,7 @@ def root(bot, argument1, argument2):
 
 # callback
 def mycallback(bot, callback):
+    TIME = (datetime.datetime.now(tz)).strftime('%H:%M:%S')
     #ПОЛУЧЕНИЕ ДНЕЙ НА КОТОРЫЕ ЕСТЬ РАСПИСАНИЕ
     site = requests.get(f'https://erp.nttek.ru/api/schedule/legacy').text
     sitedate = json.loads(site)

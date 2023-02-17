@@ -5,8 +5,6 @@ from settings import *
 from buttons import *
 
 tz = pytz.timezone('Asia/Yekaterinburg')
-TIME = (datetime.datetime.now(tz)).strftime('%H:%M:%S')
-
 bot = telebot.TeleBot(TOKEN)
 
 #Действия после start
@@ -45,6 +43,7 @@ def callback(callback):
 #Действия когда пришёл текст
 @bot.message_handler(content_types=["text"])
 def bot_message(message):
+    TIME = (datetime.datetime.now(tz)).strftime('%H:%M:%S')
     cursor.execute(f'SELECT id FROM users WHERE user_id = {message.chat.id} ')
     data = cursor.fetchone()
     message_to_bot = message.text.lower()
