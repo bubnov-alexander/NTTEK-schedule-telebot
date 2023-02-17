@@ -327,11 +327,13 @@ def mycallback(bot, callback):
         if callback.data[0:6:] != 'препод':
             if callback.data[0:10:] == f'{sitedate[i]}':
                 getpari(callback.data[0:10:], 'group', callback.data[11::], InlineKeyboardMarkup, InlineKeyboardButton, bot, callback)
+                TIME = (datetime.datetime.now(tz)).strftime('%H:%M:%S')
                 print(f'Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил {callback.data[11::]}! В', TIME)
                 with open("data/logs.txt", "a+") as f:
                     f.write(f'\n{TIME} | Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил {callback.data[11::]}!')
 
             elif callback.data[2:12:] == f'{sitedate[i]}':
+                TIME = (datetime.datetime.now(tz)).strftime('%H:%M:%S')
                 print(f'Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил {callback.data[16:-2:]}! В', TIME)
                 with open("data/logs.txt", "a+") as f:
                     f.write(f'\n{TIME} | Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил {callback.data[16:-2:]}!')
@@ -339,6 +341,7 @@ def mycallback(bot, callback):
         
         elif callback.data[0:18:] == f"препод('{sitedate[i]}":
             getpari(callback.data[8:18:], 'teacher', callback.data[22:-2:], InlineKeyboardMarkup, InlineKeyboardButton, bot, callback)
+            TIME = (datetime.datetime.now(tz)).strftime('%H:%M:%S')
             print(f'Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил {callback.data[22:-2:]}! В', TIME)
             with open("data/logs.txt", "a+") as f:
                     f.write(f'\n{TIME} | Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил {callback.data[22:-2:]}!')
@@ -548,6 +551,7 @@ def mycallback(bot, callback):
                 bot.reply_to(message, f'Задание которое я добавил в Базу Данных:\n\n{message.text}\n', parse_mode='markdown')
                 homework(bot, message, InlineKeyboardMarkup, InlineKeyboardButton)
                 bot.send_message(chat_id = 510441193, text = f'Добавил новое ДЗ! В {para} {message.from_user.username}, {message.from_user.first_name}', parse_mode='Markdown')
+                TIME = (datetime.datetime.now(tz)).strftime('%H:%M:%S')
                 print(f'Пользователь {callback.message.chat.username} {callback.message.chat.first_name} изменил ДЗ! В {para}', TIME)
                 with open("data/logs.txt", "a+") as f:
                     f.write(f'\n{TIME} | Пользователь {callback.message.chat.username} {callback.message.chat.first_name} изменил ДЗ!')

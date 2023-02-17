@@ -24,6 +24,7 @@ def start_message(message):
 @bot.message_handler(commands=['help'])
 def help_message(message):
     bot.send_message(message.from_user.id, 'Привет, чтобы пользоваться функциями бота тебе достаточно написать "Меню" c большой буквы, если что-то не получается пиши мне | @Kinoki445', parse_mode='html')
+    TIME = (datetime.datetime.now(tz)).strftime('%H:%M:%S')
     print(f'Пользователь {message.from_user.username} {message.from_user.first_name} написал {message.text} в ', TIME)
     with open("data/logs.txt", "a+") as f:
         f.write(f'\n{TIME} | Пользователь {message.from_user.username} {message.from_user.first_name} написал {message.text}')
@@ -31,6 +32,7 @@ def help_message(message):
 @bot.message_handler(commands=['students'])
 def students(message):
     groupstudents(bot, message)
+    TIME = (datetime.datetime.now(tz)).strftime('%H:%M:%S')
     print(f'Пользователь {message.from_user.username} {message.from_user.first_name} запросил студентов в', TIME)
     with open("data/logs.txt", "a+") as f:
         f.write(f'\n{TIME} | Пользователь {message.from_user.username} {message.from_user.first_name} запросил студентов')
@@ -60,6 +62,7 @@ def bot_message(message):
                 #Преподы
                 if message_to_bot == '👥преподаватели👥' or message_to_bot == 'преподы':
                     prepod(bot, message)
+                    TIME = (datetime.datetime.now(tz)).strftime('%H:%M:%S')
                     print(f'Пользователь {message.from_user.username} {message.from_user.first_name} узнал преподов! В', TIME)
                     with open("data/logs.txt", "a+") as f:
                         f.write(f'\n{TIME} | Пользователь {message.from_user.username} {message.from_user.first_name} узнал преподов!')
@@ -115,6 +118,7 @@ def bot_message(message):
                 #Рандом пользователя
                 elif message_to_bot == '🔁рандомно выбрать студента🔁':
                     myrandom(bot, message)
+                    TIME = (datetime.datetime.now(tz)).strftime('%H:%M:%S')
                     print(f'Пользователь {message.from_user.username} {message.from_user.first_name} запросил рандом! В', TIME)
                     with open("data/logs.txt", "a+") as f:
                         f.write(f'\n{TIME} | Пользователь {message.from_user.username} {message.from_user.first_name} узнал преподов!')
@@ -122,6 +126,7 @@ def bot_message(message):
                 #Информация о боте 
                 elif message_to_bot == '📒о боте📒' or message_to_bot == 'о боте':
                     aboutbot(bot, message)
+                    TIME = (datetime.datetime.now(tz)).strftime('%H:%M:%S')
                     print(f'Пользователь {message.from_user.username} {message.from_user.first_name} узнал о боте в', TIME)
                     with open("data/logs.txt", "a+") as f:
                         f.write(f'\n{TIME} | Пользователь {message.from_user.username} {message.from_user.first_name} узнал о боте')
@@ -129,6 +134,7 @@ def bot_message(message):
                 #Эхо-сообщение
                 else:
                     bot.send_message(message.chat.id, f'Вы написали: {message.text}\nЕсли хотите узанть что может бот напишите "меню"', parse_mode='html')
+                    TIME = (datetime.datetime.now(tz)).strftime('%H:%M:%S')
                     print(f'Пользователь {message.from_user.username} {message.from_user.first_name} написал {message.text} в', TIME)
                     with open("data/logs.txt", "a+") as f:
                         f.write(f'\n{TIME} | Пользователь {message.from_user.username} {message.from_user.first_name} написал {message.text}')
@@ -136,11 +142,13 @@ def bot_message(message):
     #Действия если user в бане
     else:
         bot.send_message(message.chat.id, 'Ты в БАНЕ чучело!!! \n Пиши @Kinoki445', parse_mode='html')   
+        TIME = (datetime.datetime.now(tz)).strftime('%H:%M:%S')
         print(f'Забаненый пользователь {message.from_user.username} {message.from_user.first_name} написал {message.text} в', TIME)
         with open("data/logs.txt", "a+") as f:
             f.write(f'\n{TIME} | Забаненый пользователь {message.from_user.username} {message.from_user.first_name} написал {message.text}')
 
 if __name__ == '__main__':
+    TIME = (datetime.datetime.now(tz)).strftime('%H:%M:%S')
     print ('Бот запущен:', TIME)
     with open("data/logs.txt", "a+") as f:
             f.write(f'\n{TIME} | Бот запущен')
@@ -148,6 +156,7 @@ if __name__ == '__main__':
         try:
             bot.infinity_polling(none_stop=True, timeout=123)
         except Exception as e:
+            TIME = (datetime.datetime.now(tz)).strftime('%H:%M:%S')
             print(e)
             with open("data/logs.txt", "a+") as f:
                 f.write(f'\n{TIME} | e')
