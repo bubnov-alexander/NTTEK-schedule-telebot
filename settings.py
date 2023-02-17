@@ -3,7 +3,7 @@ import sqlite3, datetime, pytz
 tz = pytz.timezone('Asia/Yekaterinburg')
 TIME = (datetime.datetime.now(tz)).strftime('%H:%M:%S')
 
-TOKEN = ('5641742733:AAFjF171LR2NxdLKtu-6zSGrnx63U-W137U')
+TOKEN = ('5656787289:AAE8wT3rHr92ic0FkqGCIAcHDbYQtwZ5G5s')
 
 database = sqlite3.connect('db/database.db', check_same_thread=False)
 cursor = database.cursor()
