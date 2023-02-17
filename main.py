@@ -5,7 +5,7 @@ from settings import *
 from buttons import *
 
 tz = pytz.timezone('Asia/Yekaterinburg')
-time = (datetime.datetime.now(tz))
+TIME = (datetime.datetime.now(tz)).strftime('%H:%M:%S')
 
 bot = telebot.TeleBot(TOKEN)
 
@@ -25,14 +25,17 @@ def start_message(message):
 
 @bot.message_handler(commands=['help'])
 def help_message(message):
-    bot.send_message(message.from_user.id, 'Привет, чтобы пользоваться функциями бота тебе достаточно написать "Меню" c большой буквы', parse_mode='html')
-    print(f'Пользователь {message.from_user.username} {message.from_user.first_name} написал {message.text} в ', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
+    bot.send_message(message.from_user.id, 'Привет, чтобы пользоваться функциями бота тебе достаточно написать "Меню" c большой буквы, если что-то не получается пиши мне | @Kinoki445', parse_mode='html')
+    print(f'Пользователь {message.from_user.username} {message.from_user.first_name} написал {message.text} в ', TIME)
+    with open("data/logs.txt", "a+") as f:
+        f.write(f'\n{TIME} | Пользователь {message.from_user.username} {message.from_user.first_name} написал {message.text}')
 
 @bot.message_handler(commands=['students'])
 def students(message):
     groupstudents(bot, message)
-    print(f'Пользователь {message.from_user.username} {message.from_user.first_name} запросил студентов в', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
-                
+    print(f'Пользователь {message.from_user.username} {message.from_user.first_name} запросил студентов в', TIME)
+    with open("data/logs.txt", "a+") as f:
+        f.write(f'\n{TIME} | Пользователь {message.from_user.username} {message.from_user.first_name} запросил студентов')
 
 #Действия callback
 @bot.callback_query_handler(func=lambda callback: callback.data)
@@ -52,16 +55,15 @@ def bot_message(message):
     if message.chat.id != 5322880119:
         if data is None:
             bot.send_message(message.from_user.id, 'Привет, тебя нету в базе данных, не мог бы ты написать /start ?', parse_mode='html')
-            print(f'Пользователь {message.from_user.username} {message.from_user.first_name} зарегестрировался! в', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
-
         else:
             if message.content_type.lower() == 'text':
 
                 #Преподы
                 if message_to_bot == '👥преподаватели👥' or message_to_bot == 'преподы':
                     prepod(bot, message)
-                    print(f'Пользователь {message.from_user.username} {message.from_user.first_name} узнал преподов! В', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
-
+                    print(f'Пользователь {message.from_user.username} {message.from_user.first_name} узнал преподов! В', TIME)
+                    with open("data/logs.txt", "a+") as f:
+                        f.write(f'\n{TIME} | Пользователь {message.from_user.username} {message.from_user.first_name} узнал преподов!')
                 #Меню
                 elif message_to_bot == '🔙назад' or message_to_bot == 'назад':
                     menu(bot, message, message)
@@ -114,30 +116,42 @@ def bot_message(message):
                 #Рандом пользователя
                 elif message_to_bot == '🔁рандомно выбрать студента🔁':
                     myrandom(bot, message)
-                    print(f'Пользователь {message.from_user.username} {message.from_user.first_name} запросил рандом! В', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
+                    print(f'Пользователь {message.from_user.username} {message.from_user.first_name} запросил рандом! В', TIME)
+                    with open("data/logs.txt", "a+") as f:
+                        f.write(f'\n{TIME} | Пользователь {message.from_user.username} {message.from_user.first_name} узнал преподов!')
 
                 #Информация о боте 
                 elif message_to_bot == '📒о боте📒' or message_to_bot == 'о боте':
                     aboutbot(bot, message)
-                    print(f'Пользователь {message.from_user.username} {message.from_user.first_name} узнал о боте в', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
-                
+                    print(f'Пользователь {message.from_user.username} {message.from_user.first_name} узнал о боте в', TIME)
+                    with open("data/logs.txt", "a+") as f:
+                        f.write(f'\n{TIME} | Пользователь {message.from_user.username} {message.from_user.first_name} узнал о боте')
+
                 #Эхо-сообщение
                 else:
                     bot.send_message(message.chat.id, f'Вы написали: {message.text}\nЕсли хотите узанть что может бот напишите "меню"', parse_mode='html')
-                    print(f'Пользователь {message.from_user.username} {message.from_user.first_name} написал {message.text} в', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
+                    print(f'Пользователь {message.from_user.username} {message.from_user.first_name} написал {message.text} в', TIME)
+                    with open("data/logs.txt", "a+") as f:
+                        f.write(f'\n{TIME} | Пользователь {message.from_user.username} {message.from_user.first_name} написал {message.text}')
 
     #Действия если user в бане
     else:
         bot.send_message(message.chat.id, 'Ты в БАНЕ чучело!!! \n Пиши @Kinoki445', parse_mode='html')   
-        print(f'Забаненый пользователь {message.from_user.username} {message.from_user.first_name} написал {message.text} в', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
+        print(f'Забаненый пользователь {message.from_user.username} {message.from_user.first_name} написал {message.text} в', TIME)
+        with open("data/logs.txt", "a+") as f:
+            f.write(f'\n{TIME} | Забаненый пользователь {message.from_user.username} {message.from_user.first_name} написал {message.text}')
 
 if __name__ == '__main__':
-    print ('Бот запущен:',time.strftime('%d/%m/%Y %H:%M'))
+    print ('Бот запущен:', TIME)
+    with open("data/logs.txt", "a+") as f:
+            f.write(f'\n{TIME} | Бот запущен')
     while True:
         try:
             bot.infinity_polling(none_stop=True, timeout=123)
         except Exception as e:
             print(e)
+            with open("data/logs.txt", "a+") as f:
+                f.write(f'\n{TIME} | e')
             error(bot)
             tm.sleep(15)
 

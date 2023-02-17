@@ -1,10 +1,15 @@
-import sqlite3, datetime
+import sqlite3, datetime, pytz
 
-TOKEN = ('5656787289:AAE8wT3rHr92ic0FkqGCIAcHDbYQtwZ5G5s')
+tz = pytz.timezone('Asia/Yekaterinburg')
+TIME = (datetime.datetime.now(tz)).strftime('%H:%M:%S')
+
+TOKEN = ('5641742733:AAFjF171LR2NxdLKtu-6zSGrnx63U-W137U')
 
 database = sqlite3.connect('db/database.db', check_same_thread=False)
 cursor = database.cursor()
 print("Подключен к SQLite3")
+with open("data/logs.txt", "a+") as f:
+    f.write(f'\n{TIME} | Подключен к SQLite3')
 
 cursor.execute ("""CREATE TABLE IF NOT EXISTS users(
     id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
@@ -54,5 +59,8 @@ def db_table_val(message, bot):
         database.commit()
         bot.send_message(message.chat.id, 'Я тебя зарегистрировал!', parse_mode='html')
         bot.send_message(chat_id = 510441193, text = f'Зарегестрировался новый пользователь! {username}, {us_name}')
+        print(f'Пользователь {message.from_user.username} {message.from_user.first_name} зарегестрировался! в', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
+        with open("data/logs.txt", "a+") as f:
+                f.write(f'\n{TIME} | Пользователь {message.from_user.username} {message.from_user.first_name} зарегестрировался!')
     else:
         bot.send_message(message.chat.id, 'Ты уже зарегестрирован и можешь пользоваться функциями бота!')
