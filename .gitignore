@@ -3,3 +3,4 @@ __pycache__/
 .handler-saves/
 db/
 data/homework/
+data/logs.txt/

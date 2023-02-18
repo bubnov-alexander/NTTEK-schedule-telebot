@@ -268,8 +268,9 @@ def root(bot, argument1, argument2):
     item1 = InlineKeyboardButton(text = 'BAN', callback_data = 'banbase')
     item2 = InlineKeyboardButton(text = 'ДЗ', callback_data = 'dzbase')
     item3 = InlineKeyboardButton(text = 'admin', callback_data = 'adminbase')
+    item4 = InlineKeyboardButton(text=' logs', callback_data='logs')
     back = InlineKeyboardButton(text = '🔙Назад', callback_data='close')
-    markup.add(item1, item2, item3, back)
+    markup.add(item1, item2, item3,item4, back)
     bot.send_message(argument1.chat.id, text = 'Выбери что-то из предложенного:  ', parse_mode='html', reply_markup=markup)
 
 # callback
@@ -374,6 +375,27 @@ def mycallback(bot, callback):
                 bot.send_message(callback.message.chat.id, f'У тебя не получилось: {message.text}', parse_mode='html')
                 root(bot, callback.message, callback.message)
         bot.register_next_step_handler(callback.message, add_user_ban)
+
+    elif callback.data == 'logs':
+        markup_inline = InlineKeyboardMarkup()
+        url1 = InlineKeyboardButton (text = 'Логи', callback_data='logs_choice')
+        url2 = InlineKeyboardButton (text = 'Файл', callback_data='log_file')
+        markup_inline.add(url1,url2)
+        bot.send_message(callback.message.chat.id, 'Что хочешь?', parse_mode='html', reply_markup=markup_inline)
+
+    elif callback.data == 'logs_choice':
+        bot.reply_to(callback.message, f'Введи количество строк')
+        def logs_choice(message):
+            f1 = open("data/logs.txt", "r")
+            a = f1.readlines()[-(int(message.text)):]
+            bot.send_message(callback.message.chat.id, f'{a}', parse_mode='Markdown')
+            f1.close()
+        bot.register_next_step_handler(callback.message, logs_choice)
+
+    elif callback.data == 'log_file':
+        f = open("data/logs.txt","rb")
+        bot.send_document(callback.message.chat.id,f)
+        f.close()
 
     elif callback.data == 'sm':
         cursor.execute('''SELECT user_id FROM admin WHERE user_id = ?''', (callback.message.chat.id, ))
