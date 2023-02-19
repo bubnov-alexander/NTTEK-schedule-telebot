@@ -4,3 +4,4 @@ __pycache__/
 db/database.db
 data/homework/
 data/logs.txt
+Key.py
