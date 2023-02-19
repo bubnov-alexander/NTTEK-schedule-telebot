@@ -1,5 +1,5 @@
 from settings import *
-from parser import *
+from parser_1 import *
 import pytz,requests,json,time,random
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton, KeyboardButton, ReplyKeyboardMarkup
 

@@ -1,6 +1,6 @@
 __pycache__/
 .vscode/
 .handler-saves/
-db/
+db/database.db
 data/homework/
-data/logs.txt/
+data/logs.txt
