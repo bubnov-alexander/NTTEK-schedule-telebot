@@ -33,11 +33,12 @@ def group(bot, message):
     item1 = InlineKeyboardButton(text = "2ИС6", callback_data = '2is6')
     item2 = InlineKeyboardButton(text = "2ИС3", callback_data = "2is3")
     item3 = InlineKeyboardButton(text = "2Р5", callback_data = "2r5")
+    item7 = InlineKeyboardButton(text = "Excel", callback_data = "excel")
     item5 = InlineKeyboardButton(text = "Сайт с расписанием", url = 'https://a.nttek.ru/')
     item4 = InlineKeyboardButton(text = "🔔Расписание звонков", callback_data = 'bells')
     item6 = InlineKeyboardButton(text = "Преподаватель", callback_data = 'teacher')
     back = InlineKeyboardButton(text = "Другая группа", callback_data = 'another_group')
-    markup.add(item1, item2, item3, back, item6)
+    markup.add(item1, item2, item3, item7,back, item6)
     markup.add(item4, item5)
     bot.send_message(message.chat.id, 'Выбери расписание какой группы ты хочешь узнать: ',  parse_mode='html', reply_markup=markup)
 
@@ -85,6 +86,15 @@ def parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, group, wh
     elif group == 'teacher':
         for i in range(a, len(sitedate)):
             keyboard.add (InlineKeyboardButton(f'{sitedate[i]} {who}', callback_data = f'препод{sitedate[i], who}'))
+        item1 = (InlineKeyboardButton('Другие группы', callback_data = 'another_group'))
+        item3 = (InlineKeyboardButton('Преподаватели', callback_data = 'teacher'))
+        item2 = (InlineKeyboardButton('Меню', callback_data = 'close'))
+        keyboard.add(item1, item3, item2)
+        bot.send_message(callback.message.chat.id, 'Выберите день на который хотите узнать расписание', parse_mode='html', reply_markup = keyboard)
+
+    elif group == 'excel':
+        for i in range(a, len(sitedate)):
+            keyboard.add (InlineKeyboardButton(f'{sitedate[i]} {who}', callback_data = f'excel {sitedate[i]}'))
         item1 = (InlineKeyboardButton('Другие группы', callback_data = 'another_group'))
         item3 = (InlineKeyboardButton('Преподаватели', callback_data = 'teacher'))
         item2 = (InlineKeyboardButton('Меню', callback_data = 'close'))
@@ -323,6 +333,8 @@ def mycallback(bot, callback):
                 bot.send_message(callback.message.chat.id, f'Такой группы не существует', parse_mode='html')
         bot.register_next_step_handler(callback.message, another_teacher)
         
+    elif callback.data =='excel':
+        parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, 'excel', 'excel')
 
     for i in range(a, len(sitedate)):
         if callback.data[0:6:] != 'препод':
@@ -341,6 +353,14 @@ def mycallback(bot, callback):
                 with open("data/logs.txt", "a+") as f:
                     f.write(f'\n{TIME} {DATE}| Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил {callback.data[16:-2:]}!')
                 getpari(callback.data[2:12:], 'group', callback.data[16:-2:], InlineKeyboardMarkup, InlineKeyboardButton, bot, callback)
+
+            elif callback.data[0:18:] == f"excel {sitedate[i]}":
+                getpari(callback.data[6:18:], 'excel', sitedate[i], InlineKeyboardMarkup, InlineKeyboardButton, bot, callback)
+                TIME = (datetime.datetime.now(tz)).strftime('%H:%M:%S')
+                DATE = (datetime.datetime.now(tz)).strftime('%d.%m')
+                print(f'Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил {callback.data[22:-2:]}! В', TIME)
+                with open("data/logs.txt", "a+") as f:
+                        f.write(f'\n{TIME} {DATE}| Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил {callback.data[22:-2:]}!')
         
         elif callback.data[0:18:] == f"препод('{sitedate[i]}":
             getpari(callback.data[8:18:], 'teacher', callback.data[22:-2:], InlineKeyboardMarkup, InlineKeyboardButton, bot, callback)
