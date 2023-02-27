@@ -56,7 +56,7 @@ def getpari(date, group, group_name, InlineKeyboardMarkup, InlineKeyboardButton,
             item3 = (InlineKeyboardButton('Преподаватели', callback_data = 'teacher'))
             item2 = (InlineKeyboardButton('Меню', callback_data = 'close'))
             keyboard.add(item1, item3, item2)
-            bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'Такой группы нету выбери другую', parse_mode='Markdown', reply_markup = keyboard)
+            bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'Такой группы нету выбери другую, либо узнай у меня в чём проблема @kinoki445', parse_mode='Markdown', reply_markup = keyboard)
     
     elif group == 'excel':
         try:
@@ -107,7 +107,7 @@ def getpari(date, group, group_name, InlineKeyboardMarkup, InlineKeyboardButton,
             item3 = (InlineKeyboardButton('Преподаватели', callback_data = 'teacher'))
             item2 = (InlineKeyboardButton('Меню', callback_data = 'close'))
             keyboard.add(item1, item3, item2)
-            bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'Такой группы нету выбери другую', parse_mode='Markdown', reply_markup = keyboard)
+            bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'Такой группы нету выбери другую, либо узнай у меня в чём проблема @kinoki445', parse_mode='Markdown', reply_markup = keyboard)
 
     else:
         try:
