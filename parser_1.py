@@ -25,7 +25,7 @@ def getpari(date, group, group_name, InlineKeyboardMarkup, InlineKeyboardButton,
                     name = i['name']
                     room = i['rooms']
                     teacher = i['teachers']
-                    text = (text + '\n' + (f'**Номер урока:** {lesson}\n**урок:** {name} {room}\n**Препод:** {teacher}\n'))
+                    text = (text + '\n' + (f'**Номер урока:** {lesson}\n**Урок:** {name} {room}\n**Препод:** {teacher}\n'))
             
                 keyboard = InlineKeyboardMarkup()
                 keyboard.row_width = 2

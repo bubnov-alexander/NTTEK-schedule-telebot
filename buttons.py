@@ -147,8 +147,7 @@ def aboutbot(bot, message):
     url1 = InlineKeyboardButton (text = 'Вк', url='https://vk.com/mem445')
     url2 = InlineKeyboardButton (text = 'Телеграмм', url= 'https://t.me/Kinoki445')
     url3 = InlineKeyboardButton (text = 'Вк куратора группы', url= 'https://vk.com/id31107453')
-    url4 = InlineKeyboardButton (text = 'Вк Аналог', url= 'https://vk.com/nttek_raspisanie')
-    markup_inline.add(url1,url2, url3, url4)
+    markup_inline.add(url1,url2, url3)
     bot.send_message(message.chat.id, facts, parse_mode='html', reply_markup=markup_inline)
     f.close()
 
