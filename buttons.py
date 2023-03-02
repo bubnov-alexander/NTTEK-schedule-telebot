@@ -14,17 +14,16 @@ def menu(bot, argument1, argument2):
     markup=ReplyKeyboardMarkup(resize_keyboard=True)
     item1 = KeyboardButton("📋Расписание📋")
     item2 = KeyboardButton("👥Преподаватели👥")
-    item3 = KeyboardButton("👬Студенты группы👬")
-    item4 = KeyboardButton("📖ДЗ📖")
+    item3 = KeyboardButton("🛠Настройки🛠")
     item5 = KeyboardButton("📒О боте📒")
     cursor.execute('''SELECT user_id FROM admin WHERE user_id = ?''', (argument1.chat.id, ))
     admin = 510441193
     if argument1.chat.id != admin:
-        markup.add(item1, item2, item5)
+        markup.add(item1, item2, item3, item5)
         bot.send_message(argument1.chat.id, 'Вот что я могу сделать: '.format(argument2.from_user),  parse_mode='html', reply_markup=markup)
     else:
         item6 = KeyboardButton("Admin panel")
-        markup.add(item1, item2, item3, item4, item5, item6)
+        markup.add(item1, item2, item3, item5, item6)
         bot.send_message(argument1.chat.id, 'Вот что я могу сделать: '.format(argument2.from_user),  parse_mode='html', reply_markup=markup)
         
 #ГРУППЫ
@@ -100,7 +99,7 @@ def parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, group, wh
         item2 = (InlineKeyboardButton('Меню', callback_data = 'close'))
         keyboard.add(item1, item3, item2)
         bot.send_message(callback.message.chat.id, 'Выберите день на который хотите узнать расписание', parse_mode='html', reply_markup = keyboard)
-        
+
 
 #ПРЕПОДЫ
 def prepod(bot, message):
@@ -109,7 +108,7 @@ def prepod(bot, message):
     f.close()
     bot.send_message(message.chat.id, thinks, parse_mode='html')
 
-#ЗВОНКИ
+# #ЗВОНКИ
 def zvonok(bot, callback):
     photo = open('data/photo.jpg', 'rb')
     markup_inline = InlineKeyboardMarkup()
@@ -117,27 +116,38 @@ def zvonok(bot, callback):
     markup_inline.add(url1)
     bot.send_photo(callback.message.chat.id, photo, reply_markup=markup_inline)
 
-#СТУДЕНТЫ
-def groupstudents(bot, message):
-    f = open('data/Student.txt', 'r', encoding='UTF-8')
-    facts = f.read()
-    markup = ReplyKeyboardMarkup(resize_keyboard=True)
-    item1 = KeyboardButton("🔁Рандомно выбрать студента🔁")
-    back = KeyboardButton("🔙Назад")
-    markup.add(item1, back)
-    bot.send_message(message.chat.id, facts, parse_mode='html', reply_markup=markup)
-    f.close()
+# #СТУДЕНТЫ
+# def groupstudents(bot, message):
+#     f = open('data/Student.txt', 'r', encoding='UTF-8')
+#     facts = f.read()
+#     markup = ReplyKeyboardMarkup(resize_keyboard=True)
+#     item1 = KeyboardButton("🔁Рандомно выбрать студента🔁")
+#     back = KeyboardButton("🔙Назад")
+#     markup.add(item1, back)
+#     bot.send_message(message.chat.id, facts, parse_mode='html', reply_markup=markup)
+#     f.close()
 
-#РАНДОМ
-def myrandom(bot, message):
-    file = open('data/Student.txt', 'r', encoding='UTF-8')
-    lines = []
-    for line in file:
-        lines.append(line)
-    random_line = random.choice(lines)
-    file.close()
-    markup = ReplyKeyboardMarkup(resize_keyboard=True)
-    bot.send_message(message.chat.id, random_line, parse_mode='html', reply_markup=markup)
+# #РАНДОМ
+# def myrandom(bot, message):
+#     file = open('data/Student.txt', 'r', encoding='UTF-8')
+#     lines = []
+#     for line in file:
+#         lines.append(line)
+#     random_line = random.choice(lines)
+#     file.close()
+#     markup = ReplyKeyboardMarkup(resize_keyboard=True)
+#     bot.send_message(message.chat.id, random_line, parse_mode='html', reply_markup=markup)
+
+#🛠Настройки🛠
+def setting(bot, message):
+    markup = InlineKeyboardMarkup()
+    url1 = InlineKeyboardButton (text = '🔔Вкл уведомления', callback_data = 'n_YES')
+    url2 = InlineKeyboardButton (text = '🔕Выкл уведомления', callback_data = 'n_NO')
+    back = InlineKeyboardButton (text = '🔙Назад', callback_data = 'close')
+    markup.add(url1,url2)
+    markup.add(back)
+    bot.send_message(message.chat.id, "Нажми на кнопку взависимости от твоего желания!", parse_mode='html', reply_markup=markup)
+    f.close()
 
 #О БОТЕ
 def aboutbot(bot, message):
@@ -368,7 +378,7 @@ def mycallback(bot, callback):
             print(f'Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил {callback.data[22:-2:]}! В', TIME)
             with open("data/logs.txt", "a+") as f:
                     f.write(f'\n{TIME} {DATE}| Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил {callback.data[22:-2:]}!')
-        
+
     #Работа с DateBase BAN
     if callback.data == 'banbase':
         markup = InlineKeyboardMarkup()
@@ -398,6 +408,26 @@ def mycallback(bot, callback):
                 root(bot, callback.message, callback.message)
         bot.register_next_step_handler(callback.message, add_user_ban)
 
+    elif callback.data == 'n_YES':
+        try:
+            cursor.execute(f'UPDATE users SET notice = {1} WHERE user_id = {callback.message.chat.id}')
+            database.commit()
+            bot.send_message(callback.message.chat.id, 'Теперь тебе будут приходить мои сообщения :)', parse_mode='html')
+            menu(bot, callback.message, callback.message)
+        except:
+            bot.send_message(callback.message.chat.id, 'Появилась какая-то ошибка, обратись к @kinoki445', parse_mode='html')
+            menu(bot, callback.message, callback.message)
+
+    elif callback.data == 'n_NO':
+        try:
+            cursor.execute(f'UPDATE users SET notice = {0} WHERE user_id = {callback.message.chat.id}')
+            database.commit()
+            bot.send_message(callback.message.chat.id, 'Теперь тебе не будут приходить мои сообщения :)', parse_mode='html')
+            menu(bot, callback.message, callback.message)
+        except:
+            bot.send_message(callback.message.chat.id, 'Появилась какая-то ошибка, обратись к @kinoki445', parse_mode='html')
+            menu(bot, callback.message, callback.message)
+
     elif callback.data == 'logs':
         markup_inline = InlineKeyboardMarkup()
         url1 = InlineKeyboardButton (text = 'Логи', callback_data='logs_choice')
@@ -426,20 +456,20 @@ def mycallback(bot, callback):
             bot.send_message(callback.message.chat.id, text = 'У тебя нету прав', parse_mode='html')
             menu(bot, callback.message, callback.message)
         else:
-                    bot.reply_to(callback.message, 'Что ты хочешь написать?')
-                    def send(message, count = 0):
-                        cursor.execute('''SELECT * FROM users''')
-                        lol = cursor.fetchall()
-                        count = 0
-                        while count != len(lol):
-                                for row in lol:
-                                    try:
-                                        bot.send_message(row[1], text = f'{message.text}', parse_mode='html')
-                                        count += 1
-                                    except:
-                                        count += 1
-                        menu(bot, message, message)
-                    bot.register_next_step_handler(callback.message, send)
+            bot.reply_to(callback.message, 'Что ты хочешь написать?')
+            def send(message, count = 0):
+                cursor.execute(f'SELECT user_id FROM users WHERE notice = {1}')
+                lol = cursor.fetchall()
+                count = 0
+                while count != len(lol):
+                        for row in lol:
+                            try:
+                                bot.send_message(row[0], text = f'{message.text}', parse_mode='html')
+                                count += 1
+                            except:
+                                count += 1
+                menu(bot, message, message)
+            bot.register_next_step_handler(callback.message, send)
 
     #УДАЛИТЬ ПОЛЬЗОВАТЕЛЯ ИЗ DateBase ban
     elif callback.data == 'del_user_ban':

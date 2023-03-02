@@ -31,14 +31,14 @@ def help_message(message):
     with open("data/logs.txt", "a+") as f:
         f.write(f'\n{TIME} {DATE}| Пользователь {message.from_user.username} {message.from_user.first_name} написал {message.text}')
 
-@bot.message_handler(commands=['students'])
-def students(message):
-    groupstudents(bot, message)
-    TIME = (datetime.datetime.now(tz)).strftime('%H:%M:%S')
-    DATE = (datetime.datetime.now(tz)).strftime('%d.%m')
-    print(f'Пользователь {message.from_user.username} {message.from_user.first_name} запросил студентов в', TIME)
-    with open("data/logs.txt", "a+") as f:
-        f.write(f'\n{TIME} {DATE}| Пользователь {message.from_user.username} {message.from_user.first_name} запросил студентов')
+# @bot.message_handler(commands=['students'])
+# def students(message):
+#     groupstudents(bot, message)
+#     TIME = (datetime.datetime.now(tz)).strftime('%H:%M:%S')
+#     DATE = (datetime.datetime.now(tz)).strftime('%d.%m')
+#     print(f'Пользователь {message.from_user.username} {message.from_user.first_name} запросил студентов в', TIME)
+#     with open("data/logs.txt", "a+") as f:
+#         f.write(f'\n{TIME} {DATE}| Пользователь {message.from_user.username} {message.from_user.first_name} запросил студентов')
 
 #Действия callback
 @bot.callback_query_handler(func=lambda callback: callback.data)
@@ -69,6 +69,10 @@ def bot_message(message):
                     print(f'Пользователь {message.from_user.username} {message.from_user.first_name} узнал преподов! В', TIME)
                     with open("data/logs.txt", "a+") as f:
                         f.write(f'\n{TIME} {DATE}| Пользователь {message.from_user.username} {message.from_user.first_name} узнал преподов!')
+
+                elif message_to_bot == 'setting' or message_to_bot == 'настройки' or message_to_bot == '🛠настройки🛠':
+                    setting(bot, message)
+
                 #Меню
                 elif message_to_bot == '🔙назад' or message_to_bot == 'назад':
                     menu(bot, message, message)
@@ -119,13 +123,13 @@ def bot_message(message):
                 #     print(f'Пользователь {message.from_user.username} {message.from_user.first_name} запросил студентов в', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
                 
                 #Рандом пользователя
-                elif message_to_bot == '🔁рандомно выбрать студента🔁':
-                    myrandom(bot, message)
-                    TIME = (datetime.datetime.now(tz)).strftime('%H:%M:%S')
-                    DATE = (datetime.datetime.now(tz)).strftime('%d.%m')
-                    print(f'Пользователь {message.from_user.username} {message.from_user.first_name} запросил рандом! В', TIME)
-                    with open("data/logs.txt", "a+") as f:
-                        f.write(f'\n{TIME} {DATE}| Пользователь {message.from_user.username} {message.from_user.first_name} узнал преподов!')
+                # elif message_to_bot == '🔁рандомно выбрать студента🔁':
+                #     myrandom(bot, message)
+                #     TIME = (datetime.datetime.now(tz)).strftime('%H:%M:%S')
+                #     DATE = (datetime.datetime.now(tz)).strftime('%d.%m')
+                #     print(f'Пользователь {message.from_user.username} {message.from_user.first_name} запросил рандом! В', TIME)
+                #     with open("data/logs.txt", "a+") as f:
+                #         f.write(f'\n{TIME} {DATE}| Пользователь {message.from_user.username} {message.from_user.first_name} узнал преподов!')
 
                 #Информация о боте 
                 elif message_to_bot == '📒о боте📒' or message_to_bot == 'о боте':
