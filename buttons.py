@@ -29,15 +29,13 @@ def menu(bot, argument1, argument2):
 #ГРУППЫ
 def group(bot, message):
     markup = InlineKeyboardMarkup(row_width=3)
-    item1 = InlineKeyboardButton(text = "2ИС6", callback_data = '2is6')
-    item2 = InlineKeyboardButton(text = "2ИС3", callback_data = "2is3")
-    item3 = InlineKeyboardButton(text = "2Р5", callback_data = "2r5")
+    item1 = InlineKeyboardButton(text = "Моя группа", callback_data = 'f_group')
     item7 = InlineKeyboardButton(text = "Excel", callback_data = "excel")
     item5 = InlineKeyboardButton(text = "Сайт с расписанием", url = 'https://a.nttek.ru/')
     item4 = InlineKeyboardButton(text = "🔔Расписание звонков", callback_data = 'bells')
     item6 = InlineKeyboardButton(text = "Преподаватель", callback_data = 'teacher')
     back = InlineKeyboardButton(text = "Другая группа", callback_data = 'another_group')
-    markup.add(item1, item2, item3, item7,back, item6)
+    markup.add(item1, item7,back, item6)
     markup.add(item4, item5)
     bot.send_message(message.chat.id, 'Выбери расписание какой группы ты хочешь узнать: ',  parse_mode='html', reply_markup=markup)
 
@@ -116,35 +114,15 @@ def zvonok(bot, callback):
     markup_inline.add(url1)
     bot.send_photo(callback.message.chat.id, photo, reply_markup=markup_inline)
 
-# #СТУДЕНТЫ
-# def groupstudents(bot, message):
-#     f = open('data/Student.txt', 'r', encoding='UTF-8')
-#     facts = f.read()
-#     markup = ReplyKeyboardMarkup(resize_keyboard=True)
-#     item1 = KeyboardButton("🔁Рандомно выбрать студента🔁")
-#     back = KeyboardButton("🔙Назад")
-#     markup.add(item1, back)
-#     bot.send_message(message.chat.id, facts, parse_mode='html', reply_markup=markup)
-#     f.close()
-
-# #РАНДОМ
-# def myrandom(bot, message):
-#     file = open('data/Student.txt', 'r', encoding='UTF-8')
-#     lines = []
-#     for line in file:
-#         lines.append(line)
-#     random_line = random.choice(lines)
-#     file.close()
-#     markup = ReplyKeyboardMarkup(resize_keyboard=True)
-#     bot.send_message(message.chat.id, random_line, parse_mode='html', reply_markup=markup)
-
 #🛠Настройки🛠
 def setting(bot, message):
     markup = InlineKeyboardMarkup()
     url1 = InlineKeyboardButton (text = '🔔Вкл уведомления', callback_data = 'n_YES')
     url2 = InlineKeyboardButton (text = '🔕Выкл уведомления', callback_data = 'n_NO')
+    url3 = InlineKeyboardButton (text = '👯Добавить мою группу', callback_data = 'add_f_group')
     back = InlineKeyboardButton (text = '🔙Назад', callback_data = 'close')
     markup.add(url1,url2)
+    markup.add(url3)
     markup.add(back)
     bot.send_message(message.chat.id, "Нажми на кнопку взависимости от твоего желания!", parse_mode='html', reply_markup=markup)
     f.close()
@@ -156,8 +134,9 @@ def aboutbot(bot, message):
     markup_inline = InlineKeyboardMarkup()
     url1 = InlineKeyboardButton (text = 'Вк', url='https://vk.com/mem445')
     url2 = InlineKeyboardButton (text = 'Телеграмм', url= 'https://t.me/Kinoki445')
-    url3 = InlineKeyboardButton (text = 'Вк куратора группы', url= 'https://vk.com/id31107453')
-    markup_inline.add(url1,url2, url3)
+    url3 = InlineKeyboardButton (text = 'Отзыв', callback_data= 'review')
+    markup_inline.add(url1,url2)
+    markup_inline.add(url3)
     bot.send_message(message.chat.id, facts, parse_mode='html', reply_markup=markup_inline)
     f.close()
 
@@ -298,16 +277,6 @@ def mycallback(bot, callback):
     #ПОЛУЧЕНИЕ ДНЕЙ НА КОТОРЫЕ ЕСТЬ РАСПИСАНИЕ
     site = requests.get(f'https://erp.nttek.ru/api/schedule/legacy').text
     sitedate = json.loads(site)
-
-    # a = int((sitedate[0])[0:2:])
-    # print (a)
-    # f = open("info.txt", "w+")
-    # b = f.readline()
-    # n = int(b)
-    # print(n)
-    # if a == n:
-    #     print('Равно')
-        
     sitedate.sort(key=lambda x: time.mktime(time.strptime(x,"%d.%m.%Y")))
     if (len(sitedate)) <= 5:
         a = 0
@@ -315,12 +284,16 @@ def mycallback(bot, callback):
         a = ((len(sitedate)) - 5)
 
     #ВЫВОД ОПРЕДЕЛЁННОЙ ГРУППЫ (ДНЕЙ)
-    if callback.data == '2is6':
-        parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, 'group', '2ИС6')
-    elif callback.data == '2r5':
-        parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, 'group', '2Р5')
-    elif callback.data == '2is3':
-        parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, 'group', '2ИС3')
+    if callback.data == 'f_group':
+        cursor.execute(f'SELECT f_group FROM users WHERE user_id = {callback.message.chat.id}')
+        data = cursor.fetchone()
+        try:
+            if data[0] is None:
+                bot.send_message(callback.message.chat.id, 'У тебя нету твоей группы, добавь её в настройках', parse_mode='html')
+            else:
+                parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, 'group', f'{data[0]}')
+        except:
+            bot.send_message(callback.message.chat.id, 'Какая-то ошибка, пиши @Kinoki445', parse_mode='html')
     
     elif callback.data == 'another_group':
         bot.reply_to(callback.message, 'Введи название группы, пример "2ИС6" Без - и пробелов: ')
@@ -406,6 +379,33 @@ def mycallback(bot, callback):
             except:
                 bot.send_message(callback.message.chat.id, f'У тебя не получилось: {message.text}', parse_mode='html')
                 root(bot, callback.message, callback.message)
+        bot.register_next_step_handler(callback.message, add_user_ban)
+
+    elif callback.data == 'add_f_group':
+        bot.reply_to(callback.message, 'Введи свою группу, например: "2ИС6" без " - и т.п ')
+        def add_user_ban(message):
+            try:
+                cursor.execute(f'''UPDATE users SET f_group = '{message.text}' WHERE user_id = {callback.message.chat.id}''')
+                database.commit()
+                bot.send_message(callback.message.chat.id, 'Я успешно обновил твою группу!', parse_mode='html')
+                menu(bot, callback.message, callback.message)
+            except:
+                bot.send_message(callback.message.chat.id, 'Появилась какая-то ошибка, обратись к @kinoki445', parse_mode='html')
+                menu(bot, callback.message, callback.message)
+        bot.register_next_step_handler(callback.message, add_user_ban)
+
+    elif callback.data == 'review':
+        bot.reply_to(callback.message, 'Напиши свой отзыв: ')
+        def add_user_ban(message):
+            try:
+                cursor.execute(f'''UPDATE users SET review = '{message.text}' WHERE user_id = {callback.message.chat.id}''')
+                database.commit()
+                bot.send_message(callback.message.chat.id, 'Благодарю за твоё мнение о боте)', parse_mode='html')
+                bot.send_message(chat_id = 510441193, text = f'Пользователь {callback.message.chat.username} {callback.message.chat.first_name} написал отзыв: \n {message.text}')
+                menu(bot, callback.message, callback.message)
+            except:
+                bot.send_message(callback.message.chat.id, 'Появилась какая-то ошибка, обратись к @kinoki445', parse_mode='html')
+                menu(bot, callback.message, callback.message)
         bot.register_next_step_handler(callback.message, add_user_ban)
 
     elif callback.data == 'n_YES':

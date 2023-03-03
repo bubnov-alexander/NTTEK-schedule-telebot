@@ -31,15 +31,6 @@ def help_message(message):
     with open("data/logs.txt", "a+") as f:
         f.write(f'\n{TIME} {DATE}| Пользователь {message.from_user.username} {message.from_user.first_name} написал {message.text}')
 
-# @bot.message_handler(commands=['students'])
-# def students(message):
-#     groupstudents(bot, message)
-#     TIME = (datetime.datetime.now(tz)).strftime('%H:%M:%S')
-#     DATE = (datetime.datetime.now(tz)).strftime('%d.%m')
-#     print(f'Пользователь {message.from_user.username} {message.from_user.first_name} запросил студентов в', TIME)
-#     with open("data/logs.txt", "a+") as f:
-#         f.write(f'\n{TIME} {DATE}| Пользователь {message.from_user.username} {message.from_user.first_name} запросил студентов')
-
 #Действия callback
 @bot.callback_query_handler(func=lambda callback: callback.data)
 def callback(callback):
@@ -112,24 +103,6 @@ def bot_message(message):
                         url1 = InlineKeyboardButton (text = 'Сайт с расписанием: ', url= 'https://a.nttek.ru/')
                         markup.add(url1)
                         bot.send_message(message.chat.id, 'К сожелению сайт с парами сейчас недоступен, но ты можешь воспольззоваться другими функциями бота. \nДля этого напиши "меню"', parse_mode='html',reply_markup=markup)
-
-                # elif message_to_bot == '📖дз📖' or message_to_bot == 'дз':
-                #     homework(bot, message, InlineKeyboardMarkup, InlineKeyboardButton)
-                #     print(f'Пользователь {message.from_user.username} {message.from_user.first_name} запросил ДЗ! В', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
-
-                #Студенты группы 
-                # elif message_to_bot == '👬студенты группы👬' or message_to_bot == 'студенты группы':
-                #     groupstudents(bot, message)
-                #     print(f'Пользователь {message.from_user.username} {message.from_user.first_name} запросил студентов в', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
-                
-                #Рандом пользователя
-                # elif message_to_bot == '🔁рандомно выбрать студента🔁':
-                #     myrandom(bot, message)
-                #     TIME = (datetime.datetime.now(tz)).strftime('%H:%M:%S')
-                #     DATE = (datetime.datetime.now(tz)).strftime('%d.%m')
-                #     print(f'Пользователь {message.from_user.username} {message.from_user.first_name} запросил рандом! В', TIME)
-                #     with open("data/logs.txt", "a+") as f:
-                #         f.write(f'\n{TIME} {DATE}| Пользователь {message.from_user.username} {message.from_user.first_name} узнал преподов!')
 
                 #Информация о боте 
                 elif message_to_bot == '📒о боте📒' or message_to_bot == 'о боте':

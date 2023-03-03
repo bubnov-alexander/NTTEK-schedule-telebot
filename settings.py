@@ -16,6 +16,8 @@ cursor.execute ("""CREATE TABLE IF NOT EXISTS users(
     user_name TEXT NOT NULL,
     username STRING,
     notice INTEGER NOT NULL DEFAULT 0,
+    review TEXT,
+    f_group STRING,
     join_date DATETIME NOT NULL
     )""")
 database.commit()
