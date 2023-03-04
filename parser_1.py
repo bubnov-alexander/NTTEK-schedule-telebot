@@ -72,8 +72,10 @@ def getpari(date, group, group_name, InlineKeyboardMarkup, InlineKeyboardButton,
                         date2 = ('Понедельник')
                 else:
                     date2 == ('Среда')
-
-                bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'Расписание на {date} ({date2}):\n __{text}__ \nВыберите день на который хотите узнать расписание\nгруппы {group_name}', parse_mode='Markdown', reply_markup = keyboard)
+                try:
+                    bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'Расписание на {date} ({date2}):\n __{text}__ \nВыберите день на который хотите узнать расписание\nгруппы {group_name}', parse_mode='Markdown', reply_markup = keyboard)
+                except:
+                    pass
             except Exception as e:
                 print(e)
                 keyboard = InlineKeyboardMarkup()
@@ -160,8 +162,10 @@ def getpari(date, group, group_name, InlineKeyboardMarkup, InlineKeyboardButton,
                         date2 = ('Понедельник')
                 else:
                     date2 == ('Среда')
-
-                bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'Расписание на {date} ({date2}):\n __{text}__ \nВыберите день на который хотите узнать расписание', parse_mode='Markdown', reply_markup = keyboard)
+                try:
+                    bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'Расписание на {date} ({date2}):\n __{text}__ \nВыберите день на который хотите узнать расписание', parse_mode='Markdown', reply_markup = keyboard)
+                except:
+                    pass
             except Exception as e:
                 keyboard = InlineKeyboardMarkup()
                 keyboard.row_width = 2
@@ -248,7 +252,12 @@ def getpari(date, group, group_name, InlineKeyboardMarkup, InlineKeyboardButton,
                         date2 = ('Понедельник')
                 else:
                     date2 == ('Среда')
-                bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'Расписание на {date} ({date2}):\n __{text}__ \nВыберите день на который хотите узнать расписание преподавателя {group_name}', parse_mode='Markdown', reply_markup = keyboard)
+
+                try:
+                    bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'Расписание на {date} ({date2}):\n __{text}__ \nВыберите день на который хотите узнать расписание преподавателя {group_name}', parse_mode='Markdown', reply_markup = keyboard)
+                except:
+                    pass
+
             except Exception as e:
                 keyboard = InlineKeyboardMarkup()
                 keyboard.row_width = 2
