@@ -1,7 +1,7 @@
 __pycache__/
 .vscode/
 .handler-saves/
-db/database.db
+db/
 data/homework/
 data/logs.txt
 Key.py
