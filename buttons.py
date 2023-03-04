@@ -73,12 +73,30 @@ def parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, group, wh
 
     if group == 'group':
         for i in range(a, len(sitedate)):
-            keyboard.add (InlineKeyboardButton(f'{sitedate[i]} {who}', callback_data = f'{sitedate[i], who}'))
+            date1 = int(dt.datetime.weekday(dt.datetime.strptime(sitedate[i].replace('.','-'), '%d-%m-%Y')))
+            date2 = ''
+
+            if date1 > 2:
+                if date1 == 3:
+                    date2 = ('Четверг')
+                elif date1 == 4:
+                    date2 = ('Пятница')
+                elif date1 == 5:
+                    date2 = ('Суббота')
+            elif date1 < 2:
+                if date1 == 1:
+                    date2 = ('Вторник')
+                elif date1 == 0:
+                    date2 = ('Понедельник')
+            else:
+                date2 == ('Среда')
+
+            keyboard.add (InlineKeyboardButton(f'{sitedate[i]} ({date2})', callback_data = f'{sitedate[i], who}'))
         item1 = (InlineKeyboardButton('Другие группы', callback_data = 'another_group'))
         item3 = (InlineKeyboardButton('Преподаватели', callback_data = 'teacher'))
         item2 = (InlineKeyboardButton('Меню', callback_data = 'close'))
         keyboard.add(item1, item3, item2)
-        bot.send_message(callback.message.chat.id, 'Выберите день на который хотите узнать расписание', parse_mode='html', reply_markup = keyboard)
+        bot.send_message(callback.message.chat.id, f'Выберите день на который хотите узнать расписание\nгруппы {who}', parse_mode='html', reply_markup = keyboard)
 
     elif group == 'teacher':
         for i in range(a, len(sitedate)):
@@ -87,7 +105,7 @@ def parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, group, wh
         item3 = (InlineKeyboardButton('Преподаватели', callback_data = 'teacher'))
         item2 = (InlineKeyboardButton('Меню', callback_data = 'close'))
         keyboard.add(item1, item3, item2)
-        bot.send_message(callback.message.chat.id, 'Выберите день на который хотите узнать расписание', parse_mode='html', reply_markup = keyboard)
+        bot.send_message(callback.message.chat.id, f'Выберите день на который хотите узнать расписание преподавателя {who}', parse_mode='html', reply_markup = keyboard)
 
     elif group == 'excel':
         for i in range(a, len(sitedate)):
@@ -292,11 +310,12 @@ def mycallback(bot, callback):
                 bot.send_message(callback.message.chat.id, 'У тебя нету твоей группы, добавь её в настройках', parse_mode='html')
             else:
                 parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, 'group', f'{data[0]}')
-        except:
+        except Exception as e:
+            print(e)
             bot.send_message(callback.message.chat.id, 'Какая-то ошибка, пиши @Kinoki445', parse_mode='html')
     
     elif callback.data == 'another_group':
-        bot.reply_to(callback.message, 'Введи название группы, пример "2ИС6" Без - и пробелов: ')
+        bot.reply_to(callback.message, 'Введи название группы, пример (2ИС6) Без - и пробелов: ')
         def another_group(message):
             try:
                 parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, 'group', message.text.upper())
@@ -306,7 +325,7 @@ def mycallback(bot, callback):
         bot.register_next_step_handler(callback.message, another_group)
 
     elif callback.data == 'teacher':
-        bot.reply_to(callback.message, 'Введи фамилию преподавателя, пример "Зятикова ТЮ" Без - и  через пробел: ')
+        bot.reply_to(callback.message, 'Введи фамилию преподавателя, пример (Зятикова ТЮ) Без - и  через пробел: ')
         def another_teacher(message):
             try:
                 parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, 'teacher', message.text)

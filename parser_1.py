@@ -31,7 +31,24 @@ def getpari(date, group, group_name, InlineKeyboardMarkup, InlineKeyboardButton,
                 keyboard.row_width = 2
 
                 for i in range(a, len(sitedate)):
-                    keyboard.add (InlineKeyboardButton(f'{sitedate[i]} {group_name}',callback_data = f'{sitedate[i]} {group_name}'))
+                    date1 = int(dt.datetime.weekday(dt.datetime.strptime(sitedate[i].replace('.','-'), '%d-%m-%Y')))
+                    date2 = ''
+
+                    if date1 > 2:
+                        if date1 == 3:
+                            date2 = ('Четверг')
+                        elif date1 == 4:
+                            date2 = ('Пятница')
+                        elif date1 == 5:
+                            date2 = ('Суббота')
+                    elif date1 < 2:
+                        if date1 == 1:
+                            date2 = ('Вторник')
+                        elif date1 == 0:
+                            date2 = ('Понедельник')
+                    else:
+                        date2 == ('Среда')
+                    keyboard.add (InlineKeyboardButton(f'{sitedate[i]} ({date2})',callback_data = f'{sitedate[i]} {group_name}'))
                     
                 item1 = (InlineKeyboardButton('Другие группы', callback_data = 'another_group'))
                 item3 = (InlineKeyboardButton('Преподаватели', callback_data = 'teacher'))
@@ -56,7 +73,7 @@ def getpari(date, group, group_name, InlineKeyboardMarkup, InlineKeyboardButton,
                 else:
                     date2 == ('Среда')
 
-                bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'Расписание на {date} ({date2}):\n __{text}__ \nВыберите день на который хотите узнать расписание', parse_mode='Markdown', reply_markup = keyboard)
+                bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'Расписание на {date} ({date2}):\n __{text}__ \nВыберите день на который хотите узнать расписание\nгруппы {group_name}', parse_mode='Markdown', reply_markup = keyboard)
             except Exception as e:
                 print(e)
                 keyboard = InlineKeyboardMarkup()
@@ -102,7 +119,24 @@ def getpari(date, group, group_name, InlineKeyboardMarkup, InlineKeyboardButton,
                 keyboard.row_width = 2
 
                 for i in range(a, len(sitedate)):
-                    keyboard.add (InlineKeyboardButton(f'{sitedate[i]} {group}',callback_data = f'excel {sitedate[i]}'))
+                    date1 = int(dt.datetime.weekday(dt.datetime.strptime(sitedate[i].replace('.','-'), '%d-%m-%Y')))
+                    date2 = ''
+
+                    if date1 > 2:
+                        if date1 == 3:
+                            date2 = ('Четверг')
+                        elif date1 == 4:
+                            date2 = ('Пятница')
+                        elif date1 == 5:
+                            date2 = ('Суббота')
+                    elif date1 < 2:
+                        if date1 == 1:
+                            date2 = ('Вторник')
+                        elif date1 == 0:
+                            date2 = ('Понедельник')
+                    else:
+                        date2 == ('Среда')
+                    keyboard.add (InlineKeyboardButton(f'{sitedate[i]} ({date2})',callback_data = f'excel {sitedate[i]}'))
                     
                 item1 = (InlineKeyboardButton('Другие группы', callback_data = 'another_group'))
                 item3 = (InlineKeyboardButton('Преподаватели', callback_data = 'teacher'))
@@ -175,7 +209,24 @@ def getpari(date, group, group_name, InlineKeyboardMarkup, InlineKeyboardButton,
                 keyboard = InlineKeyboardMarkup()
                 keyboard.row_width = 2
                 for i in range(a, len(sitedate)):
-                    keyboard.add (InlineKeyboardButton(f'{sitedate[i]} {group_name}',callback_data = f'препод{sitedate[i], group_name}'))
+                    date1 = int(dt.datetime.weekday(dt.datetime.strptime(sitedate[i].replace('.','-'), '%d-%m-%Y')))
+                    date2 = ''
+
+                    if date1 > 2:
+                        if date1 == 3:
+                            date2 = ('Четверг')
+                        elif date1 == 4:
+                            date2 = ('Пятница')
+                        elif date1 == 5:
+                            date2 = ('Суббота')
+                    elif date1 < 2:
+                        if date1 == 1:
+                            date2 = ('Вторник')
+                        elif date1 == 0:
+                            date2 = ('Понедельник')
+                    else:
+                        date2 == ('Среда')
+                    keyboard.add (InlineKeyboardButton(f'{sitedate[i]} ({date2})',callback_data = f'препод{sitedate[i], group_name}'))
                 item1 = (InlineKeyboardButton('Другие группы', callback_data = 'another_group'))
                 item3 = (InlineKeyboardButton('Преподаватели', callback_data = 'teacher'))
                 item2 = (InlineKeyboardButton('Меню', callback_data = 'close'))
@@ -197,7 +248,7 @@ def getpari(date, group, group_name, InlineKeyboardMarkup, InlineKeyboardButton,
                         date2 = ('Понедельник')
                 else:
                     date2 == ('Среда')
-                bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'Расписание на {date} ({date2}):\n __{text}__ \nВыберите день на который хотите узнать расписание', parse_mode='Markdown', reply_markup = keyboard)
+                bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'Расписание на {date} ({date2}):\n __{text}__ \nВыберите день на который хотите узнать расписание преподавателя {group_name}', parse_mode='Markdown', reply_markup = keyboard)
             except Exception as e:
                 keyboard = InlineKeyboardMarkup()
                 keyboard.row_width = 2
