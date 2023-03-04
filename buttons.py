@@ -100,7 +100,24 @@ def parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, group, wh
 
     elif group == 'teacher':
         for i in range(a, len(sitedate)):
-            keyboard.add (InlineKeyboardButton(f'{sitedate[i]} {who}', callback_data = f'препод{sitedate[i], who}'))
+            date1 = int(dt.datetime.weekday(dt.datetime.strptime(sitedate[i].replace('.','-'), '%d-%m-%Y')))
+            date2 = ''
+
+            if date1 > 2:
+                if date1 == 3:
+                    date2 = ('Четверг')
+                elif date1 == 4:
+                    date2 = ('Пятница')
+                elif date1 == 5:
+                    date2 = ('Суббота')
+            elif date1 < 2:
+                if date1 == 1:
+                    date2 = ('Вторник')
+                elif date1 == 0:
+                    date2 = ('Понедельник')
+            else:
+                date2 == ('Среда')
+            keyboard.add (InlineKeyboardButton(f'{sitedate[i]} ({date2})', callback_data = f'препод{sitedate[i], who}'))
         item1 = (InlineKeyboardButton('Другие группы', callback_data = 'another_group'))
         item3 = (InlineKeyboardButton('Преподаватели', callback_data = 'teacher'))
         item2 = (InlineKeyboardButton('Меню', callback_data = 'close'))
@@ -109,7 +126,24 @@ def parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, group, wh
 
     elif group == 'excel':
         for i in range(a, len(sitedate)):
-            keyboard.add (InlineKeyboardButton(f'{sitedate[i]} {who}', callback_data = f'excel {sitedate[i]}'))
+            date1 = int(dt.datetime.weekday(dt.datetime.strptime(sitedate[i].replace('.','-'), '%d-%m-%Y')))
+            date2 = ''
+
+            if date1 > 2:
+                if date1 == 3:
+                    date2 = ('Четверг')
+                elif date1 == 4:
+                    date2 = ('Пятница')
+                elif date1 == 5:
+                    date2 = ('Суббота')
+            elif date1 < 2:
+                if date1 == 1:
+                    date2 = ('Вторник')
+                elif date1 == 0:
+                    date2 = ('Понедельник')
+            else:
+                date2 == ('Среда')
+            keyboard.add (InlineKeyboardButton(f'{sitedate[i]} ({date2})', callback_data = f'excel {sitedate[i]}'))
         item1 = (InlineKeyboardButton('Другие группы', callback_data = 'another_group'))
         item3 = (InlineKeyboardButton('Преподаватели', callback_data = 'teacher'))
         item2 = (InlineKeyboardButton('Меню', callback_data = 'close'))
