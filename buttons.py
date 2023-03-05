@@ -341,7 +341,7 @@ def mycallback(bot, callback):
         data = cursor.fetchone()
         try:
             if data[0] is None:
-                bot.send_message(callback.message.chat.id, 'У тебя нету твоей группы, добавь её в настройках', parse_mode='html')
+                bot.send_message(callback.message.chat.id, 'У тебя нету твоей группы, добавь её в настройках, если нету настроек напиши menu', parse_mode='html')
             else:
                 parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, 'group', f'{data[0]}')
         except Exception as e:
