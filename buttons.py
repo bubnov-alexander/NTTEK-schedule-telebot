@@ -233,8 +233,8 @@ def defuser(bot, message, InlineKeyboardMarkup, InlineKeyboardButton):
         global page
         markup = InlineKeyboardMarkup()
         markup.row_width = 1
-        max = page * 5
-        min = max - 5
+        max = page * 10
+        min = max - 10
         a = 0
         b = 0
         if page == 0:
@@ -257,7 +257,7 @@ def defuser(bot, message, InlineKeyboardMarkup, InlineKeyboardButton):
             markup.add (close, amount_plus, row_width = 2)
             bot.send_message (message.chat.id, text = f'**Список {page}**', parse_mode='markdown', reply_markup = markup)
 
-        elif a < 5:
+        elif a < 10:
             amount_minus = InlineKeyboardButton(text = '<-- Назад', callback_data = '-1')
             close = InlineKeyboardButton(text = 'Закрыть', callback_data='close')
             markup.add(amount_minus, close, row_width = 2)
@@ -278,8 +278,8 @@ def defuser2(bot, callback, InlineKeyboardMarkup, InlineKeyboardButton):
     global page
     markup = InlineKeyboardMarkup()
     markup.row_width = 1
-    max = page * 5
-    min = max - 5
+    max = page * 10
+    min = max - 10
     a = 0
     if page == 0:
             page = page + 1
@@ -295,21 +295,23 @@ def defuser2(bot, callback, InlineKeyboardMarkup, InlineKeyboardButton):
             a = a + 1
     if page == 1:
         amount_plus = InlineKeyboardButton(text = 'Вперёд -->', callback_data = '+1')
-        close = InlineKeyboardButton(text = 'Закрыть', callback_data='close')
-        markup.add (close, amount_plus, row_width = 2)
+        maxpage = InlineKeyboardButton(text = 'Конец', callback_data='maxpage')
+        markup.add (maxpage, amount_plus, row_width = 2)
         bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'**Список {page}**', parse_mode='markdown', reply_markup = markup)
 
-    elif a < 5:
+    elif a < 10:
         amount_minus = InlineKeyboardButton(text = '<-- Назад', callback_data = '-1')
-        close = InlineKeyboardButton(text = 'Закрыть', callback_data='close')
-        markup.add(amount_minus, close, row_width = 2)
+        start = InlineKeyboardButton(text = 'Начало', callback_data='minpage')
+        maxpage = InlineKeyboardButton(text = 'Конец', callback_data='maxpage')
+        markup.add(amount_minus, start,maxpage, row_width = 2)
         bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'**Список {page}**', parse_mode='markdown', reply_markup = markup)
 
     else:
         amount_minus = InlineKeyboardButton(text = '<-- Назад', callback_data = '-1')
         amount_plus = InlineKeyboardButton(text = 'Вперёд -->', callback_data = '+1')
-        close = InlineKeyboardButton(text = 'Закрыть', callback_data='close')
-        markup.add (amount_minus, close, amount_plus, row_width = 3)
+        start = InlineKeyboardButton(text = 'Начало', callback_data='minpage')
+        maxpage = InlineKeyboardButton(text = 'Конец', callback_data='maxpage')
+        markup.add (amount_minus, start,maxpage, amount_plus, row_width = 3)
         bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'**Список {page}**', parse_mode='markdown', reply_markup = markup)
 
 #Панель прав
@@ -660,9 +662,20 @@ def mycallback(bot, callback):
         page += 1
         defuser2(bot, callback, InlineKeyboardMarkup, InlineKeyboardButton)
 
-    elif callback.data == '-1': 
+    elif callback.data == '-1':
         page -= 1
         defuser2(bot, callback, InlineKeyboardMarkup, InlineKeyboardButton)
+
+    elif callback.data == 'maxpage':
+        cursor.execute('''SELECT * FROM users''')
+        user = cursor.fetchall()
+        page = len(user) // 10
+        defuser2(bot, callback, InlineKeyboardMarkup, InlineKeyboardButton)
+    
+    elif callback.data == 'minpage':
+        page = 1
+        defuser2(bot, callback, InlineKeyboardMarkup, InlineKeyboardButton)
+        
 
     for i in range(0, len(predmeti)):
         if callback.data == (f"{predmeti[i]}HW"):
