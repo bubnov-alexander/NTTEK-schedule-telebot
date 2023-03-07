@@ -684,7 +684,10 @@ def mycallback(bot, callback):
             f'Имя: {str(i[2])}\n'
             f'id: {str(i[1])}\n'
             f'Nickname: {str(i[3])}\n'
-            f'Regist: {str(i[4])}\n'
+            f'Отзыв: {str(i[5])}\n'
+            f'Уведомление: {str(i[4])}\n'
+            f'Group: {str(i[6])}\n'
+            f'Regist: {str(i[7])}\n'
             ))
 
         elif callback.data == str(i[2]):
@@ -694,5 +697,8 @@ def mycallback(bot, callback):
             f'Имя: {str(i[2])}\n'
             f'id: {str(i[1])}\n'
             f'Nickname: {str(i[3])}\n'
-            f'Regist: {str(i[4])}\n'
+            f'Отзыв: {str(i[5])}\n'
+            f'Уведомление: {str(i[4])}\n'
+            f'Group: {str(i[6])}\n'
+            f'Regist: {str(i[7])}\n'
             ))
