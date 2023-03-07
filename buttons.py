@@ -265,15 +265,20 @@ def defuser(bot, message, InlineKeyboardMarkup, InlineKeyboardButton):
             start = InlineKeyboardButton(text = 'Начало', callback_data='minpage')
             maxpage = InlineKeyboardButton(text = 'Конец', callback_data='maxpage')
             markup.add(amount_minus, start,maxpage, row_width = 4)
-            bot.edit_message_text(chat_id=message.chat.id, message_id=message.id, text = f'**Список {page}**', parse_mode='markdown', reply_markup = markup)
-
+            try:
+                bot.edit_message_text(chat_id=message.chat.id, message_id=message.id, text = f'**Список {page}**', parse_mode='markdown', reply_markup = markup)
+            except:
+                bot.send_message(message.chat.id, text = f'**Список {page}**', parse_mode='markdown', reply_markup = markup)
         else:
             amount_minus = InlineKeyboardButton(text = '<-- Назад', callback_data = '-1')
             amount_plus = InlineKeyboardButton(text = 'Вперёд -->', callback_data = '+1')
             start = InlineKeyboardButton(text = 'Начало', callback_data='minpage')
             maxpage = InlineKeyboardButton(text = 'Конец', callback_data='maxpage')
             markup.add (amount_minus, start, maxpage, amount_plus, row_width = 4)
-            bot.edit_message_text(chat_id=message.chat.id, message_id=message.id, text = f'**Список {page}**', parse_mode='markdown', reply_markup = markup)
+            try:
+                bot.edit_message_text(chat_id=message.chat.id, message_id=message.id, text = f'**Список {page}**', parse_mode='markdown', reply_markup = markup)
+            except:
+                bot.send_message(message.chat.id, text = f'**Список {page}**', parse_mode='markdown', reply_markup = markup)
 
 #Панель прав
 def root(bot, argument1, argument2):
