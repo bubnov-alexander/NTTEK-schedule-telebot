@@ -28,7 +28,7 @@ def getpari(date, group, group_name, InlineKeyboardMarkup, InlineKeyboardButton,
                     text = (text + '\n' + (f'**Номер урока:** {lesson}\n**Урок:** {name} {room}\n**Препод:** {teacher}\n'))
             
                 keyboard = InlineKeyboardMarkup()
-                keyboard.row_width = 2
+                keyboard.row_width = 3
 
                 for i in range(a, len(sitedate)):
                     date1 = int(dt.datetime.weekday(dt.datetime.strptime(sitedate[i].replace('.','-'), '%d-%m-%Y')))
@@ -52,10 +52,52 @@ def getpari(date, group, group_name, InlineKeyboardMarkup, InlineKeyboardButton,
                     
                 item1 = (InlineKeyboardButton('Другие группы', callback_data = 'another_group'))
                 item3 = (InlineKeyboardButton('Преподаватели', callback_data = 'teacher'))
-                item2 = (InlineKeyboardButton('Меню', callback_data = 'close'))
+                item2 = (InlineKeyboardButton('Твоя группа', callback_data = 'f_group'))
+                close = (InlineKeyboardButton('Меню', callback_data = 'close'))
                 keyboard.add(item1, item3, item2)
+                keyboard.add(close)
+                try:
+                    bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'Расписание на {date} ({date2}):\n __{text}__ \nВыберите день на который хотите узнать расписание\nгруппы {group_name}', parse_mode='Markdown', reply_markup = keyboard)
+                except:
+                    pass
+            except Exception as e:
+                keyboard = InlineKeyboardMarkup()
+                keyboard.row_width = 3
+
+                for i in range(a, len(sitedate)):
+                    date1 = int(dt.datetime.weekday(dt.datetime.strptime(sitedate[i].replace('.','-'), '%d-%m-%Y')))
+                    date2 = ''
+
+                    if date1 > 2:
+                        if date1 == 3:
+                            date2 = ('Четверг')
+                        elif date1 == 4:
+                            date2 = ('Пятница')
+                        elif date1 == 5:
+                            date2 = ('Суббота')
+                    elif date1 < 2:
+                        if date1 == 1:
+                            date2 = ('Вторник')
+                        elif date1 == 0:
+                            date2 = ('Понедельник')
+                    else:
+                        date2 == ('Среда')
+                    keyboard.add (InlineKeyboardButton(f'{sitedate[i]} ({date2})',callback_data = f'{sitedate[i]} {group_name}'))
+                    
+                item1 = (InlineKeyboardButton('Другие группы', callback_data = 'another_group'))
+                item3 = (InlineKeyboardButton('Преподаватели', callback_data = 'teacher'))
+                item2 = (InlineKeyboardButton('Твоя группа', callback_data = 'f_group'))
+                close = (InlineKeyboardButton('Меню', callback_data = 'close'))
+                keyboard.add(item1, item3, item2)
+                keyboard.add(close)
+                bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'Расписания НЕТУ! Либо попробуй нажать ещё раз\nВыберите день на который хотите узнать расписание:', parse_mode='Markdown', reply_markup = keyboard)
                 
-                date1 = int(dt.datetime.weekday(dt.datetime.strptime(date, '%d-%m-%Y')))
+        except Exception as e:
+            keyboard = InlineKeyboardMarkup()
+            keyboard.row_width = 3
+
+            for i in range(a, len(sitedate)):
+                date1 = int(dt.datetime.weekday(dt.datetime.strptime(sitedate[i].replace('.','-'), '%d-%m-%Y')))
                 date2 = ''
 
                 if date1 > 2:
@@ -72,29 +114,14 @@ def getpari(date, group, group_name, InlineKeyboardMarkup, InlineKeyboardButton,
                         date2 = ('Понедельник')
                 else:
                     date2 == ('Среда')
-                try:
-                    bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'Расписание на {date} ({date2}):\n __{text}__ \nВыберите день на который хотите узнать расписание\nгруппы {group_name}', parse_mode='Markdown', reply_markup = keyboard)
-                except:
-                    pass
-            except Exception as e:
-                print(e)
-                keyboard = InlineKeyboardMarkup()
-                keyboard.row_width = 2
-                for i in range(a, len(sitedate)):
-                    keyboard.add(InlineKeyboardButton(f'{sitedate[i]} {group_name}',callback_data = f'{sitedate[i]} {group_name}'))
-                item1 = (InlineKeyboardButton('Другие группы', callback_data = 'another_group'))
-                item3 = (InlineKeyboardButton('Преподаватели', callback_data = 'teacher'))
-                item2 = (InlineKeyboardButton('Меню', callback_data = 'close'))
-                keyboard.add(item1, item3, item2)
-                bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'Расписания НЕТУ! Либо попробуй нажать ещё раз\nВыберите день на который хотите узнать расписание:', parse_mode='Markdown', reply_markup = keyboard)
-        except Exception as e:
-            bot.send_message(chat_id = 510441193, text = f'Пользователь {callback.message.chat.username} {callback.message.chat.first_name} ввёл неверно группу')
-            keyboard = InlineKeyboardMarkup()
-            keyboard.row_width = 2
+                keyboard.add (InlineKeyboardButton(f'{sitedate[i]} ({date2})',callback_data = f'{sitedate[i]} {group_name}'))
+                
             item1 = (InlineKeyboardButton('Другие группы', callback_data = 'another_group'))
             item3 = (InlineKeyboardButton('Преподаватели', callback_data = 'teacher'))
-            item2 = (InlineKeyboardButton('Меню', callback_data = 'close'))
+            item2 = (InlineKeyboardButton('Твоя группа', callback_data = 'f_group'))
+            close = (InlineKeyboardButton('Меню', callback_data = 'close'))
             keyboard.add(item1, item3, item2)
+            keyboard.add(close)
             bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'Такой группы нету выбери другую, либо проблемы на сайте, \nузнай у меня в чём проблема @kinoki445', parse_mode='Markdown', reply_markup = keyboard)
     
     elif group == 'excel':
@@ -118,7 +145,7 @@ def getpari(date, group, group_name, InlineKeyboardMarkup, InlineKeyboardButton,
                 text = (f'**{url}**')
             
                 keyboard = InlineKeyboardMarkup()
-                keyboard.row_width = 2
+                keyboard.row_width = 3
 
                 for i in range(a, len(sitedate)):
                     date1 = int(dt.datetime.weekday(dt.datetime.strptime(sitedate[i].replace('.','-'), '%d-%m-%Y')))
@@ -142,9 +169,10 @@ def getpari(date, group, group_name, InlineKeyboardMarkup, InlineKeyboardButton,
                     
                 item1 = (InlineKeyboardButton('Другие группы', callback_data = 'another_group'))
                 item3 = (InlineKeyboardButton('Преподаватели', callback_data = 'teacher'))
-                item2 = (InlineKeyboardButton('Меню', callback_data = 'close'))
+                item2 = (InlineKeyboardButton('Твоя группа', callback_data = 'f_group'))
+                close = (InlineKeyboardButton('Меню', callback_data = 'close'))
                 keyboard.add(item1, item3, item2)
-
+                keyboard.add(close)
                 date1 = int(dt.datetime.weekday(dt.datetime.strptime(date, '%d-%m-%Y')))
                 date2 = ''
 
@@ -168,22 +196,26 @@ def getpari(date, group, group_name, InlineKeyboardMarkup, InlineKeyboardButton,
                     pass
             except Exception as e:
                 keyboard = InlineKeyboardMarkup()
-                keyboard.row_width = 2
+                keyboard.row_width = 3
                 for i in range(a, len(sitedate)):
                     keyboard.add(InlineKeyboardButton(f'{sitedate[i]} {group_name}',callback_data = f'{sitedate[i]} {group_name}'))
                 item1 = (InlineKeyboardButton('Другие группы', callback_data = 'another_group'))
                 item3 = (InlineKeyboardButton('Преподаватели', callback_data = 'teacher'))
-                item2 = (InlineKeyboardButton('Меню', callback_data = 'close'))
+                item2 = (InlineKeyboardButton('Твоя группа', callback_data = 'f_group'))
+                close = (InlineKeyboardButton('Меню', callback_data = 'close'))
                 keyboard.add(item1, item3, item2)
+                keyboard.add(close)
                 bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'Расписания НЕТУ! Либо попробуй нажать ещё раз\nВыберите день на который хотите узнать расписание:', parse_mode='Markdown', reply_markup = keyboard)
         except Exception as e:
             bot.send_message(chat_id = 510441193, text = f'Пользователь {callback.message.chat.username} {callback.message.chat.first_name} ввёл неверно группу')
             keyboard = InlineKeyboardMarkup()
-            keyboard.row_width = 2
+            keyboard.row_width = 3
             item1 = (InlineKeyboardButton('Другие группы', callback_data = 'another_group'))
             item3 = (InlineKeyboardButton('Преподаватели', callback_data = 'teacher'))
-            item2 = (InlineKeyboardButton('Меню', callback_data = 'close'))
+            item2 = (InlineKeyboardButton('Твоя группа', callback_data = 'f_group'))
+            close = (InlineKeyboardButton('Меню', callback_data = 'close'))
             keyboard.add(item1, item3, item2)
+            keyboard.add(close)
             bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'Такой группы нету выбери другую, либо узнай у меня в чём проблема @kinoki445', parse_mode='Markdown', reply_markup = keyboard)
 
     else:
@@ -211,7 +243,7 @@ def getpari(date, group, group_name, InlineKeyboardMarkup, InlineKeyboardButton,
                     Room = data[i]['rooms']
                     text = (text + '\n' + (str(f'{Corpus}\nНомер урока: {i}\nГруппа: {Group}\nУрок: {Para}\nКабинет: {Room}\n')))
                 keyboard = InlineKeyboardMarkup()
-                keyboard.row_width = 2
+                keyboard.row_width = 3
                 for i in range(a, len(sitedate)):
                     date1 = int(dt.datetime.weekday(dt.datetime.strptime(sitedate[i].replace('.','-'), '%d-%m-%Y')))
                     date2 = ''
@@ -233,8 +265,10 @@ def getpari(date, group, group_name, InlineKeyboardMarkup, InlineKeyboardButton,
                     keyboard.add (InlineKeyboardButton(f'{sitedate[i]} ({date2})',callback_data = f'препод{sitedate[i], group_name}'))
                 item1 = (InlineKeyboardButton('Другие группы', callback_data = 'another_group'))
                 item3 = (InlineKeyboardButton('Преподаватели', callback_data = 'teacher'))
-                item2 = (InlineKeyboardButton('Меню', callback_data = 'close'))
+                item2 = (InlineKeyboardButton('Твоя группа', callback_data = 'f_group'))
+                close = (InlineKeyboardButton('Меню', callback_data = 'close'))
                 keyboard.add(item1, item3, item2)
+                keyboard.add(close)
                 date1 = int(dt.datetime.weekday(dt.datetime.strptime(date, '%d-%m-%Y')))
                 date2 = ''
 
@@ -260,21 +294,25 @@ def getpari(date, group, group_name, InlineKeyboardMarkup, InlineKeyboardButton,
 
             except Exception as e:
                 keyboard = InlineKeyboardMarkup()
-                keyboard.row_width = 2
+                keyboard.row_width = 3
                 for i in range(a, len(sitedate)):
                     keyboard.add(InlineKeyboardButton(f'{sitedate[i]} {group_name}',callback_data = f'препод{sitedate[i], group_name}'))
                 item1 = (InlineKeyboardButton('Другие группы', callback_data = 'another_group'))
                 item3 = (InlineKeyboardButton('Преподаватели', callback_data = 'teacher'))
-                item2 = (InlineKeyboardButton('Меню', callback_data = 'close'))
+                item2 = (InlineKeyboardButton('Твоя группа', callback_data = 'f_group'))
+                close = (InlineKeyboardButton('Меню', callback_data = 'close'))
                 keyboard.add(item1, item3, item2)
+                keyboard.add(close)
                 bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'Расписания НЕТУ! Либо попробуй нажать ещё раз\nВыберите день на который хотите узнать расписание:', parse_mode='Markdown', reply_markup = keyboard)
         except Exception as e:
             bot.send_message(chat_id = 510441193, text = f'Пользователь {callback.message.chat.username} {callback.message.chat.first_name} ввёл неверно группу')
             keyboard = InlineKeyboardMarkup()
-            keyboard.row_width = 2
+            keyboard.row_width = 3
             item1 = (InlineKeyboardButton('Другие группы', callback_data = 'another_group'))
             item3 = (InlineKeyboardButton('Преподаватели', callback_data = 'teacher'))
-            item2 = (InlineKeyboardButton('Меню', callback_data = 'close'))
+            item2 = (InlineKeyboardButton('Твоя группа', callback_data = 'f_group'))
+            close = (InlineKeyboardButton('Меню', callback_data = 'close'))
             keyboard.add(item1, item3, item2)
+            keyboard.add(close)
             bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'Такого препода нету нету выбери другую', parse_mode='Markdown', reply_markup = keyboard)
         

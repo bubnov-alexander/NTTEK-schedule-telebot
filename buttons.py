@@ -11,6 +11,10 @@ predmeti = ['Теория вероятностей', 'Математика', 'С
 #argument1.chat.id
 #argument2.from_user
 def menu(bot, argument1, argument2):
+    try:
+        bot.clear_step_handler_by_chat_id(chat_id=argument1.message.chat.id)
+    except:
+        pass
     markup=ReplyKeyboardMarkup(resize_keyboard=True)
     item1 = KeyboardButton("📋Расписание📋")
     item2 = KeyboardButton("👥Преподаватели👥")
@@ -37,7 +41,10 @@ def group(bot, message):
     back = InlineKeyboardButton(text = "Другая группа", callback_data = 'another_group')
     markup.add(item1, item7,back, item6)
     markup.add(item4, item5)
-    bot.send_message(message.chat.id, 'Выбери расписание какой группы ты хочешь узнать: ',  parse_mode='html', reply_markup=markup)
+    try:
+        bot.edit_message_text(chat_id=message.chat.id, message_id=message.id, text ='Выбери расписание какой группы ты хочешь узнать: ',  parse_mode='html', reply_markup=markup)
+    except:
+        bot.send_message(message.chat.id, 'Выбери расписание какой группы ты хочешь узнать: ',  parse_mode='html', reply_markup=markup)
 
 def send_message_users(bot, message):
     markup = InlineKeyboardMarkup(row_width=2)
@@ -61,7 +68,7 @@ def adminpanel(bot, argument1, argument2):
 #ВЫВОД РАСПИСАНИЯ
 def parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, group, who):
     keyboard = InlineKeyboardMarkup()
-    keyboard.row_width = 2
+    keyboard.row_width = 3
     site = requests.get(f'https://erp.nttek.ru/api/schedule/legacy').text
     sitedate = json.loads(site)
     sitedate.sort(key=lambda x: time.mktime(time.strptime(x,"%d.%m.%Y")))
@@ -94,9 +101,14 @@ def parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, group, wh
             keyboard.add (InlineKeyboardButton(f'{sitedate[i]} ({date2})', callback_data = f'{sitedate[i], who}'))
         item1 = (InlineKeyboardButton('Другие группы', callback_data = 'another_group'))
         item3 = (InlineKeyboardButton('Преподаватели', callback_data = 'teacher'))
-        item2 = (InlineKeyboardButton('Меню', callback_data = 'close'))
+        item2 = (InlineKeyboardButton('Твоя группа', callback_data = 'f_group'))
+        close = (InlineKeyboardButton('Меню', callback_data = 'close'))
         keyboard.add(item1, item3, item2)
-        bot.send_message(callback.message.chat.id, f'Выберите день на который хотите узнать расписание\nгруппы {who}', parse_mode='html', reply_markup = keyboard)
+        keyboard.add(close)
+        try:
+            bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'Выберите день на который хотите узнать расписание\nгруппы {who}', parse_mode='html', reply_markup = keyboard)
+        except:
+            bot.send_message(callback.message.chat.id, f'Выберите день на который хотите узнать расписание\nгруппы {who}', parse_mode='html', reply_markup = keyboard)
 
     elif group == 'teacher':
         for i in range(a, len(sitedate)):
@@ -120,9 +132,14 @@ def parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, group, wh
             keyboard.add (InlineKeyboardButton(f'{sitedate[i]} ({date2})', callback_data = f'препод{sitedate[i], who}'))
         item1 = (InlineKeyboardButton('Другие группы', callback_data = 'another_group'))
         item3 = (InlineKeyboardButton('Преподаватели', callback_data = 'teacher'))
-        item2 = (InlineKeyboardButton('Меню', callback_data = 'close'))
+        item2 = (InlineKeyboardButton('Твоя группа', callback_data = 'f_group'))
+        close = (InlineKeyboardButton('Меню', callback_data = 'close'))
         keyboard.add(item1, item3, item2)
-        bot.send_message(callback.message.chat.id, f'Выберите день на который хотите узнать расписание преподавателя {who}', parse_mode='html', reply_markup = keyboard)
+        keyboard.add(close)
+        try:
+            bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'Выберите день на который хотите узнать расписание преподавателя {who}', parse_mode='html', reply_markup = keyboard)
+        except:
+            bot.send_message(callback.message.chat.id, f'Выберите день на который хотите узнать расписание преподавателя {who}', parse_mode='html', reply_markup = keyboard)
 
     elif group == 'excel':
         for i in range(a, len(sitedate)):
@@ -146,9 +163,14 @@ def parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, group, wh
             keyboard.add (InlineKeyboardButton(f'{sitedate[i]} ({date2})', callback_data = f'excel {sitedate[i]}'))
         item1 = (InlineKeyboardButton('Другие группы', callback_data = 'another_group'))
         item3 = (InlineKeyboardButton('Преподаватели', callback_data = 'teacher'))
-        item2 = (InlineKeyboardButton('Меню', callback_data = 'close'))
+        item2 = (InlineKeyboardButton('Твоя группа', callback_data = 'f_group'))
+        close = (InlineKeyboardButton('Меню', callback_data = 'close'))
         keyboard.add(item1, item3, item2)
-        bot.send_message(callback.message.chat.id, 'Выберите день на который хотите узнать расписание', parse_mode='html', reply_markup = keyboard)
+        keyboard.add(close)
+        try:
+            bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = 'Выберите день на который хотите узнать расписание', parse_mode='html', reply_markup = keyboard)
+        except:
+            bot.send_message(callback.message.chat.id, 'Выберите день на который хотите узнать расписание', parse_mode='html', reply_markup = keyboard)
 
 
 #ПРЕПОДЫ
@@ -195,29 +217,6 @@ def aboutbot(bot, message):
 #При появление ошибок
 def error(bot):
     bot.send_message(chat_id = 510441193, text = f'В боте появилась ошибка!')  
-
-#Панель ДЗ
-def homework(bot, message, InlineKeyboardMarkup, InlineKeyboardButton):
-    try:
-        cursor.execute('''SELECT user_id FROM homeworker WHERE user_id = ?''', (message.chat.id, ))
-        homeworker = cursor.fetchone()
-        if homeworker is None:
-            markup = InlineKeyboardMarkup()
-            para = InlineKeyboardButton(text = 'Выбрать предмет ', callback_data='dz')
-            markup.add(para, row_width = 3)
-            bot.send_message(message.chat.id, text = 'Выбери что-то из предложенного: ', parse_mode='html', reply_markup=markup)
-        else:
-            markup = InlineKeyboardMarkup()
-            para = InlineKeyboardButton(text = 'Выбрать предмет ', callback_data='dz')
-            hw = InlineKeyboardButton(text = 'Добавить ДЗ', callback_data= 'addhw')
-            markup.add(para,hw, row_width = 3)
-            bot.send_message(message.chat.id, text = 'Выбери что-то из предложенного: ', parse_mode='html', reply_markup=markup)
-    except:
-        markup = InlineKeyboardMarkup()
-        para = InlineKeyboardButton(text = 'Выбрать предмет ', callback_data='dz')
-        markup.add(para, row_width = 3)
-        bot.send_message(message.chat.id, text = 'Выбери что-то из предложенного: ', parse_mode='html', reply_markup=markup)
-
 
 #Получить информацию из базы данных о пользователе
 def defuser(bot, message, InlineKeyboardMarkup, InlineKeyboardButton):
@@ -305,6 +304,10 @@ def mycallback(bot, callback):
 
     #ВЫВОД ОПРЕДЕЛЁННОЙ ГРУППЫ (ДНЕЙ)
     if callback.data == 'f_group':
+        try:
+            bot.clear_step_handler_by_chat_id(chat_id=callback.message.chat.id)
+        except:
+            pass
         cursor.execute(f'SELECT f_group FROM users WHERE user_id = {callback.message.chat.id}')
         data = cursor.fetchone()
         try:
@@ -317,7 +320,9 @@ def mycallback(bot, callback):
             bot.send_message(callback.message.chat.id, 'Какая-то ошибка, пиши @Kinoki445', parse_mode='html')
     
     elif callback.data == 'another_group':
-        bot.reply_to(callback.message, 'Введи название группы, пример (2ИС6) Без - и пробелов: ')
+        keyboard = InlineKeyboardMarkup()
+        keyboard.add(InlineKeyboardButton('Отмена', callback_data = 'f_group'))
+        bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = 'Введи название группы, пример (2ИС6) Без - и пробелов: ', reply_markup = keyboard)
         def another_group(message):
             try:
                 parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, 'group', message.text.upper())
@@ -325,9 +330,12 @@ def mycallback(bot, callback):
                 bot.send_message(chat_id = 510441193, text = f'Пользователь {message.from_user.username} {message.from_user.first_name} ввёл неверно группу {message.text}')
                 bot.send_message(callback.message.chat.id, f'Такой группы не существует', parse_mode='html')
         bot.register_next_step_handler(callback.message, another_group)
+        bot.clear_step_handler_by_chat_id(chat_id=callback.message.chat.id)
 
     elif callback.data == 'teacher':
-        bot.reply_to(callback.message, 'Введи фамилию преподавателя, пример (Зятикова ТЮ) Без - и  через пробел: ')
+        keyboard = InlineKeyboardMarkup()
+        keyboard.add(InlineKeyboardButton('Отмена', callback_data = 'f_group'))
+        bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = 'Введи фамилию преподавателя, пример (Зятикова ТЮ) Без - и  через пробел: ', reply_markup = keyboard)
         def another_teacher(message):
             try:
                 parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, 'teacher', message.text)
@@ -403,7 +411,9 @@ def mycallback(bot, callback):
         bot.register_next_step_handler(callback.message, add_user_ban)
 
     elif callback.data == 'add_f_group':
-        bot.reply_to(callback.message, 'Введи свою группу, например: "2ИС6" без " - и т.п ')
+        keyboard = InlineKeyboardMarkup()
+        keyboard.add(InlineKeyboardButton('Отмена', callback_data = 'close'))
+        bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = 'Введи свою группу, например: "2ИС6" без " - и т.п ', reply_markup=keyboard)
         def add_user_ban(message):
             try:
                 cursor.execute(f'''UPDATE users SET f_group = '{message.text}' WHERE user_id = {callback.message.chat.id}''')
@@ -507,7 +517,6 @@ def mycallback(bot, callback):
                 root(bot, callback.message, callback.message)
         bot.register_next_step_handler(callback.message, del_user_ban)
 
-
     #Работа с DateBase ДЗ
     elif callback.data == 'dzbase':
         markup = InlineKeyboardMarkup()
@@ -595,24 +604,6 @@ def mycallback(bot, callback):
                 root(bot, callback.message, callback.message)
         bot.register_next_step_handler(callback.message, del_user_admin)
 
-    #ВЫБОР ДЗ
-    elif callback.data == 'dz':
-        markup = InlineKeyboardMarkup()
-        close = InlineKeyboardButton(text = '🔙Выйти', callback_data= 'close')
-        for i in range(0, len(predmeti)):
-            markup.add(InlineKeyboardButton(predmeti[i], callback_data = f'{predmeti[i]}DZ'))
-        markup.add(close)
-        bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'Выбери предмет: ', parse_mode='markdown', reply_markup = markup)
-
-    #ДОБАВИТЬ ДЗ
-    elif callback.data == 'addhw':
-        markup = InlineKeyboardMarkup()
-        close = InlineKeyboardButton(text = '🔙Выйти', callback_data= 'close')
-        for i in range(0, len(predmeti)):
-            markup.add(InlineKeyboardButton(predmeti[i], callback_data = f'{predmeti[i]}HW'))
-        markup.add(close)
-        bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'Выбери предмет: ', parse_mode='markdown', reply_markup = markup)
-
     #ВЫВОД СПИСКА ПРАВ 
     elif callback.data == 'root':
         root(bot, callback.message, callback.message)
@@ -621,6 +612,10 @@ def mycallback(bot, callback):
         zvonok(bot, callback)
 
     elif callback.data == 'close':
+        try:
+            bot.clear_step_handler_by_chat_id(chat_id=callback.message.chat.id)
+        except:
+            pass
         menu(bot, callback.message, callback)
 
     elif callback.data == '+1':
@@ -641,38 +636,6 @@ def mycallback(bot, callback):
     elif callback.data == 'minpage':
         page = 1
         defuser(bot, callback.message, InlineKeyboardMarkup, InlineKeyboardButton)
-        
-
-    for i in range(0, len(predmeti)):
-        if callback.data == (f"{predmeti[i]}HW"):
-            para = predmeti[i]
-            bot.reply_to(callback.message, f'Напиши ДЗ которое задали по {para}', parse_mode='markdown') 
-        
-            def writehomework(message):
-                text = message.text
-                f = open(f'data/homework/{para}.txt', 'w+', encoding='UTF-8')
-                date = datetime.datetime.now(tz).strftime('%d.%m.%Y')
-                f.write(f'Задание заданное {date} числа:\n\n{text}\n\n')
-                f.close
-                bot.reply_to(message, f'Задание которое я добавил в Базу Данных:\n\n{message.text}\n', parse_mode='markdown')
-                homework(bot, message, InlineKeyboardMarkup, InlineKeyboardButton)
-                bot.send_message(chat_id = 510441193, text = f'Добавил новое ДЗ! В {para} {message.from_user.username}, {message.from_user.first_name}', parse_mode='Markdown')
-                TIME = (datetime.datetime.now(tz)).strftime('%H:%M:%S')
-                DATE = (datetime.datetime.now(tz)).strftime('%d.%m')
-                print(f'Пользователь {callback.message.chat.username} {callback.message.chat.first_name} изменил ДЗ! В {para}', TIME)
-                with open("data/logs.txt", "a+") as f:
-                    f.write(f'\n{TIME} {DATE}| Пользователь {callback.message.chat.username} {callback.message.chat.first_name} изменил ДЗ!')
-            bot.register_next_step_handler(callback.message, writehomework)
-
-        if callback.data == (f'{predmeti[i]}DZ'):
-            para = predmeti[i]
-            try:
-                f = open(f'data/homework/{para}.txt', 'r+', encoding='UTF-8')
-                text = f.read()
-                bot.send_message(callback.message.chat.id, text, parse_mode='markdown')
-                f.close
-            except:
-                bot.send_message(callback.message.chat.id, f'Дз по {para} пока что нету!', parse_mode='markdown')
             
     cursor.execute('''SELECT * FROM users''')
     user = cursor.fetchall()
