@@ -102,7 +102,7 @@ def parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, group, wh
         item1 = (InlineKeyboardButton('Другие группы', callback_data = 'another_group'))
         item3 = (InlineKeyboardButton('Преподаватели', callback_data = 'teacher'))
         item2 = (InlineKeyboardButton('Твоя группа', callback_data = 'f_group'))
-        close = (InlineKeyboardButton('Меню', callback_data = 'close'))
+        close = (InlineKeyboardButton('Меню', callback_data = 'close2'))
         keyboard.add(item1, item3, item2)
         keyboard.add(close)
         try:
@@ -133,7 +133,7 @@ def parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, group, wh
         item1 = (InlineKeyboardButton('Другие группы', callback_data = 'another_group'))
         item3 = (InlineKeyboardButton('Преподаватели', callback_data = 'teacher'))
         item2 = (InlineKeyboardButton('Твоя группа', callback_data = 'f_group'))
-        close = (InlineKeyboardButton('Меню', callback_data = 'close'))
+        close = (InlineKeyboardButton('Меню', callback_data = 'close2'))
         keyboard.add(item1, item3, item2)
         keyboard.add(close)
         try:
@@ -164,7 +164,7 @@ def parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, group, wh
         item1 = (InlineKeyboardButton('Другие группы', callback_data = 'another_group'))
         item3 = (InlineKeyboardButton('Преподаватели', callback_data = 'teacher'))
         item2 = (InlineKeyboardButton('Твоя группа', callback_data = 'f_group'))
-        close = (InlineKeyboardButton('Меню', callback_data = 'close'))
+        close = (InlineKeyboardButton('Меню', callback_data = 'close2'))
         keyboard.add(item1, item3, item2)
         keyboard.add(close)
         try:
