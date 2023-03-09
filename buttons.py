@@ -330,7 +330,7 @@ def mycallback(bot, callback):
                 bot.send_message(chat_id = 510441193, text = f'Пользователь {message.from_user.username} {message.from_user.first_name} ввёл неверно группу {message.text}')
                 bot.send_message(callback.message.chat.id, f'Такой группы не существует', parse_mode='html')
         bot.register_next_step_handler(callback.message, another_group)
-        
+
     elif callback.data == 'teacher':
         keyboard = InlineKeyboardMarkup()
         keyboard.add(InlineKeyboardButton('Отмена', callback_data = 'f_group'))
@@ -425,13 +425,15 @@ def mycallback(bot, callback):
         bot.register_next_step_handler(callback.message, add_user_ban)
 
     elif callback.data == 'review':
-        bot.reply_to(callback.message, 'Напиши свой отзыв: ')
+        keyboard = InlineKeyboardMarkup()
+        keyboard.add(InlineKeyboardButton('Отмена', callback_data = 'close'))
+        bot.reply_to(callback.message, 'Напиши свой отзыв: ', reply_markup=keyboard)
         def add_user_ban(message):
             try:
                 cursor.execute(f'''UPDATE users SET review = '{message.text}' WHERE user_id = {callback.message.chat.id}''')
                 database.commit()
                 bot.send_message(callback.message.chat.id, 'Благодарю за твоё мнение о боте)', parse_mode='html')
-                bot.send_message(chat_id = 510441193, text = f'Пользователь {callback.message.chat.username} {callback.message.chat.first_name} написал отзыв: \n {message.text}')
+                bot.send_message(chat_id = 510441193, text = f'Пользователь {callback.message.chat.username} {callback.message.chat.first_name} написал отзыв: \n{message.text}')
                 menu(bot, callback.message, callback.message)
             except:
                 bot.send_message(callback.message.chat.id, 'Появилась какая-то ошибка, обратись к @kinoki445', parse_mode='html')
