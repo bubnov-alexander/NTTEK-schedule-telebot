@@ -321,7 +321,7 @@ def mycallback(bot, callback):
     
     elif callback.data == 'another_group':
         keyboard = InlineKeyboardMarkup()
-        keyboard.add(InlineKeyboardButton('Отмена', callback_data = 'f_group'))
+        keyboard.add(InlineKeyboardButton('Отмена', callback_data = 'close2'))
         bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = 'Введи название группы, пример (2ИС6) Без - и пробелов: ', reply_markup = keyboard)
         def another_group(message):
             try:
@@ -333,7 +333,7 @@ def mycallback(bot, callback):
 
     elif callback.data == 'teacher':
         keyboard = InlineKeyboardMarkup()
-        keyboard.add(InlineKeyboardButton('Отмена', callback_data = 'f_group'))
+        keyboard.add(InlineKeyboardButton('Отмена', callback_data = 'close2'))
         bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = 'Введи фамилию преподавателя, пример (Зятикова ТЮ) Без - и  через пробел: ', reply_markup = keyboard)
         def another_teacher(message):
             try:
@@ -345,6 +345,9 @@ def mycallback(bot, callback):
         
     elif callback.data =='excel':
         parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, 'excel', 'excel')
+
+    elif callback.data == 'close2':
+        group(bot, callback.message)
 
     for i in range(a, len(sitedate)):
         if callback.data[0:6:] != 'препод':
