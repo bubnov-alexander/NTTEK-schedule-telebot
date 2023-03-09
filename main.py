@@ -119,8 +119,11 @@ def bot_message(message):
                     TIME = (datetime.datetime.now(tz)).strftime('%H:%M:%S')
                     DATE = (datetime.datetime.now(tz)).strftime('%d.%m')
                     print(f'Пользователь {message.from_user.username} {message.from_user.first_name} написал {message.text} в', TIME)
-                    with open("data/logs.txt", "a+") as f:
-                        f.write(f'\n{TIME} {DATE}| Пользователь {message.from_user.username} {message.from_user.first_name} написал {message.text}')
+                    try:
+                        with open("data/logs.txt", "a+") as f:
+                            f.write(f'\n{TIME} {DATE}| Пользователь {message.from_user.username} {message.from_user.first_name} написал {message.text}')
+                    except:
+                        pass
 
     #Действия если user в бане
     else:
@@ -136,7 +139,7 @@ if __name__ == '__main__':
     DATE = (datetime.datetime.now(tz)).strftime('%d.%m')
     print ('Бот запущен:', TIME)
     with open("data/logs.txt", "a+") as f:
-            f.write(f'\n{TIME} {DATE}| Бот запущен')
+        f.write(f'\n{TIME} {DATE}| Бот запущен')
     while True:
         try:
             bot.infinity_polling(none_stop=True, timeout=123)

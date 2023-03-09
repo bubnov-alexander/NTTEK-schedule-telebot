@@ -11,10 +11,6 @@ predmeti = ['Теория вероятностей', 'Математика', 'С
 #argument1.chat.id
 #argument2.from_user
 def menu(bot, argument1, argument2):
-    try:
-        bot.clear_step_handler_by_chat_id(chat_id=argument1.message.chat.id)
-    except:
-        pass
     markup=ReplyKeyboardMarkup(resize_keyboard=True)
     item1 = KeyboardButton("📋Расписание📋")
     item2 = KeyboardButton("👥Преподаватели👥")
@@ -355,6 +351,10 @@ def mycallback(bot, callback):
         parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, 'excel', 'excel')
 
     elif callback.data == 'close2':
+        try:
+            bot.clear_step_handler_by_chat_id(chat_id=callback.message.chat.id)
+        except:
+            pass
         group(bot, callback.message)
 
     for i in range(a, len(sitedate)):
