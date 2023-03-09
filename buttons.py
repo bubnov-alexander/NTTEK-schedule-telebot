@@ -330,8 +330,7 @@ def mycallback(bot, callback):
                 bot.send_message(chat_id = 510441193, text = f'Пользователь {message.from_user.username} {message.from_user.first_name} ввёл неверно группу {message.text}')
                 bot.send_message(callback.message.chat.id, f'Такой группы не существует', parse_mode='html')
         bot.register_next_step_handler(callback.message, another_group)
-        bot.clear_step_handler_by_chat_id(chat_id=callback.message.chat.id)
-
+        
     elif callback.data == 'teacher':
         keyboard = InlineKeyboardMarkup()
         keyboard.add(InlineKeyboardButton('Отмена', callback_data = 'f_group'))
@@ -516,35 +515,6 @@ def mycallback(bot, callback):
                 bot.send_message(callback.message.chat.id, f'У тебя не получилось: {message.text}', parse_mode='html')
                 root(bot, callback.message, callback.message)
         bot.register_next_step_handler(callback.message, del_user_ban)
-
-    #Работа с DateBase ДЗ
-    elif callback.data == 'dzbase':
-        markup = InlineKeyboardMarkup()
-        add_user = InlineKeyboardButton(text = 'Adduser', callback_data= 'add_user_dz')
-        close = InlineKeyboardButton(text = '🔙Выйти', callback_data= 'root')
-        delete_user = InlineKeyboardButton(text = 'Deleteuser', callback_data= 'del_user_dz')
-        cursor.execute('''SELECT user_id FROM homeworker ''')
-        dz = cursor.fetchall()
-        for i in range(0, len(dz)):
-            markup.add(InlineKeyboardButton(str(dz[i][0]), callback_data = f'{dz[i]}'))
-        markup.add(add_user, close, delete_user, row_width = 3)
-        bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'Все пользователи Базы: ', parse_mode='markdown', reply_markup = markup)
-
-    #ДОБАВИТЬ ПОЛЬЗОВАТЕЛЯ В DateBase дз
-    elif callback.data == 'add_user_dz':
-        bot.reply_to(callback.message, 'Введи ID пользователя: ')
-        def add_user_dz(message):
-            try:
-                id_user = int(message.text)
-                today = datetime.date.today().strftime('%d.%m.%Y')
-                cursor.execute('INSERT INTO homeworker (user_id, user_name, join_date) VALUES (?, ?, ?)', (id_user, callback.message.chat.username, today))
-                database.commit()
-                bot.send_message(callback.message.chat.id, f'Я добавил в базу данных dz: {message.text}', parse_mode='html')
-                root(bot, callback.message, callback.message)
-            except:
-                bot.send_message(callback.message.chat.id, f'У тебя не получилось: {message.text}', parse_mode='html')
-                root(bot, callback.message, callback.message)
-        bot.register_next_step_handler(callback.message, add_user_dz)
 
     #УДАЛИТЬ ПОЛЬЗОВАТЕЛЯ ИЗ DateBase ДЗ
     elif callback.data == 'del_user_dz':
