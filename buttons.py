@@ -364,15 +364,21 @@ def mycallback(bot, callback):
                 TIME = (datetime.datetime.now(tz)).strftime('%H:%M:%S')
                 DATE = (datetime.datetime.now(tz)).strftime('%d.%m')
                 print(f'Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил {callback.data[11::]}! В', TIME)
-                with open("data/logs.txt", "a+") as f:
-                    f.write(f'\n{TIME} {DATE}| Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил {callback.data[11::]}!')
-
+                try:
+                    with open("data/logs.txt", "a+") as f:
+                        f.write(f'\n{TIME} {DATE}| Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил {callback.data[11::]}!')
+                except:
+                        pass
+                
             elif callback.data[2:12:] == f'{sitedate[i]}':
                 TIME = (datetime.datetime.now(tz)).strftime('%H:%M:%S')
                 DATE = (datetime.datetime.now(tz)).strftime('%d.%m')
                 print(f'Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил {callback.data[16:-2:]}! В', TIME)
-                with open("data/logs.txt", "a+") as f:
-                    f.write(f'\n{TIME} {DATE}| Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил {callback.data[16:-2:]}!')
+                try:
+                    with open("data/logs.txt", "a+") as f:
+                        f.write(f'\n{TIME} {DATE}| Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил {callback.data[16:-2:]}!')
+                except:
+                    pass
                 getpari(callback.data[2:12:], 'group', callback.data[16:-2:], InlineKeyboardMarkup, InlineKeyboardButton, bot, callback)
 
             elif callback.data[0:18:] == f"excel {sitedate[i]}":
@@ -380,16 +386,22 @@ def mycallback(bot, callback):
                 TIME = (datetime.datetime.now(tz)).strftime('%H:%M:%S')
                 DATE = (datetime.datetime.now(tz)).strftime('%d.%m')
                 print(f'Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил excel {sitedate[i]}! В', TIME)
-                with open("data/logs.txt", "a+") as f:
+                try:
+                    with open("data/logs.txt", "a+") as f:
                         f.write(f'\n{TIME} {DATE}| Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил excel {sitedate[i]}!')
+                except:
+                        pass
         
         elif callback.data[0:18:] == f"препод('{sitedate[i]}":
             getpari(callback.data[8:18:], 'teacher', callback.data[22:-2:], InlineKeyboardMarkup, InlineKeyboardButton, bot, callback)
             TIME = (datetime.datetime.now(tz)).strftime('%H:%M:%S')
             DATE = (datetime.datetime.now(tz)).strftime('%d.%m')
             print(f'Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил {callback.data[22:-2:]}! В', TIME)
-            with open("data/logs.txt", "a+") as f:
+            try:
+                with open("data/logs.txt", "a+") as f:
                     f.write(f'\n{TIME} {DATE}| Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил {callback.data[22:-2:]}!')
+            except:
+                pass
 
     #Работа с DateBase BAN
     if callback.data == 'banbase':

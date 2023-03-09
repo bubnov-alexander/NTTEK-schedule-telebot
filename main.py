@@ -110,9 +110,12 @@ def bot_message(message):
                     TIME = (datetime.datetime.now(tz)).strftime('%H:%M:%S')
                     DATE = (datetime.datetime.now(tz)).strftime('%d.%m')
                     print(f'Пользователь {message.from_user.username} {message.from_user.first_name} узнал о боте в', TIME)
-                    with open("data/logs.txt", "a+") as f:
-                        f.write(f'\n{TIME} {DATE}| Пользователь {message.from_user.username} {message.from_user.first_name} узнал о боте')
-                
+                    try:
+                        with open("data/logs.txt", "a+") as f:
+                            f.write(f'\n{TIME} {DATE}| Пользователь {message.from_user.username} {message.from_user.first_name} узнал о боте')
+                    except:
+                        pass
+                    
                 #Эхо-сообщение
                 else:
                     bot.send_message(message.chat.id, f'Вы написали: {message.text}\nЕсли хотите узанть что может бот напишите "меню"', parse_mode='html')
