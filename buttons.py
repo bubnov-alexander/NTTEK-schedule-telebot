@@ -320,6 +320,10 @@ def mycallback(bot, callback):
             bot.send_message(callback.message.chat.id, 'Какая-то ошибка, пиши @Kinoki445', parse_mode='html')
     
     elif callback.data == 'another_group':
+        try:
+            bot.clear_step_handler_by_chat_id(chat_id=callback.message.chat.id)
+        except:
+            pass
         keyboard = InlineKeyboardMarkup()
         keyboard.add(InlineKeyboardButton('Отмена', callback_data = 'close2'))
         bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = 'Введи название группы, пример (2ИС6) Без - и пробелов: ', reply_markup = keyboard)
@@ -332,6 +336,10 @@ def mycallback(bot, callback):
         bot.register_next_step_handler(callback.message, another_group)
 
     elif callback.data == 'teacher':
+        try:
+            bot.clear_step_handler_by_chat_id(chat_id=callback.message.chat.id)
+        except:
+            pass
         keyboard = InlineKeyboardMarkup()
         keyboard.add(InlineKeyboardButton('Отмена', callback_data = 'close2'))
         bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = 'Введи фамилию преподавателя, пример (Зятикова ТЮ) Без - и  через пробел: ', reply_markup = keyboard)
