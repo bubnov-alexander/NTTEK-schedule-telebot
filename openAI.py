@@ -12,6 +12,7 @@ def send_openai(prompt, bot, argument1):
     DATE = (datetime.datetime.now(tz)).strftime('%d.%m')
     with open("data/logs.txt", "a+") as f:
         f.write(f'\n{TIME} {DATE}| Пользователь {argument1.from_user.username} {argument1.from_user.first_name} запросил у OpenAI: {prompt}')
+    print(f'{TIME} {DATE}| Пользователь {argument1.from_user.username} {argument1.from_user.first_name} запросил у OpenAI: {prompt}')
     bot.send_message(argument1.chat.id, text = "Подожди, обрабатываю запрос!")
     # задаем модель и промпт
     model_engine = "text-davinci-003"
