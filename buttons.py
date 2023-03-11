@@ -505,7 +505,11 @@ def mycallback(bot, callback):
         def logs_choice(message):
             f1 = open("data/logs.txt", "r")
             a = f1.readlines()[-(int(message.text)):]
-            bot.send_message(callback.message.chat.id, f'{a}', parse_mode='Markdown')
+            text = ''
+            for i in a:
+                text = (text + i)
+            print(text)
+            bot.send_message(callback.message.chat.id, f'{text}', parse_mode='Markdown')
             f1.close()
         bot.register_next_step_handler(callback.message, logs_choice)
 
