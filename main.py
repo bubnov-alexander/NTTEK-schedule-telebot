@@ -64,6 +64,9 @@ def bot_message(message):
                 elif message_to_bot == 'setting' or message_to_bot == 'настройки' or message_to_bot == '🛠настройки🛠':
                     setting(bot, message)
 
+                elif message_to_bot == '🥸openai🥸' or message_to_bot == 'openai':
+                    openai(bot, message)
+
                 #Меню
                 elif message_to_bot == '🔙назад' or message_to_bot == 'назад':
                     menu(bot, message, message)

@@ -1,5 +1,6 @@
 from settings import *
 from parser_1 import *
+from openAI import send_openai
 import pytz,requests,json,time,random
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton, KeyboardButton, ReplyKeyboardMarkup
 
@@ -15,15 +16,16 @@ def menu(bot, argument1, argument2):
     item1 = KeyboardButton("📋Расписание📋")
     item2 = KeyboardButton("👥Преподаватели👥")
     item3 = KeyboardButton("🛠Настройки🛠")
+    item4 = KeyboardButton("🥸OpenAI🥸")
     item5 = KeyboardButton("📒О боте📒")
     cursor.execute('''SELECT user_id FROM admin WHERE user_id = ?''', (argument1.chat.id, ))
     admin = 510441193
     if argument1.chat.id != admin:
-        markup.add(item1, item2, item3, item5)
+        markup.add(item1, item2, item3, item4,item5)
         bot.send_message(argument1.chat.id, 'Вот что я могу сделать: '.format(argument2.from_user),  parse_mode='html', reply_markup=markup)
     else:
         item6 = KeyboardButton("Admin panel")
-        markup.add(item1, item2, item3, item5, item6)
+        markup.add(item1, item2, item3, item4,item5, item6)
         bot.send_message(argument1.chat.id, 'Вот что я могу сделать: '.format(argument2.from_user),  parse_mode='html', reply_markup=markup)
         
 #ГРУППЫ
@@ -274,6 +276,14 @@ def defuser(bot, message, InlineKeyboardMarkup, InlineKeyboardButton):
                 bot.edit_message_text(chat_id=message.chat.id, message_id=message.id, text = f'**Список {page}**', parse_mode='markdown', reply_markup = markup)
             except:
                 bot.send_message(message.chat.id, text = f'**Список {page}**', parse_mode='markdown', reply_markup = markup)
+
+def openai(bot, argument1):
+    keyboard = InlineKeyboardMarkup()
+    keyboard.add(InlineKeyboardButton('Отмена', callback_data = 'close'))
+    bot.send_message(argument1.chat.id, text = 'Задай вопрос!', reply_markup=keyboard)
+    def openai_send(message):
+        send_openai(message.text, bot, argument1)
+    bot.register_next_step_handler(argument1, openai_send)
 
 #Панель прав
 def root(bot, argument1, argument2):
