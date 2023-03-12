@@ -294,6 +294,7 @@ def mycallback(bot, callback):
         except:
             bot.send_message(callback.message.chat.id, 'Выбери что-то из предложенного: ', parse_mode = 'html', reply_markup = markup)
 
+
     elif callback.data == '🥸OpenAI🥸':
         keyboard = InlineKeyboardMarkup()
         keyboard.add(InlineKeyboardButton('Отмена', callback_data = 'close'))
@@ -552,6 +553,8 @@ def mycallback(bot, callback):
                 menu(bot, message)
             bot.register_next_step_handler(callback.message, send)
 
+    elif callback.data == 'users':
+        defuser(bot, callback.message, InlineKeyboardMarkup, InlineKeyboardButton)
 
     elif callback.data == 'close':
         try:
