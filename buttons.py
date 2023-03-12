@@ -83,7 +83,7 @@ def parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, group, wh
                 elif date1 == 0:
                     date2 = ('Понедельник')
             else:
-                date2 == ('Среда')
+                date2 = ('Среда')
 
             keyboard.add (InlineKeyboardButton(f'{sitedate[i]} ({date2})', callback_data = f'{sitedate[i], who}'))
         item1 = (InlineKeyboardButton('Другие группы', callback_data = 'another_group'))
@@ -115,7 +115,7 @@ def parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, group, wh
                 elif date1 == 0:
                     date2 = ('Понедельник')
             else:
-                date2 == ('Среда')
+                date2 = ('Среда')
             keyboard.add (InlineKeyboardButton(f'{sitedate[i]} ({date2})', callback_data = f'препод{sitedate[i], who}'))
         item1 = (InlineKeyboardButton('Другие группы', callback_data = 'another_group'))
         item3 = (InlineKeyboardButton('Преподаватели', callback_data = 'teacher'))

@@ -47,7 +47,7 @@ def getpari(date, group, group_name, InlineKeyboardMarkup, InlineKeyboardButton,
                         elif date1 == 0:
                             date2 = ('Понедельник')
                     else:
-                        date2 == ('Среда')
+                        date2 = ('Среда')
                     keyboard.add (InlineKeyboardButton(f'{sitedate[i]} ({date2})',callback_data = f'{sitedate[i]} {group_name}'))
                     
                 item1 = (InlineKeyboardButton('Другие группы', callback_data = 'another_group'))
@@ -73,7 +73,7 @@ def getpari(date, group, group_name, InlineKeyboardMarkup, InlineKeyboardButton,
                     elif date1 == 0:
                         date2 = ('Понедельник')
                 else:
-                    date2 == ('Среда')
+                    date2 = ('Среда')
 
                 try:
                     bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'Расписание на {date} ({date2}):\n __{text}__ \nВыберите день на который хотите узнать расписание\nгруппы {group_name}', parse_mode='Markdown', reply_markup = keyboard)
@@ -100,7 +100,7 @@ def getpari(date, group, group_name, InlineKeyboardMarkup, InlineKeyboardButton,
                         elif date1 == 0:
                             date2 = ('Понедельник')
                     else:
-                        date2 == ('Среда')
+                        date2 = ('Среда')
                     keyboard.add (InlineKeyboardButton(f'{sitedate[i]} ({date2})',callback_data = f'{sitedate[i]} {group_name}'))
                     
                 item1 = (InlineKeyboardButton('Другие группы', callback_data = 'another_group'))
@@ -132,7 +132,7 @@ def getpari(date, group, group_name, InlineKeyboardMarkup, InlineKeyboardButton,
                     elif date1 == 0:
                         date2 = ('Понедельник')
                 else:
-                    date2 == ('Среда')
+                    date2 = ('Среда')
                 keyboard.add (InlineKeyboardButton(f'{sitedate[i]} ({date2})',callback_data = f'{sitedate[i]} {group_name}'))
                 
             item1 = (InlineKeyboardButton('Другие группы', callback_data = 'another_group'))
@@ -183,7 +183,7 @@ def getpari(date, group, group_name, InlineKeyboardMarkup, InlineKeyboardButton,
                         elif date1 == 0:
                             date2 = ('Понедельник')
                     else:
-                        date2 == ('Среда')
+                        date2 = ('Среда')
                     keyboard.add (InlineKeyboardButton(f'{sitedate[i]} ({date2})',callback_data = f'excel {sitedate[i]}'))
                     
                 item1 = (InlineKeyboardButton('Другие группы', callback_data = 'another_group'))
@@ -208,7 +208,7 @@ def getpari(date, group, group_name, InlineKeyboardMarkup, InlineKeyboardButton,
                     elif date1 == 0:
                         date2 = ('Понедельник')
                 else:
-                    date2 == ('Среда')
+                    date2 = ('Среда')
 
                 try:
                     bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'Расписание на {date} ({date2}):\n __{text}__ \nВыберите день на который хотите узнать расписание', parse_mode='Markdown', reply_markup = keyboard)
@@ -281,7 +281,7 @@ def getpari(date, group, group_name, InlineKeyboardMarkup, InlineKeyboardButton,
                         elif date1 == 0:
                             date2 = ('Понедельник')
                     else:
-                        date2 == ('Среда')
+                        date2 = ('Среда')
                     keyboard.add (InlineKeyboardButton(f'{sitedate[i]} ({date2})',callback_data = f'препод{sitedate[i], group_name}'))
                 item1 = (InlineKeyboardButton('Другие группы', callback_data = 'another_group'))
                 item3 = (InlineKeyboardButton('Преподаватели', callback_data = 'teacher'))
@@ -305,7 +305,7 @@ def getpari(date, group, group_name, InlineKeyboardMarkup, InlineKeyboardButton,
                     elif date1 == 0:
                         date2 = ('Понедельник')
                 else:
-                    date2 == ('Среда')
+                    date2 = ('Среда')
 
                 try:
                     bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'Расписание на {date} ({date2}):\n __{text}__ \nВыберите день на который хотите узнать расписание преподавателя {group_name}', parse_mode='Markdown', reply_markup = keyboard)
