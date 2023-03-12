@@ -16,11 +16,11 @@ def start_message(message):
     if message.chat.id != admin:
         bot.send_message(message.from_user.id, f'Добро пожаловать, {message.from_user.first_name}', parse_mode='html')
         db_table_val(message, bot)
-        menu(bot, message, message)
+        menu(bot, message)
     else:
         bot.send_message(message.from_user.id, f'Добро пожаловать, Admin {message.from_user.first_name}', parse_mode='html')
         db_table_val(message, bot)
-        menu(bot, message, message)
+        menu(bot, message)
 
 @bot.message_handler(commands=['help'])
 def help_message(message):
@@ -51,80 +51,16 @@ def bot_message(message):
             bot.send_message(message.from_user.id, 'Привет, тебя нету в базе данных, не мог бы ты написать /start ?', parse_mode='html')
         else:
             if message.content_type.lower() == 'text':
+                if message_to_bot == 'меню' or message_to_bot == 'menu':
+                    menu(bot, message)
+                    bot.delete_message(message.chat.id, message.message_id)
 
-                #Преподы
-                if message_to_bot == '👥преподаватели👥' or message_to_bot == 'преподы':
-                    prepod(bot, message)
-                    TIME = (datetime.datetime.now(tz)).strftime('%H:%M:%S')
-                    DATE = (datetime.datetime.now(tz)).strftime('%d.%m')
-                    print(f'Пользователь {message.from_user.username} {message.from_user.first_name} узнал преподов! В', TIME)
-                    with open("data/logs.txt", "a+") as f:
-                        f.write(f'\n{TIME} {DATE}| Пользователь {message.from_user.username} {message.from_user.first_name} узнал преподов!')
-
-                elif message_to_bot == 'setting' or message_to_bot == 'настройки' or message_to_bot == '🛠настройки🛠':
-                    setting(bot, message)
-
-                elif message_to_bot == '🥸openai🥸' or message_to_bot == 'openai':
-                    openai(bot, message)
-
-                #Меню
-                elif message_to_bot == '🔙назад' or message_to_bot == 'назад':
-                    menu(bot, message, message)
-
-                elif message_to_bot == 'меню' or message_to_bot == 'menu':
-                    menu(bot, message, message)
-                
-                #Пользователи из БД
-                elif message_to_bot == 'user' or message_to_bot == 'пользователи':
-                    defuser(bot, message, InlineKeyboardMarkup, InlineKeyboardButton)
-
-                elif message_to_bot == 'права доступа' or message_to_bot == 'root':
-                    root(bot, message, message)
-
-                elif message_to_bot == 'admin panel':
-                    adminpanel(bot, message, message)
-
-                elif message_to_bot == 'отправить сообщение':
-                    send_message_users(bot, message)
-
-                #Все группы у которых можно узнать расписание
-                elif message_to_bot == 'группы':
-                    try:
-                        group(bot, message)
-                    except:
-                        markup = InlineKeyboardMarkup()
-                        url1 = InlineKeyboardButton (text = 'Сайт с расписанием: ', url= 'https://a.nttek.ru/')
-                        markup.add(url1)
-                        bot.send_message(message.chat.id, 'К сожелению сайт с парами сейчас недоступен, но ты можешь воспольззоваться другими функциями бота. \nДля этого напиши "меню"', parse_mode='html',reply_markup=markup)
-
-                #Все группы у которых можно узнать расписание
-                elif message_to_bot == '📋пары📋' or message_to_bot == 'пары' or message_to_bot == '📋расписание📋' or message_to_bot == 'расписание':
-                    try:
-                        group(bot, message)
-                    except:
-                        markup = InlineKeyboardMarkup()
-                        url1 = InlineKeyboardButton (text = 'Сайт с расписанием: ', url= 'https://a.nttek.ru/')
-                        markup.add(url1)
-                        bot.send_message(message.chat.id, 'К сожелению сайт с парами сейчас недоступен, но ты можешь воспольззоваться другими функциями бота. \nДля этого напиши "меню"', parse_mode='html',reply_markup=markup)
-
-                #Информация о боте 
-                elif message_to_bot == '📒о боте📒' or message_to_bot == 'о боте':
-                    aboutbot(bot, message)
-                    TIME = (datetime.datetime.now(tz)).strftime('%H:%M:%S')
-                    DATE = (datetime.datetime.now(tz)).strftime('%d.%m')
-                    print(f'Пользователь {message.from_user.username} {message.from_user.first_name} узнал о боте в', TIME)
-                    try:
-                        with open("data/logs.txt", "a+") as f:
-                            f.write(f'\n{TIME} {DATE}| Пользователь {message.from_user.username} {message.from_user.first_name} узнал о боте')
-                    except:
-                        pass
-                    
-                #Эхо-сообщение
                 else:
                     bot.send_message(message.chat.id, f'Вы написали: {message.text}\nЕсли хотите узанть что может бот напишите "меню"', parse_mode='html')
                     TIME = (datetime.datetime.now(tz)).strftime('%H:%M:%S')
                     DATE = (datetime.datetime.now(tz)).strftime('%d.%m')
-                    print(f'Пользователь {message.from_user.username} {message.from_user.first_name} написал {message.text} в', TIME)
+                    print(f'{TIME} {DATE} | Пользователь {message.from_user.username} {message.from_user.first_name} написал {message.text}')
+                    bot.delete_message(message.chat.id, message.message_id)
                     try:
                         with open("data/logs.txt", "a+") as f:
                             f.write(f'\n{TIME} {DATE}| Пользователь {message.from_user.username} {message.from_user.first_name} написал {message.text}')
@@ -136,9 +72,9 @@ def bot_message(message):
         bot.send_message(message.chat.id, 'Ты в БАНЕ чучело!!! \n Пиши @Kinoki445', parse_mode='html')   
         TIME = (datetime.datetime.now(tz)).strftime('%H:%M:%S')
         DATE = (datetime.datetime.now(tz)).strftime('%d.%m')
-        print(f'Забаненый пользователь {message.from_user.username} {message.from_user.first_name} написал {message.text} в', TIME)
+        print(f'{TIME} {DATE} | Забаненый пользователь {message.from_user.username} {message.from_user.first_name} написал {message.text}')
         with open("data/logs.txt", "a+") as f:
-            f.write(f'\n{TIME} {DATE}| Забаненый пользователь {message.from_user.username} {message.from_user.first_name} написал {message.text}')
+            f.write(f'\n{TIME} {DATE} | Забаненый пользователь {message.from_user.username} {message.from_user.first_name} написал {message.text}')
 
 if __name__ == '__main__':
     TIME = (datetime.datetime.now(tz)).strftime('%H:%M:%S')
@@ -155,7 +91,6 @@ if __name__ == '__main__':
             print(e)
             with open("data/logs.txt", "a+") as f:
                 f.write(f'\n{TIME} {DATE}| e')
-            error(bot)
             tm.sleep(15)
 
 # bot.polling(none_stop=True)
