@@ -83,7 +83,7 @@ def parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, group, wh
                 elif date1 == 0:
                     date2 = ('Понедельник')
             else:
-                date2 == ('Среда')
+                date2 = ('Среда')
 
             keyboard.add (InlineKeyboardButton(f'{sitedate[i]} ({date2})', callback_data = f'{sitedate[i], who}'))
         item1 = (InlineKeyboardButton('Другие группы', callback_data = 'another_group'))
@@ -115,7 +115,7 @@ def parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, group, wh
                 elif date1 == 0:
                     date2 = ('Понедельник')
             else:
-                date2 == ('Среда')
+                date2 = ('Среда')
             keyboard.add (InlineKeyboardButton(f'{sitedate[i]} ({date2})', callback_data = f'препод{sitedate[i], who}'))
         item1 = (InlineKeyboardButton('Другие группы', callback_data = 'another_group'))
         item3 = (InlineKeyboardButton('Преподаватели', callback_data = 'teacher'))
@@ -293,6 +293,7 @@ def mycallback(bot, callback):
             bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = 'Выбери что-то из предложенного: ', parse_mode = 'html', reply_markup = markup)
         except:
             bot.send_message(callback.message.chat.id, 'Выбери что-то из предложенного: ', parse_mode = 'html', reply_markup = markup)
+
 
     elif callback.data == '🥸OpenAI🥸':
         keyboard = InlineKeyboardMarkup()
@@ -552,6 +553,8 @@ def mycallback(bot, callback):
                 menu(bot, message)
             bot.register_next_step_handler(callback.message, send)
 
+    elif callback.data == 'users':
+        defuser(bot, callback.message, InlineKeyboardMarkup, InlineKeyboardButton)
 
     elif callback.data == 'close':
         try:
