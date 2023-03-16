@@ -9,8 +9,6 @@ page = 1
 predmeti = ['Теория вероятностей', 'Математика', 'Сопровождение ИС', 'ОС и среды ', 'Информационные технологии', 'ОБЖ']
 
 #ГЛАВНОЕ МЕНЮ
-#argument1.chat.id
-#argument2.from_user
 def menu(bot, callback):
     markup=InlineKeyboardMarkup(row_width=3)
     item1 = InlineKeyboardButton(text = "📋Расписание📋", callback_data = "📋Расписание📋")
@@ -238,6 +236,9 @@ def mycallback(bot, callback):
     if callback.data == '📋Расписание📋':
         group(bot, callback)
 
+    elif callback.data == 'print':
+        print('Ты 4мо')
+
 # #ЗВОНКИ
     elif callback.data == 'bells':
         photo = open('data/photo.jpg', 'rb')
@@ -312,9 +313,9 @@ def mycallback(bot, callback):
         f = open('data/About bot.txt', 'r', encoding='UTF-8')
         facts = f.read()
         markup_inline = InlineKeyboardMarkup()
-        url1 = InlineKeyboardButton (text = 'Вк', url='https://vk.com/mem445')
-        url2 = InlineKeyboardButton (text = 'Телеграмм', url= 'https://t.me/Kinoki445')
-        url3 = InlineKeyboardButton (text = 'Отзыв', callback_data= 'review')
+        url1 = InlineKeyboardButton (text = '🙍🏻‍♂️Вк', url='https://vk.com/mem445')
+        url2 = InlineKeyboardButton (text = '💌Отзыв', callback_data= 'review')
+        url3 = InlineKeyboardButton (text = '💸Поддержка автора', url='https://www.donationalerts.com/r/kinoki445', callback_data = 'print')
         back = InlineKeyboardButton(text = '🔙Назад', callback_data = 'close')
         markup_inline.add(url1,url2)
         markup_inline.add(url3)
