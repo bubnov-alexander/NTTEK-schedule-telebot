@@ -31,6 +31,11 @@ def help_message(message):
     with open("data/logs.txt", "a+") as f:
         f.write(f'\n{TIME} {DATE}| Пользователь {message.from_user.username} {message.from_user.first_name} написал {message.text}')
 
+@bot.message_handler(commands=['clear'])
+def message_menu(message):
+    delete = telebot.types.ReplyKeyboardRemove()
+    bot.send_message(message.chat.id, f'Я удалил кнопки!', parse_mode='html', reply_markup=delete)
+
 @bot.message_handler(commands=['menu'])
 def message_menu(message):
     menu(bot, message)
