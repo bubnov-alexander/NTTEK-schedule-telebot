@@ -170,6 +170,7 @@ def defuser(bot, message, InlineKeyboardMarkup, InlineKeyboardButton):
         user = cursor.fetchall()
         global page
         markup = InlineKeyboardMarkup()
+        back = InlineKeyboardButton(text = '🔙Назад', callback_data = 'close')
         markup.row_width = 1
         max = page * 10
         min = max - 10
@@ -193,6 +194,7 @@ def defuser(bot, message, InlineKeyboardMarkup, InlineKeyboardButton):
             amount_plus = InlineKeyboardButton(text = 'Вперёд -->', callback_data = '+1')
             maxpage = InlineKeyboardButton(text = 'Конец', callback_data='maxpage')
             markup.add (maxpage, amount_plus, row_width = 4)
+            markup.add(back)
             try:
                 bot.edit_message_text(chat_id=message.chat.id, message_id=message.id, text = f'**Список {page}**', parse_mode='markdown', reply_markup = markup)
             except:
@@ -203,6 +205,7 @@ def defuser(bot, message, InlineKeyboardMarkup, InlineKeyboardButton):
             start = InlineKeyboardButton(text = 'Начало', callback_data='minpage')
             maxpage = InlineKeyboardButton(text = 'Конец', callback_data='maxpage')
             markup.add(amount_minus, start,maxpage, row_width = 4)
+            markup.add(back)
             try:
                 bot.edit_message_text(chat_id=message.chat.id, message_id=message.id, text = f'**Список {page}**', parse_mode='markdown', reply_markup = markup)
             except:
@@ -213,6 +216,7 @@ def defuser(bot, message, InlineKeyboardMarkup, InlineKeyboardButton):
             start = InlineKeyboardButton(text = 'Начало', callback_data='minpage')
             maxpage = InlineKeyboardButton(text = 'Конец', callback_data='maxpage')
             markup.add (amount_minus, start, maxpage, amount_plus, row_width = 4)
+            markup.add(back)
             try:
                 bot.edit_message_text(chat_id=message.chat.id, message_id=message.id, text = f'**Список {page}**', parse_mode='markdown', reply_markup = markup)
             except:
@@ -286,7 +290,7 @@ def mycallback(bot, callback):
     elif callback.data == 'Admin panel':
         markup = InlineKeyboardMarkup()
         item1 = InlineKeyboardButton(text = 'Пользователи', callback_data = 'users')
-        item2 = InlineKeyboardButton(text = 'Права доступа', callback_data = 'roots')
+        item2 = InlineKeyboardButton(text = 'Логи', callback_data = 'logs')
         item3 = InlineKeyboardButton(text = 'Отправить сообщение', callback_data = 'send_message')
         back = InlineKeyboardButton(text = '🔙Назад', callback_data = 'close')
         markup.add(item1, item2, item3, back)
@@ -331,21 +335,6 @@ def mycallback(bot, callback):
         except:
             bot.send_message(callback.message.chat.id, facts, parse_mode='html', reply_markup=markup_inline)
         f.close()
-
-    #Панель прав
-    elif callback.data == 'roots':
-        markup = InlineKeyboardMarkup(row_width=4)
-        item1 = InlineKeyboardButton(text = 'BAN', callback_data = 'banbase')
-        item2 = InlineKeyboardButton(text = 'ДЗ', callback_data = 'dzbase')
-        item3 = InlineKeyboardButton(text = 'admin', callback_data = 'adminbase')
-        item4 = InlineKeyboardButton(text=' logs', callback_data='logs')
-        back = InlineKeyboardButton(text = '🔙Назад', callback_data='close')
-        markup.add(item1, item2, item3,item4, back)
-        
-        try:
-            bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = 'Выбери что-то из предложенного:  ', parse_mode='html', reply_markup=markup)
-        except:
-            bot.send_message(callback.message.chat.id, text = 'Выбери что-то из предложенного:  ', parse_mode='html', reply_markup=markup)
 
     elif callback.data == 'f_group':
         try:
@@ -511,11 +500,18 @@ def mycallback(bot, callback):
         markup_inline = InlineKeyboardMarkup()
         url1 = InlineKeyboardButton (text = 'Логи', callback_data='logs_choice')
         url2 = InlineKeyboardButton (text = 'Файл', callback_data='log_file')
-        markup_inline.add(url1,url2)
-        bot.send_message(callback.message.chat.id, 'Что хочешь?', parse_mode='html', reply_markup=markup_inline)
+        back = InlineKeyboardButton(text = '🔙Назад', callback_data = 'close')
+        markup_inline.add(url1,url2,back)
+        try:
+            bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = 'Что хочешь?', parse_mode='html', reply_markup=markup_inline)
+        except:
+            bot.send_message(callback.message.chat.id, 'Что хочешь?', parse_mode='html', reply_markup=markup_inline)
 
     elif callback.data == 'logs_choice':
-        bot.reply_to(callback.message, f'Введи количество строк')
+        markup = InlineKeyboardMarkup()
+        back = InlineKeyboardButton(text = '🔙Назад', callback_data = 'close')
+        markup.add(back)
+        bot.reply_to(callback.message, f'Введи количество строк', reply_markup=markup)
         def logs_choice(message):
             f1 = open("data/logs.txt", "r")
             a = f1.readlines()[-(int(message.text)):]
@@ -528,8 +524,11 @@ def mycallback(bot, callback):
         bot.register_next_step_handler(callback.message, logs_choice)
 
     elif callback.data == 'log_file':
+        markup = InlineKeyboardMarkup()
+        back = InlineKeyboardButton(text = '🔙Назад', callback_data = 'close')
+        markup.add(back)
         f = open("data/logs.txt","rb")
-        bot.send_document(callback.message.chat.id,f)
+        bot.send_document(callback.message.chat.id,f,reply_markup=markup)
         f.close()
 
     elif callback.data == 'send_message':
@@ -539,7 +538,10 @@ def mycallback(bot, callback):
             bot.send_message(callback.message.chat.id, text = 'У тебя нету прав', parse_mode='html')
             menu(bot, callback.message)
         else:
-            bot.reply_to(callback.message, 'Что ты хочешь написать?')
+            markup = InlineKeyboardMarkup()
+            back = InlineKeyboardButton(text = '🔙Назад', callback_data = 'close')
+            markup.add(back)
+            bot.reply_to(callback.message, 'Что ты хочешь написать?', reply_markup = markup)
             def send(message, count = 0):
                 cursor.execute(f'SELECT user_id FROM users WHERE notice = {1}')
                 lol = cursor.fetchall()
@@ -547,7 +549,7 @@ def mycallback(bot, callback):
                 while count != len(lol):
                         for row in lol:
                             try:
-                                bot.send_message(row[0], text = f'{message.text}', parse_mode='html')
+                                bot.forward_message(row[0], message.chat.id, message.id)
                                 count += 1
                             except:
                                 count += 1

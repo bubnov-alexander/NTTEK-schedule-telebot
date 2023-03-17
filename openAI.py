@@ -13,10 +13,7 @@ def send_openai(prompt, bot, callback, InlineKeyboardMarkup, InlineKeyboardButto
     with open("data/logs.txt", "a+") as f:
         f.write(f'\n{TIME} {DATE}| Пользователь {callback.from_user.username} {callback.from_user.first_name} запросил у OpenAI: {prompt}')
     print(f'{TIME} {DATE}| Пользователь {callback.from_user.username} {callback.from_user.first_name} запросил у OpenAI: {prompt}')
-    try:
-        bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = "Подожди, обрабатываю запрос!")
-    except:
-        bot.send_message(callback.message.chat.id, text = "Подожди, обрабатываю запрос!")
+    bot.send_message(callback.message.chat.id, text = "Подожди, обрабатываю запрос!")
     # задаем модель и промпт
     model_engine = "text-davinci-003"
 
