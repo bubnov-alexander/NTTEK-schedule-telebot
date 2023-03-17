@@ -24,7 +24,7 @@ def start_message(message):
 
 @bot.message_handler(commands=['help'])
 def help_message(message):
-    bot.send_message(message.from_user.id, 'Привет, чтобы пользоваться функциями бота тебе достаточно написать /menu c большой буквы, если что-то не получается пиши мне | @Kinoki445', parse_mode='html')
+    bot.send_message(message.from_user.id, 'Привет, чтобы пользоваться функциями бота тебе достаточно написать /menu, если что-то не получается пиши мне | @Kinoki445', parse_mode='html')
     TIME = (datetime.datetime.now(tz)).strftime('%H:%M:%S')
     DATE = (datetime.datetime.now(tz)).strftime('%d.%m')
     print(f'Пользователь {message.from_user.username} {message.from_user.first_name} написал {message.text} в ', TIME)
@@ -34,6 +34,8 @@ def help_message(message):
 @bot.message_handler(commands=['menu'])
 def message_menu(message):
     menu(bot, message)
+    telebot.types.ReplyKeyboardRemove()
+    
 
 #Действия callback
 @bot.callback_query_handler(func=lambda callback: callback.data)
@@ -60,10 +62,12 @@ def bot_message(message):
                     bot.delete_message(message.chat.id, message.message_id)
 
                 else:
-                    bot.send_message(message.chat.id, f'Вы написали: {message.text}\nЕсли хотите узанть что может бот напишите /menu', parse_mode='html')
+                    delete = telebot.types.ReplyKeyboardRemove()
+                    bot.send_message(message.chat.id, f'Вы написали: {message.text}\nЕсли хотите узанть что может бот напишите /menu', parse_mode='html', reply_markup=delete)
                     TIME = (datetime.datetime.now(tz)).strftime('%H:%M:%S')
                     DATE = (datetime.datetime.now(tz)).strftime('%d.%m')
                     print(f'{TIME} {DATE} | Пользователь {message.from_user.username} {message.from_user.first_name} написал {message.text}')
+
                     bot.delete_message(message.chat.id, message.message_id)
                     try:
                         with open("data/logs.txt", "a+") as f:

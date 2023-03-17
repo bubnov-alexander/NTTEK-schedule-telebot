@@ -2,7 +2,7 @@ from settings import cursor, database
 from parser_1 import getpari
 from openAI import send_openai
 import pytz,requests,json,time,random, datetime as dt
-from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton, KeyboardButton, ReplyKeyboardMarkup
+from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 tz = pytz.timezone('Asia/Yekaterinburg')
 page = 1
@@ -10,6 +10,7 @@ predmeti = ['Теория вероятностей', 'Математика', 'С
 
 #ГЛАВНОЕ МЕНЮ
 def menu(bot, callback):
+    
     markup=InlineKeyboardMarkup(row_width=3)
     item1 = InlineKeyboardButton(text = "📋Расписание📋", callback_data = "📋Расписание📋")
     item2 = InlineKeyboardButton(text = "👥Преподаватели👥", callback_data = "👥Преподаватели👥")
