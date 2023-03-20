@@ -1,6 +1,24 @@
 import requests, json, time
 import datetime as dt
 
+def get_schedule(bot):
+    site = requests.get(f'https://erp.nttek.ru/api/schedule/legacy').text
+    sitedate = json.loads(site)
+    f = open('data/last_data.txt', 'r', encoding='UTF-8')
+    schedule_number = f.read()
+    f.close()
+    with open('data/last_data.txt', 'w') as f:
+        try:
+            print (schedule_number.strip('"'), sitedate[0:1])
+            if schedule_number.strip('"') != str(sitedate[0:1]):
+                bot.send_message(chat_id = 510441193, text = f'Расписание изменилось')
+            else:
+                bot.send_message(chat_id = 510441193, text = f'Ничего не поменялось')
+        except:
+            bot.send_message(chat_id = 510441193, text = f'Ничего не поменялось')
+        f.write(f'{sitedate[0:1]}')
+    
+
 def getpari(date, group, group_name, InlineKeyboardMarkup, InlineKeyboardButton, bot, callback):
     if group == 'group':
         try:

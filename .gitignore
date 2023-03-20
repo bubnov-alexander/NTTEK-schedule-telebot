@@ -4,5 +4,7 @@ __pycache__/
 db/database.db
 db/
 data/homework/
+data/last_data.txt
 data/logs.txt
 Key.py
+test.py

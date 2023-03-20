@@ -257,7 +257,7 @@ def mycallback(bot, callback):
 #ПРЕПОДЫ
     elif callback.data == "👥Преподаватели👥":
         f = open('data/Prepod.txt', 'r', encoding='UTF-8')
-        thinks  = f.read()
+        thinks = f.read()
         f.close()
         markup_inline = InlineKeyboardMarkup()
         markup_inline.add(InlineKeyboardButton(text = '🔙Назад', callback_data = 'close'))
