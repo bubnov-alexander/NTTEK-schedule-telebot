@@ -90,7 +90,7 @@ def bot_message(message):
             f.write(f'\n{TIME} {DATE} | Забаненый пользователь {message.from_user.username} {message.from_user.first_name} написал {message.text}')
 
 def schedule1():
-    schedule.every(1).hours.do(get_schedule,bot)
+    schedule.every(5).seconds.do(get_schedule,bot)
     while True:
         schedule.run_pending()
 
@@ -98,7 +98,6 @@ if __name__ == '__main__':
     TIME = (datetime.datetime.now(tz)).strftime('%H:%M:%S')
     DATE = (datetime.datetime.now(tz)).strftime('%d.%m')
     print ('Бот запущен:', TIME)
-    schedule1()
     with open("data/logs.txt", "a+") as f:
         f.write(f'\n{TIME} {DATE}| Бот запущен')
     while True:
@@ -111,5 +110,6 @@ if __name__ == '__main__':
             with open("data/logs.txt", "a+") as f:
                 f.write(f'\n{TIME} {DATE}| e')
             tm.sleep(15)
+
 
 # bot.polling(none_stop=True)
