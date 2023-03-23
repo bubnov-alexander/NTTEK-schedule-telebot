@@ -10,10 +10,10 @@ openai.api_key = (TOKEN_OPENAI)
 def send_openai(prompt, bot, callback, InlineKeyboardMarkup, InlineKeyboardButton):
     TIME = (datetime.datetime.now(tz)).strftime('%H:%M:%S')
     DATE = (datetime.datetime.now(tz)).strftime('%d.%m')
-    with open("data/logs.txt", "a+") as f:
+    with open("data/logs.txt", "a+", encoding="utf-8") as f:
         f.write(f'\n{TIME} {DATE}| Пользователь {callback.from_user.username} {callback.from_user.first_name} запросил у OpenAI: {prompt}')
     print(f'{TIME} {DATE}| Пользователь {callback.from_user.username} {callback.from_user.first_name} запросил у OpenAI: {prompt}')
-    bot.send_message(callback.message.chat.id, text = "Подожди, обрабатываю запрос!")
+    bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = "Подожди, обрабатываю запрос!")
     # задаем модель и промпт
     model_engine = "text-davinci-003"
 

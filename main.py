@@ -40,8 +40,6 @@ def message_menu(message):
 @bot.message_handler(commands=['menu'])
 def message_menu(message):
     menu(bot, message)
-    telebot.types.ReplyKeyboardRemove()
-    
 
 #Действия callback
 @bot.callback_query_handler(func=lambda callback: callback.data)
@@ -73,7 +71,6 @@ def bot_message(message):
                     TIME = (datetime.datetime.now(tz)).strftime('%H:%M:%S')
                     DATE = (datetime.datetime.now(tz)).strftime('%d.%m')
                     print(f'{TIME} {DATE} | Пользователь {message.from_user.username} {message.from_user.first_name} написал {message.text}')
-
                     bot.delete_message(message.chat.id, message.message_id)
                     try:
                         with open("data/logs.txt", "a+") as f:
@@ -113,10 +110,8 @@ def main():
             tm.sleep(15)
 
 if __name__ == '__main__':
-    thread1 = threading.Thread(target=schedule1)
-    thread2 = threading.Thread(target=main)
-    thread1.start()
-    thread2.start()
-
-
-# bot.polling(none_stop=True)
+    # thread1 = threading.Thread(target=schedule1)
+    # thread2 = threading.Thread(target=main)
+    # thread1.start()
+    # thread2.start()
+    main()

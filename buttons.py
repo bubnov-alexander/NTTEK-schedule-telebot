@@ -264,7 +264,7 @@ def mycallback(bot, callback):
         TIME = (dt.datetime.now(tz)).strftime('%H:%M:%S')
         DATE = (dt.datetime.now(tz)).strftime('%d.%m')
         print(f'{TIME} {DATE}| Пользователь {callback.from_user.username} {callback.from_user.first_name} узнал преподов!')
-        with open("data/logs.txt", "a+") as f:
+        with open("data/logs.txt", "a+", encoding="utf-8") as f:
             f.write(f'\n{TIME} {DATE}| Пользователь {callback.from_user.username} {callback.from_user.first_name} узнал преподов!')
         try:
             bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = thinks, parse_mode='html', reply_markup=markup_inline)
@@ -328,7 +328,7 @@ def mycallback(bot, callback):
         TIME = (dt.datetime.now(tz)).strftime('%H:%M:%S')
         DATE = (dt.datetime.now(tz)).strftime('%d.%m')
         print(f'{TIME} {DATE}| Пользователь {callback.from_user.username} {callback.from_user.first_name} узнал о боте!')
-        with open("data/logs.txt", "a+") as f:
+        with open("data/logs.txt", "a+", encoding="utf-8") as f:
             f.write(f'\n{TIME} {DATE}| Пользователь {callback.from_user.username} {callback.from_user.first_name} узнал о боте')
 
         try:
@@ -405,7 +405,7 @@ def mycallback(bot, callback):
                 DATE = (dt.datetime.now(tz)).strftime('%d.%m')
                 print(f'Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил {callback.data[11::]}! В', TIME)
                 try:
-                    with open("data/logs.txt", "a+") as f:
+                    with open("data/logs.txt", "a+", encoding="utf-8") as f:
                         f.write(f'\n{TIME} {DATE}| Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил {callback.data[11::]}!')
                 except:
                         pass
@@ -415,7 +415,7 @@ def mycallback(bot, callback):
                 DATE = (dt.datetime.now(tz)).strftime('%d.%m')
                 print(f'Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил {callback.data[16:-2:]}! В', TIME)
                 try:
-                    with open("data/logs.txt", "a+") as f:
+                    with open("data/logs.txt", "a+", encoding="utf-8") as f:
                         f.write(f'\n{TIME} {DATE}| Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил {callback.data[16:-2:]}!')
                 except:
                     pass
@@ -427,7 +427,7 @@ def mycallback(bot, callback):
                 DATE = (dt.datetime.now(tz)).strftime('%d.%m')
                 print(f'Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил excel {sitedate[i]}! В', TIME)
                 try:
-                    with open("data/logs.txt", "a+") as f:
+                    with open("data/logs.txt", "a+", encoding="utf-8") as f:
                         f.write(f'\n{TIME} {DATE}| Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил excel {sitedate[i]}!')
                 except:
                         pass
@@ -438,7 +438,7 @@ def mycallback(bot, callback):
             DATE = (dt.datetime.now(tz)).strftime('%d.%m')
             print(f'Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил {callback.data[22:-2:]}! В', TIME)
             try:
-                with open("data/logs.txt", "a+") as f:
+                with open("data/logs.txt", "a+", encoding="utf-8") as f:
                     f.write(f'\n{TIME} {DATE}| Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил {callback.data[22:-2:]}!')
             except:
                 pass
@@ -528,7 +528,7 @@ def mycallback(bot, callback):
         markup = InlineKeyboardMarkup()
         back = InlineKeyboardButton(text = '🔙Назад', callback_data = 'close')
         markup.add(back)
-        f = open("data/logs.txt","rb")
+        f = open("data/logs.txt","rb", encoding="utf-8")
         bot.send_document(callback.message.chat.id,f,reply_markup=markup)
         f.close()
 
@@ -585,32 +585,37 @@ def mycallback(bot, callback):
     elif callback.data == 'minpage':
         page = 1
         defuser(bot, callback.message, InlineKeyboardMarkup, InlineKeyboardButton)
-            
-    cursor.execute('''SELECT * FROM users''')
-    user = cursor.fetchall()
-    for i in user:
-        if callback.data == i[3]:
-            bot.send_message(callback.message.chat.id, text = 
-            (
-            f'Номер: {str(i[0])}\n'
-            f'Имя: {str(i[2])}\n'
-            f'id: {str(i[1])}\n'
-            f'Nickname: {str(i[3])}\n'
-            f'Отзыв: {str(i[5])}\n'
-            f'Уведомление: {str(i[4])}\n'
-            f'Group: {str(i[6])}\n'
-            f'Regist: {str(i[7])}\n'
-            ))
 
-        elif callback.data == str(i[2]):
-            bot.send_message(callback.message.chat.id, text = 
-            (
-            f'Номер: {str(i[0])}\n'
-            f'Имя: {str(i[2])}\n'
-            f'id: {str(i[1])}\n'
-            f'Nickname: {str(i[3])}\n'
-            f'Отзыв: {str(i[5])}\n'
-            f'Уведомление: {str(i[4])}\n'
-            f'Group: {str(i[6])}\n'
-            f'Regist: {str(i[7])}\n'
-            ))
+    try:      
+        cursor.execute('''SELECT * FROM users''')
+        user = cursor.fetchall()
+        for i in user:
+            if callback.data == i[3]:
+                bot.send_message(callback.message.chat.id, text = 
+                (
+                f'Номер: {str(i[0])}\n'
+                f'Имя: {str(i[2])}\n'
+                f'id: {str(i[1])}\n'
+                f'Nickname: {str(i[3])}\n'
+                f'Отзыв: {str(i[5])}\n'
+                f'Уведомление: {str(i[4])}\n'
+                f'Group: {str(i[6])}\n'
+                f'Regist: {str(i[7])}\n'
+                ))
+                bot.answer_callback_query(callback_query_id=callback.id, show_alert=False)
+
+            elif callback.data == str(i[2]):
+                bot.send_message(callback.message.chat.id, text = 
+                (
+                f'Номер: {str(i[0])}\n'
+                f'Имя: {str(i[2])}\n'
+                f'id: {str(i[1])}\n'
+                f'Nickname: {str(i[3])}\n'
+                f'Отзыв: {str(i[5])}\n'
+                f'Уведомление: {str(i[4])}\n'
+                f'Group: {str(i[6])}\n'
+                f'Regist: {str(i[7])}\n'
+                ))
+                bot.answer_callback_query(callback_query_id=callback.id, show_alert=False)
+    except:
+        bot.answer_callback_query(callback_query_id=callback.id, show_alert=False)
