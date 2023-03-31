@@ -528,7 +528,7 @@ def mycallback(bot, callback):
         markup = InlineKeyboardMarkup()
         back = InlineKeyboardButton(text = '🔙Назад', callback_data = 'close')
         markup.add(back)
-        f = open("data/logs.txt","rb", encoding="utf-8")
+        f = open("data/logs.txt","rb")
         bot.send_document(callback.message.chat.id,f,reply_markup=markup)
         f.close()
 
