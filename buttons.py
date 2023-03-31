@@ -15,7 +15,7 @@ def menu(bot, callback):
     item1 = InlineKeyboardButton(text = "📋Расписание📋", callback_data = "📋Расписание📋")
     item2 = InlineKeyboardButton(text = "👥Преподаватели👥", callback_data = "👥Преподаватели👥")
     item3 = InlineKeyboardButton(text = "🛠Настройки🛠", callback_data = "🛠Настройки🛠")
-    item4 = InlineKeyboardButton(text = "🥸OpenAI🥸", callback_data = "🥸Chatgpt🥸")
+    item4 = InlineKeyboardButton(text = "🥸ChatGpt🥸", callback_data = "🥸OpenAI🥸")
     item5 = InlineKeyboardButton(text = "📒О боте📒", callback_data = "📒О боте📒")
     cursor.execute('''SELECT user_id FROM admin WHERE user_id = ?''', (callback.chat.id, ))
     admin = 510441193
