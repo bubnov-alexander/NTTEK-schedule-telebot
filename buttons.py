@@ -15,19 +15,18 @@ def menu(bot, callback):
     item1 = InlineKeyboardButton(text = "📋Расписание📋", callback_data = "📋Расписание📋")
     item2 = InlineKeyboardButton(text = "👥Преподаватели👥", callback_data = "👥Преподаватели👥")
     item3 = InlineKeyboardButton(text = "🛠Настройки🛠", callback_data = "🛠Настройки🛠")
-    item4 = InlineKeyboardButton(text = "🥸ChatGpt🥸", callback_data = "🥸OpenAI🥸")
     item5 = InlineKeyboardButton(text = "📒О боте📒", callback_data = "📒О боте📒")
     cursor.execute('''SELECT user_id FROM admin WHERE user_id = ?''', (callback.chat.id, ))
     admin = 510441193
     if callback.chat.id != admin:
-        markup.add(item1, item2, item3, item4,item5)
+        markup.add(item1, item2, item3,item5)
         try:
             bot.edit_message_text(chat_id=callback.chat.id, message_id=callback.id, text = 'Вот что я могу сделать: '.format(callback.from_user),  parse_mode='html', reply_markup=markup)
         except:
             bot.send_message(callback.chat.id, 'Вот что я могу сделать: '.format(callback.from_user),  parse_mode='html', reply_markup=markup)
     else:
         item6 = InlineKeyboardButton("Admin panel", callback_data = "Admin panel")
-        markup.add(item1, item2, item3, item4,item5, item6)
+        markup.add(item1, item2, item3,item5, item6)
         try:
             bot.edit_message_text(chat_id=callback.chat.id, message_id=callback.id, text = 'Вот что я могу сделать: '.format(callback.from_user),  parse_mode='html', reply_markup=markup)
 
