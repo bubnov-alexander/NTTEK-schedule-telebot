@@ -4,7 +4,7 @@ tz = pytz.timezone('Asia/Yekaterinburg')
 TIME = (datetime.datetime.now(tz)).strftime('%H:%M:%S')
 DATE = (datetime.datetime.now(tz)).strftime('%d.%m')
 
-database = sqlite3.connect('db/database.db', check_same_thread=False)
+database = sqlite3.connect('db/database.db', check_same_thread=False, isolation_level = None)
 cursor = database.cursor()
 print("Подключен к SQLite3")
 with open("data/logs.txt", "a+") as f:
