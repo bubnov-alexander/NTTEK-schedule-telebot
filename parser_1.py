@@ -7,7 +7,7 @@ def get_schedule(bot):
     f = open('data/last_data.txt', 'r', encoding='UTF-8')
     schedule_number = f.read()
     f.close()
-    with open('data/last_data.txt', 'w', encoding="utf-8") as f:
+    with open('data/last_data.txt', 'w', encoding='UTF-8') as f:
         try:
             print (schedule_number.strip('"'), sitedate[0:1])
             if schedule_number.strip('"') != str(sitedate[0:1]):

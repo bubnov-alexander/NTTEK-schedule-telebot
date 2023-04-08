@@ -29,7 +29,7 @@ def help_message(message):
     TIME = (datetime.datetime.now(tz)).strftime('%H:%M:%S')
     DATE = (datetime.datetime.now(tz)).strftime('%d.%m')
     print(f'Пользователь {message.from_user.username} {message.from_user.first_name} написал {message.text} в ', TIME)
-    with open("data/logs.txt", "a+") as f:
+    with open("data/logs.txt", "a+", encoding='UTF-8') as f:
         f.write(f'\n{TIME} {DATE}| Пользователь {message.from_user.username} {message.from_user.first_name} написал {message.text}')
 
 @bot.message_handler(commands=['clear'])
@@ -73,7 +73,7 @@ def bot_message(message):
                     print(f'{TIME} {DATE} | Пользователь {message.from_user.username} {message.from_user.first_name} написал {message.text}')
                     bot.delete_message(message.chat.id, message.message_id)
                     try:
-                        with open("data/logs.txt", "a+") as f:
+                        with open("data/logs.txt", "a+", encoding='UTF-8') as f:
                             f.write(f'\n{TIME} {DATE}| Пользователь {message.from_user.username} {message.from_user.first_name} написал {message.text}')
                     except:
                         pass
@@ -84,7 +84,7 @@ def bot_message(message):
         TIME = (datetime.datetime.now(tz)).strftime('%H:%M:%S')
         DATE = (datetime.datetime.now(tz)).strftime('%d.%m')
         print(f'{TIME} {DATE} | Забаненый пользователь {message.from_user.username} {message.from_user.first_name} написал {message.text}')
-        with open("data/logs.txt", "a+") as f:
+        with open("data/logs.txt", "a+", encoding='UTF-8') as f:
             f.write(f'\n{TIME} {DATE} | Забаненый пользователь {message.from_user.username} {message.from_user.first_name} написал {message.text}')
 
 def schedule1():
@@ -92,11 +92,12 @@ def schedule1():
     while True:
         schedule.run_pending()
 
-def main():
+
+if __name__ == '__main__':
     TIME = (datetime.datetime.now(tz)).strftime('%H:%M:%S')
     DATE = (datetime.datetime.now(tz)).strftime('%d.%m')
     print ('Бот запущен:', TIME)
-    with open("data/logs.txt", "a+") as f:
+    with open("data/logs.txt", "a+", encoding='UTF-8') as f:
         f.write(f'\n{TIME} {DATE}| Бот запущен')
     while True:
         try:
@@ -105,13 +106,6 @@ def main():
             TIME = (datetime.datetime.now(tz)).strftime('%H:%M:%S')
             DATE = (datetime.datetime.now(tz)).strftime('%d.%m')
             print(e)
-            with open("data/logs.txt", "a+") as f:
+            with open("data/logs.txt", "a+", encoding='UTF-8') as f:
                 f.write(f'\n{TIME} {DATE}| e')
             tm.sleep(15)
-
-if __name__ == '__main__':
-    # thread1 = threading.Thread(target=schedule1)
-    # thread2 = threading.Thread(target=main)
-    # thread1.start()
-    # thread2.start()
-    main()
