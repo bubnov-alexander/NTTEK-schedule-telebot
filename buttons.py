@@ -274,12 +274,37 @@ def mycallback(bot, callback):
 #🛠Настройки🛠
     elif callback.data == "🛠Настройки🛠":
         markup = InlineKeyboardMarkup()
-        url1 = InlineKeyboardButton (text = '🔔Вкл уведомления', callback_data = 'n_YES')
-        url2 = InlineKeyboardButton (text = '🔕Выкл уведомления', callback_data = 'n_NO')
-        url3 = InlineKeyboardButton (text = '👯Добавить мою группу', callback_data = 'add_f_group')
+        url1 = InlineKeyboardButton (text = '🔔Сообщения от @Kinoki445', callback_data = 'notifications')
+        url3 = InlineKeyboardButton (text = '🔔Уведомление о новом расписании', callback_data = 'schedule')
+        url5 = InlineKeyboardButton (text = '👯Добавить мою группу', callback_data = 'add_f_group')
         back = InlineKeyboardButton (text = '🔙Назад', callback_data = 'close')
-        markup.add(url1,url2)
+        markup.add(url1)
         markup.add(url3)
+        markup.add(url5)
+        markup.add(back)
+        try:
+            bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = "Нажми на кнопку взависимости от твоего желания!", parse_mode='html', reply_markup=markup)
+        except:
+            bot.send_message(callback.message.chat.id, "Нажми на кнопку взависимости от твоего желания!", parse_mode='html', reply_markup=markup)
+    
+    elif callback.data == 'notifications':
+        markup = InlineKeyboardMarkup()
+        url1 = InlineKeyboardButton (text = '🔔Вкл сообщения', callback_data = 'n_YES')
+        url2 = InlineKeyboardButton (text = '🔕Выкл сообщения', callback_data = 'n_NO')
+        back = InlineKeyboardButton (text = '🔙Назад', callback_data = '🛠Настройки🛠')
+        markup.add(url1,url2)
+        markup.add(back)
+        try:
+            bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = "Нажми на кнопку взависимости от твоего желания!", parse_mode='html', reply_markup=markup)
+        except:
+            bot.send_message(callback.message.chat.id, "Нажми на кнопку взависимости от твоего желания!", parse_mode='html', reply_markup=markup)
+
+    elif callback.data == 'schedule':
+        markup = InlineKeyboardMarkup()
+        url3 = InlineKeyboardButton (text = '🔔Вкл уведомления', callback_data = 'n_not_YES')
+        url4 = InlineKeyboardButton (text = '🔕Выкл уведомления', callback_data = 'n_not_NO')
+        back = InlineKeyboardButton (text = '🔙Назад', callback_data = '🛠Настройки🛠')
+        markup.add(url3,url4)
         markup.add(back)
         try:
             bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = "Нажми на кнопку взависимости от твоего желания!", parse_mode='html', reply_markup=markup)
@@ -489,6 +514,26 @@ def mycallback(bot, callback):
     elif callback.data == 'n_NO':
         try:
             cursor.execute(f'UPDATE users SET notice = {0} WHERE user_id = {callback.message.chat.id}')
+            database.commit()
+            bot.send_message(callback.message.chat.id, 'Теперь тебе не будут приходить мои сообщения :)', parse_mode='html')
+            menu(bot, callback.message)
+        except:
+            bot.send_message(callback.message.chat.id, 'Появилась какая-то ошибка, обратись к @kinoki445', parse_mode='html')
+            menu(bot, callback.message)
+
+    elif callback.data == 'n_not_YES':
+        try:
+            cursor.execute(f'UPDATE users SET schedule = {1} WHERE user_id = {callback.message.chat.id}')
+            database.commit()
+            bot.send_message(callback.message.chat.id, 'Теперь тебе будут приходить мои сообщения :)', parse_mode='html')
+            menu(bot, callback.message)
+        except:
+            bot.send_message(callback.message.chat.id, 'Появилась какая-то ошибка, обратись к @kinoki445', parse_mode='html')
+            menu(bot, callback.message)
+
+    elif callback.data == 'n_not_NO':
+        try:
+            cursor.execute(f'UPDATE users SET schedule = {0} WHERE user_id = {callback.message.chat.id}')
             database.commit()
             bot.send_message(callback.message.chat.id, 'Теперь тебе не будут приходить мои сообщения :)', parse_mode='html')
             menu(bot, callback.message)

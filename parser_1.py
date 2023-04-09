@@ -1,5 +1,6 @@
 import requests, json, time
 import datetime as dt
+from settings import cursor
 
 # def get_schedule(bot):
 #     site = requests.get(f'https://erp.nttek.ru/api/schedule/legacy').text
@@ -28,12 +29,23 @@ def getpari(date, group, group_name, InlineKeyboardMarkup, InlineKeyboardButton,
             schedule_number = f.read()
             f.close()
             with open('data/last_data.txt', 'w', encoding='UTF-8') as f:
+                f.write(f'{sitedate[0:1]}')
                 try:
                     if schedule_number.strip('"') != str(sitedate[0:1]):
-                        bot.send_message(chat_id = 510441193, text = f'Расписание изменилось')
+                        cursor.execute('''SELECT user_id FROM admin WHERE user_id = ?''', (callback.message.chat.id, ))
+                        cursor.execute(f'SELECT user_id FROM users WHERE schedule = {1}')
+                        lol = cursor.fetchall()
+                        count = 0
+                        while count != len(lol):
+                                for row in lol:
+                                    try:
+                                        bot.send_message(chat_id = row[0], text = f'Расписание изменилось')
+                                        count += 1
+                                    except:
+                                        count += 1
                 except:
-                    pass
-                f.write(f'{sitedate[0:1]}')
+                        pass
+
             sitedate.sort(key=lambda x: time.mktime(time.strptime(x,"%d.%m.%Y")))
 
             if (len(sitedate)) <= 5:
