@@ -4,7 +4,6 @@ from telebot import telebot
 from settings import *
 from buttons import *
 from Key import TOKEN
-from parser_1 import get_schedule
 
 tz = pytz.timezone('Asia/Yekaterinburg')
 bot = telebot.TeleBot(TOKEN)
@@ -86,11 +85,6 @@ def bot_message(message):
         print(f'{TIME} {DATE} | Забаненый пользователь {message.from_user.username} {message.from_user.first_name} написал {message.text}')
         with open("data/logs.txt", "a+", encoding='UTF-8') as f:
             f.write(f'\n{TIME} {DATE} | Забаненый пользователь {message.from_user.username} {message.from_user.first_name} написал {message.text}')
-
-def schedule1():
-    schedule.every(1).hours.do(get_schedule,bot)
-    while True:
-        schedule.run_pending()
 
 
 if __name__ == '__main__':
