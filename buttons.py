@@ -245,7 +245,7 @@ def mycallback(bot, callback):
 
 # #ЗВОНКИ
     elif callback.data == 'bells':
-        photo = open('data/photo.jpg', 'rb', encoding='UTF-8')
+        photo = open('data/photo.jpg', 'rb')
         markup_inline = InlineKeyboardMarkup()
         url1 = InlineKeyboardButton (text = '📅Полное расписание📅', url=f'https://a.nttek.ru')
         back = InlineKeyboardButton(text = '🔙Назад', callback_data = 'close2')
