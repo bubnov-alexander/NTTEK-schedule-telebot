@@ -12,6 +12,8 @@ def getpari(date, group, group_name, InlineKeyboardMarkup, InlineKeyboardButton,
             f.close()
             try:
                 if schedule_number.strip('"') != str(sitedate[0:1]):
+                    with open('data/last_data.txt', 'w', encoding='UTF-8') as f:
+                        f.write(f'{sitedate[0:1]}')
                     cursor.execute(f'SELECT user_id FROM users WHERE schedule = {1}')
                     lol = cursor.fetchall()
                     count = 0
@@ -24,8 +26,7 @@ def getpari(date, group, group_name, InlineKeyboardMarkup, InlineKeyboardButton,
                                 count += 1
             except:
                     pass
-            with open('data/last_data.txt', 'w', encoding='UTF-8') as f:
-                f.write(f'{sitedate[0:1]}')
+            
 
             sitedate.sort(key=lambda x: time.mktime(time.strptime(x,"%d.%m.%Y")))
 
