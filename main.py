@@ -66,7 +66,7 @@ def bot_message(message):
 
                 else:
                     delete = telebot.types.ReplyKeyboardRemove()
-                    bot.send_message(message.chat.id, f'Вы написали: {message.text}\nЕсли хотите узнать что может бот напишите /menu', parse_mode='html', reply_markup=delete)
+                    bot.send_message(message.chat.id, f'Вы написали: {message.text}\nЕсли хотите узнать что может бот напишите /menu\nБудут вопросы пишите: @Kinoki445', parse_mode='html', reply_markup=delete)
                     TIME = (datetime.datetime.now(tz)).strftime('%H:%M:%S')
                     DATE = (datetime.datetime.now(tz)).strftime('%d.%m')
                     print(f'{TIME} {DATE} | Пользователь {message.from_user.username} {message.from_user.first_name} написал {message.text}')
