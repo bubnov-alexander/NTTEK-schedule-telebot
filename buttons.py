@@ -383,7 +383,10 @@ def mycallback(bot, callback):
             pass
         keyboard = InlineKeyboardMarkup()
         keyboard.add(InlineKeyboardButton('Отмена', callback_data = 'close2'))
-        bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = 'Введи название группы, пример (2ИС6) Без - и пробелов: ', reply_markup = keyboard)
+        try:
+            bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = 'Введи название группы, пример (2ИС6) Без - и пробелов: ', reply_markup = keyboard)
+        except:
+            pass
         def another_group(message):
             try:
                 parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, 'group', message.text.upper())
