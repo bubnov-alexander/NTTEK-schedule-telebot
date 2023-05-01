@@ -15,7 +15,6 @@ def menu(bot, callback):
     item2 = InlineKeyboardButton(text = "👥Преподаватели👥", callback_data = "👥Преподаватели👥")
     item3 = InlineKeyboardButton(text = "🛠Настройки🛠", callback_data = "🛠Настройки🛠")
     item5 = InlineKeyboardButton(text = "📒О боте📒", callback_data = "📒О боте📒")
-    cursor.execute('''SELECT user_id FROM admin WHERE user_id = ?''', (callback.chat.id, ))
     admin = 510441193
     if callback.chat.id != admin:
         markup.add(item1, item2, item3,item5)

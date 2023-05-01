@@ -11,7 +11,6 @@ bot = telebot.TeleBot(TOKEN)
 #Действия после start
 @bot.message_handler(commands=['start'])
 def start_message(message):
-    cursor.execute('''SELECT user_id FROM admin WHERE user_id = ?''', (message.chat.id, ))
     admin = 510441193
     if message.chat.id != admin:
         bot.send_message(message.from_user.id, f'Добро пожаловать, {message.from_user.first_name}', parse_mode='html')
