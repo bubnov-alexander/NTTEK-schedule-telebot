@@ -603,7 +603,52 @@ def mycallback(bot, callback):
             bot.register_next_step_handler(callback.message, send)
 
     elif callback.data == 'users':
+        markup = InlineKeyboardMarkup()
+        item1 = InlineKeyboardButton(text = 'Все пользователи', callback_data = 'all_users')
+        item2 = InlineKeyboardButton(text = 'Найти', callback_data = 'search_user')
+        back = InlineKeyboardButton(text = '🔙Назад', callback_data = 'close')
+        markup.add(item1,item2)
+        markup.add(back)
+        try:
+            bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = 'Что хочешь?', parse_mode='html', reply_markup=markup)
+        except:
+            bot.send_message(callback.message.chat.id, "Что ты хочешь?", reply_markup=markup)
+        
+    elif callback.data == 'all_users':
         defuser(bot, callback.message, InlineKeyboardMarkup, InlineKeyboardButton)
+
+    elif callback.data == 'search_user':
+        markup = InlineKeyboardMarkup()
+        back = InlineKeyboardButton(text = '🔙Назад', callback_data = 'close')
+        markup.add(back)
+        bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = 'Введи логин пользователя: ', parse_mode='html', reply_markup=markup)
+        def send(message):
+            next = InlineKeyboardButton(text = 'Другого', callback_data = 'search_user')
+            markup.add(next)
+            bot.delete_message(message.chat.id, message.message_id)
+            cursor.execute(f"SELECT * FROM users WHERE username = '{str(message.text)}'")
+            lol = cursor.fetchall()
+            if lol == []:
+                try:
+                    bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'Такого пользователя нету!', reply_markup=markup)
+                except:
+                    bot.send_message(callback.message.chat.id, f'Такого пользователя нету!', reply_markup=markup)
+            else:
+                for i in lol:
+                    bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = 
+                        (
+                        f'Номер: {str(i[0])}\n'
+                        f'Имя: {str(i[2])}\n'
+                        f'id: {str(i[1])}\n'
+                        f'Nickname: @{str(i[3])}\n'
+                        f'Отзыв: {str(i[5])}\n'
+                        f'Уведомление: {str(i[4])}\n'
+                        f'Group: {str(i[6])}\n'
+                        f'Regist: {str(i[7])}\n'
+                        ), reply_markup=markup)
+                    bot.answer_callback_query(callback_query_id=callback.id, show_alert=False)
+        bot.register_next_step_handler(callback.message, send)
+
 
     elif callback.data == 'close':
         try:
@@ -636,31 +681,31 @@ def mycallback(bot, callback):
         user = cursor.fetchall()
         for i in user:
             if callback.data == i[3]:
-                bot.send_message(callback.message.chat.id, text = 
+                bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text =
                 (
                 f'Номер: {str(i[0])}\n'
                 f'Имя: {str(i[2])}\n'
                 f'id: {str(i[1])}\n'
-                f'Nickname: {str(i[3])}\n'
+                f'Nickname: @{str(i[3])}\n'
                 f'Отзыв: {str(i[5])}\n'
                 f'Уведомление: {str(i[4])}\n'
                 f'Group: {str(i[6])}\n'
                 f'Regist: {str(i[7])}\n'
-                ))
+                ), reply_markup=markup)
                 bot.answer_callback_query(callback_query_id=callback.id, show_alert=False)
 
             elif callback.data == str(i[2]):
-                bot.send_message(callback.message.chat.id, text = 
+                bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text =
                 (
                 f'Номер: {str(i[0])}\n'
                 f'Имя: {str(i[2])}\n'
                 f'id: {str(i[1])}\n'
-                f'Nickname: {str(i[3])}\n'
+                f'Nickname: @{str(i[3])}\n'
                 f'Отзыв: {str(i[5])}\n'
                 f'Уведомление: {str(i[4])}\n'
                 f'Group: {str(i[6])}\n'
                 f'Regist: {str(i[7])}\n'
-                ))
+                ), reply_markup=markup)
                 bot.answer_callback_query(callback_query_id=callback.id, show_alert=False)
     except:
         bot.answer_callback_query(callback_query_id=callback.id, show_alert=False)

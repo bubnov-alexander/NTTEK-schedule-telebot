@@ -85,7 +85,6 @@ def bot_message(message):
         with open("data/logs.txt", "a+", encoding='UTF-8') as f:
             f.write(f'\n{TIME} {DATE} | Забаненый пользователь {message.from_user.username} {message.from_user.first_name} написал {message.text}')
 
-
 if __name__ == '__main__':
     TIME = (datetime.datetime.now(tz)).strftime('%H:%M:%S')
     DATE = (datetime.datetime.now(tz)).strftime('%d.%m')
