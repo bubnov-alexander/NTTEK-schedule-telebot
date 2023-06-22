@@ -99,5 +99,6 @@ if __name__ == '__main__':
             DATE = (datetime.datetime.now(tz)).strftime('%d.%m')
             print(e)
             with open("data/logs.txt", "a+", encoding='UTF-8') as f:
-                f.write(f'\n{TIME} {DATE}| e')
+                f.write(f'\n{TIME} {DATE}| {e}')
             tm.sleep(15)
+            continue

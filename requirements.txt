@@ -3,3 +3,4 @@ BeautifulSoup4
 pytz
 XlsxWriter
 sqlite3
+openai
