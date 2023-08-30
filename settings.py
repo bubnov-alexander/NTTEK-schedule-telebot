@@ -60,7 +60,7 @@ def db_table_val(message, bot):
         cursor.execute('INSERT INTO users (user_id, user_name, username, join_date) VALUES (?, ?, ?, ?)', (us_id, us_name, username, joindate))
         database.commit()
         bot.send_message(message.chat.id, 'Я тебя зарегистрировал!', parse_mode='html')
-        bot.send_message(chat_id = 510441193, text = f'Зарегестрировался новый пользователь! {username}, {us_name}')
+        bot.send_message(chat_id = 510441193, text = f'Зарегестрировался новый пользователь! @{username}, {us_name}')
         print(f'Пользователь {message.from_user.username} {message.from_user.first_name} зарегестрировался! в', (datetime.datetime.now(tz).strftime('%H:%M:%S')))
         with open("data/logs.txt", "a+") as f:
                 f.write(f'\n{TIME} {DATE}| Пользователь {message.from_user.username} {message.from_user.first_name} зарегестрировался!')

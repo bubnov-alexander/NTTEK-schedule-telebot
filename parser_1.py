@@ -100,6 +100,9 @@ def getpari(date, group, group_name, InlineKeyboardMarkup, InlineKeyboardButton,
                 try:
                     bot.answer_callback_query(callback_query_id=callback.id, show_alert=False)
                     bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'Расписание на {date} ({date2}):\n __{text}__ \nВыберите день на который хотите узнать расписание\nгруппы {group_name}', parse_mode='Markdown', reply_markup = keyboard)
+                    date = ('') 
+                    date2 = ('')
+                    text = ('')
                 except:
                     pass
 
@@ -244,6 +247,9 @@ def getpari(date, group, group_name, InlineKeyboardMarkup, InlineKeyboardButton,
                 try:
                     bot.answer_callback_query(callback_query_id=callback.id, show_alert=False)
                     bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'Расписание на {date} ({date2}):\n __{text}__ \nВыберите день на который хотите узнать расписание', parse_mode='Markdown', reply_markup = keyboard)
+                    date = ('') 
+                    date2 = ('')
+                    text = ('')
                 except:
                     pass
 
@@ -352,6 +358,9 @@ def getpari(date, group, group_name, InlineKeyboardMarkup, InlineKeyboardButton,
                 try:
                     bot.answer_callback_query(callback_query_id=callback.id, show_alert=False)
                     bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = f'Расписание на {date} ({date2}):\n __{text}__ \nВыберите день на который хотите узнать расписание преподавателя {group_name}', parse_mode='Markdown', reply_markup = keyboard)
+                    date = ('') 
+                    date2 = ('')
+                    text = ('')
                 except:
                     pass
 
