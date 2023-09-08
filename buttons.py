@@ -1,6 +1,5 @@
 from settings import cursor, database
 from parser_1 import getpari
-from openAI import send_openai
 import pytz,requests,json,time,random, datetime as dt
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 
@@ -50,6 +49,7 @@ def group(bot,callback):
 
 #ВЫВОД РАСПИСАНИЯ
 def parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, group, who):
+    a = 0
     keyboard = InlineKeyboardMarkup()
     keyboard.row_width = 3
     site = requests.get(f'https://erp.nttek.ru/api/schedule/legacy').text
@@ -57,12 +57,12 @@ def parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, group, wh
     sitedate.sort(key=lambda x: time.mktime(time.strptime(x,"%d.%m.%Y")))
 
     if (len(sitedate)) <= 5:
-        a = 0
+        count = 0
     else:
-        a = ((len(sitedate)) - 5)
+        count = ((len(sitedate)) - 5)
 
     if group == 'group':
-        for i in range(a, len(sitedate)):
+        for i in range(count, len(sitedate)):
             date1 = int(dt.datetime.weekday(dt.datetime.strptime(sitedate[i].replace('.','-'), '%d-%m-%Y')))
             date2 = ''
 
@@ -94,7 +94,7 @@ def parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, group, wh
             bot.send_message(callback.message.chat.id, f'Выберите день на который хотите узнать расписание\nгруппы {who}', parse_mode='html', reply_markup = keyboard)
 
     elif group == 'teacher':
-        for i in range(a, len(sitedate)):
+        for i in range(count, len(sitedate)):
             date1 = int(dt.datetime.weekday(dt.datetime.strptime(sitedate[i].replace('.','-'), '%d-%m-%Y')))
             date2 = ''
 
@@ -125,7 +125,7 @@ def parimiy(InlineKeyboardMarkup, InlineKeyboardButton, bot, callback, group, wh
             bot.send_message(callback.message.chat.id, f'Выберите день на который хотите узнать расписание преподавателя {who}', parse_mode='html', reply_markup = keyboard)
 
     elif group == 'excel':
-        for i in range(a, len(sitedate)):
+        for i in range(count, len(sitedate)):
             date1 = int(dt.datetime.weekday(dt.datetime.strptime(sitedate[i].replace('.','-'), '%d-%m-%Y')))
             date2 = ''
 
@@ -229,11 +229,11 @@ def mycallback(bot, callback):
         sitedate = json.loads(site)
         sitedate.sort(key=lambda x: time.mktime(time.strptime(x,"%d.%m.%Y")))
         if (len(sitedate)) <= 5:
-            a = 0
+            count = 0
         else:
-            a = ((len(sitedate)) - 5)
-    except:
-        print('Ошибка на сайте')
+            count = ((len(sitedate)) - 5)
+    except Exception as err:
+        print(err)
 
         #ВЫВОД ОПРЕДЕЛЁННОЙ ГРУППЫ (ДНЕЙ)
 
@@ -325,19 +325,6 @@ def mycallback(bot, callback):
         except:
             bot.send_message(callback.message.chat.id, 'Выбери что-то из предложенного: ', parse_mode = 'html', reply_markup = markup)
 
-
-    elif callback.data == '🥸OpenAI🥸':
-        keyboard = InlineKeyboardMarkup()
-        keyboard.add(InlineKeyboardButton('Отмена', callback_data = 'close'))
-        try:
-            bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = 'Задай вопрос!', reply_markup=keyboard)
-        except:
-            bot.send_message(callback.message.chat.id, text = 'Задай вопрос!', reply_markup=keyboard)
-        def openai_send(message):
-            send_openai(message.text, bot, callback, InlineKeyboardMarkup, InlineKeyboardButton)
-            bot.delete_message(message.chat.id, message.message_id)
-        bot.register_next_step_handler(callback.message, openai_send)
-
 #О БОТЕ
     elif callback.data == '📒О боте📒':
         f = open('data/About bot.txt', 'r', encoding='UTF-8')
@@ -367,8 +354,13 @@ def mycallback(bot, callback):
             bot.clear_step_handler_by_chat_id(chat_id=callback.message.chat.id)
         except:
             pass
-        cursor.execute(f'SELECT f_group FROM users WHERE user_id = {callback.message.chat.id}')
+        cursor.execute(f'SELECT f_group FROM users WHERE user_id = {callback.message.from_user.id}')
         data = cursor.fetchone()
+        if data == None:
+            cursor.execute(f'SELECT f_group FROM users WHERE user_id = {callback.from_user.id}')
+            data = cursor.fetchone()
+        else:
+            pass
         try:
             if data[0] is None:
                 bot.send_message(callback.message.chat.id, 'У тебя нету твоей группы, добавь её в настройках, если нету настроек напиши menu', parse_mode='html')
@@ -426,13 +418,13 @@ def mycallback(bot, callback):
         group(bot, callback)
 
     try:
-        for i in range(a, len(sitedate)):
+        for i in range(count, len(sitedate)):
             if callback.data[0:6:] != 'препод':
                 if callback.data[0:10:] == f'{sitedate[i]}':
                     getpari(callback.data[0:10:], 'group', callback.data[11::], InlineKeyboardMarkup, InlineKeyboardButton, bot, callback)
                     TIME = (dt.datetime.now(tz)).strftime('%H:%M:%S')
                     DATE = (dt.datetime.now(tz)).strftime('%d.%m')
-                    print(f'Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил {callback.data[11::]}! В', TIME)
+                    print(f'Пользователь {callback.from_user.username} {callback.from_user.first_name} запросил {callback.data[11::]}! В', TIME)
                     try:
                         with open("data/logs.txt", "a+", encoding='UTF-8') as f:
                             f.write(f'\n{TIME} {DATE}| Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил {callback.data[11::]}!')
@@ -471,8 +463,8 @@ def mycallback(bot, callback):
                         f.write(f'\n{TIME} {DATE}| Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил {callback.data[22:-2:]}!')
                 except:
                     pass
-    except:
-        print('Ошибка на сайте')
+    except Exception as err:
+        print(err)
 
     if callback.data == 'add_f_group':
         keyboard = InlineKeyboardMarkup()

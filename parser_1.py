@@ -27,7 +27,6 @@ def getpari(date, group, group_name, InlineKeyboardMarkup, InlineKeyboardButton,
             except:
                     pass
             
-
             sitedate.sort(key=lambda x: time.mktime(time.strptime(x,"%d.%m.%Y")))
 
             if (len(sitedate)) <= 5:
@@ -142,6 +141,7 @@ def getpari(date, group, group_name, InlineKeyboardMarkup, InlineKeyboardButton,
                     pass
 
         except Exception as e:
+            print(e)
             keyboard = InlineKeyboardMarkup()
             keyboard.row_width = 3
 
