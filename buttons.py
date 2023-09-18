@@ -260,12 +260,13 @@ def mycallback(bot, callback):
         thinks = f.read()
         f.close()
         markup_inline = InlineKeyboardMarkup()
+        markup_inline.add(InlineKeyboardButton(text = 'Их предметы и достижения', url = 'https://nttek.ru/about/prepodavateli/'))
         markup_inline.add(InlineKeyboardButton(text = '🔙Назад', callback_data = 'close'))
         TIME = (dt.datetime.now(tz)).strftime('%H:%M:%S')
         DATE = (dt.datetime.now(tz)).strftime('%d.%m')
         print(f'{TIME} {DATE}| Пользователь {callback.from_user.username} {callback.from_user.first_name} узнал преподов!')
         with open("data/logs.txt", "a+", encoding='UTF-8') as f:
-            f.write(f'\n{TIME} {DATE}| Пользователь {callback.from_user.username} {callback.from_user.first_name} узнал преподов!')
+            f.write(f'\n{TIME} {DATE}| Пользователь @{callback.from_user.username} {callback.from_user.first_name} узнал преподов!')
         try:
             bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = thinks, parse_mode='html', reply_markup=markup_inline)
         except:
@@ -341,7 +342,7 @@ def mycallback(bot, callback):
         DATE = (dt.datetime.now(tz)).strftime('%d.%m')
         print(f'{TIME} {DATE}| Пользователь {callback.from_user.username} {callback.from_user.first_name} узнал о боте!')
         with open("data/logs.txt", "a+", encoding='UTF-8') as f:
-            f.write(f'\n{TIME} {DATE}| Пользователь {callback.from_user.username} {callback.from_user.first_name} узнал о боте')
+            f.write(f'\n{TIME} {DATE}| Пользователь @{callback.from_user.username} {callback.from_user.first_name} узнал о боте')
 
         try:
             bot.edit_message_text(chat_id=callback.message.chat.id, message_id=callback.message.id, text = facts, parse_mode='html', reply_markup=markup_inline)
@@ -427,7 +428,7 @@ def mycallback(bot, callback):
                     print(f'Пользователь {callback.from_user.username} {callback.from_user.first_name} запросил {callback.data[11::]}! В', TIME)
                     try:
                         with open("data/logs.txt", "a+", encoding='UTF-8') as f:
-                            f.write(f'\n{TIME} {DATE}| Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил {callback.data[11::]}!')
+                            f.write(f'\n{TIME} {DATE}| Пользователь @{callback.message.chat.username} {callback.message.chat.first_name} запросил {callback.data[11::]}!')
                     except:
                             pass
                     
@@ -437,7 +438,7 @@ def mycallback(bot, callback):
                     print(f'Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил {callback.data[16:-2:]}! В', TIME)
                     try:
                         with open("data/logs.txt", "a+", encoding='UTF-8') as f:
-                            f.write(f'\n{TIME} {DATE}| Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил {callback.data[16:-2:]}!')
+                            f.write(f'\n{TIME} {DATE}| Пользователь @{callback.message.chat.username} {callback.message.chat.first_name} запросил {callback.data[16:-2:]}!')
                     except:
                         pass
                     getpari(callback.data[2:12:], 'group', callback.data[16:-2:], InlineKeyboardMarkup, InlineKeyboardButton, bot, callback)
@@ -449,7 +450,7 @@ def mycallback(bot, callback):
                     print(f'Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил excel {sitedate[i]}! В', TIME)
                     try:
                         with open("data/logs.txt", "a+", encoding='UTF-8') as f:
-                            f.write(f'\n{TIME} {DATE}| Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил excel {sitedate[i]}!')
+                            f.write(f'\n{TIME} {DATE}| Пользователь @{callback.message.chat.username} {callback.message.chat.first_name} запросил excel {sitedate[i]}!')
                     except:
                             pass
             
@@ -460,7 +461,7 @@ def mycallback(bot, callback):
                 print(f'Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил {callback.data[22:-2:]}! В', TIME)
                 try:
                     with open("data/logs.txt", "a+", encoding='UTF-8') as f:
-                        f.write(f'\n{TIME} {DATE}| Пользователь {callback.message.chat.username} {callback.message.chat.first_name} запросил {callback.data[22:-2:]}!')
+                        f.write(f'\n{TIME} {DATE}| Пользователь @{callback.message.chat.username} {callback.message.chat.first_name} запросил {callback.data[22:-2:]}!')
                 except:
                     pass
     except Exception as err:
