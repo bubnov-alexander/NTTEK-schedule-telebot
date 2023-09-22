@@ -1,5 +1,4 @@
-import telebot, datetime, pytz, schedule, time as tm
-import threading
+import telebot, datetime, pytz, time as tm
 from telebot import telebot
 from settings import *
 from buttons import *
