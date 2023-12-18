@@ -20,6 +20,15 @@ async def db_start():
     with open("data/logs.txt", "a+", encoding='UTF-8') as f:
         f.write(f'\n{TIME} {DATE}| Подключен к SQLite3')
 
+    cursor.execute("""CREATE TABLE IF NOT EXISTS 'group'(
+        id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
+        group_id INTEGER UNIQUE NOT NULL,
+        group_name TEXT NOT NULL,
+        group_description STRING,
+        join_date DATETIME NOT NULL
+        )""")
+    database.commit()
+
     cursor.execute("""CREATE TABLE IF NOT EXISTS users(
         id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE NOT NULL,
         user_id INTEGER UNIQUE NOT NULL,
@@ -40,6 +49,9 @@ async def send_newshuld(bot, sitedate):
         f.write(f'{sitedate[0:1]}')
     lol = cursor.execute(
         f'SELECT user_id FROM users WHERE schedule = {1}').fetchall()
+    lol += (cursor.execute(
+        f'SELECT group_id FROM "group"').fetchall())
+    
     count = 0
     while count != len(lol):
         for row in lol:
@@ -116,10 +128,12 @@ async def send_all_message(text, message, bot):
     cursor.execute(f'SELECT user_id FROM users')
     lol = cursor.fetchall()
     count = 0
+
     while count != len(lol):
         for row in lol:
             try:
-                await bot.send_message(row[0], text, parse_mode='html')
+                # Пересылаем сообщение из текущего чата в другой чат (замените chat_id на нужный)
+                await bot.forward_message(chat_id=row[0], from_chat_id=message.chat.id, message_id=message.message_id)
                 count += 1
             except:
                 count += 1
@@ -173,3 +187,32 @@ async def db_table_val(message, bot):
         with open("data/logs.txt", "a+", encoding='UTF-8') as f:
             f.write(
                 f'\n{TIME} {DATE}| Пользователь {message.from_user.username} {message.from_user.first_name} зарегестрировался!')
+            
+async def db_table_group(message, bot):
+    chat_id = message.chat.id
+    chat_info = await bot.get_chat(chat_id)
+    # Выводим название группы и ее описание
+    group_name = chat_info.title
+    group_description = chat_info.description
+
+    today = datetime.date.today()
+    joindate = today.strftime('%d.%m.%Y')
+    user = cursor.execute(
+        f'SELECT * FROM "group" WHERE group_id = {chat_id} ').fetchone()
+    if user is None:
+        cursor.execute('INSERT INTO "group" (group_id, group_name, group_description, join_date) VALUES (?, ?, ?, ?)',
+                    (chat_id, group_name, group_description, joindate))
+        database.commit()
+        await bot.send_message(chat_id=os.getenv('ADMIN_ID'), text=f'Зарегестрировалась новая группа! @{group_name}, {group_description}')
+        print(f'Пользователь {group_name} {group_description} зарегестрировался! в', (
+            datetime.datetime.now(tz).strftime('%H:%M:%S')))
+        with open("data/logs.txt", "a+", encoding='UTF-8') as f:
+            f.write(
+                f'\n{TIME} {DATE}| Пользователь {group_name} {group_description} зарегестрировался!')
+        
+async def delete_group(message, bot):
+    # Запрос на удаление записей
+    cursor.execute('DELETE FROM "group" WHERE group_id = ?', (message.chat.id,))
+
+    # Подтверждение изменений
+    database.commit()

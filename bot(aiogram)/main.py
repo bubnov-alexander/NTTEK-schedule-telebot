@@ -56,6 +56,25 @@ async def cmd_start(message: types.Message):
     else:
         await message.answer(f'Вот что я могу сделать: ', reply_markup=kb.main)
 
+@dp.message_handler(commands=['add_group_id'])
+async def start(message: types.Message):
+    if message.chat.type == types.ChatType.PRIVATE:
+        await message.answer(f"Привет! Это личное сообщение. Если хочешь добавить свою группу в БД, пиши /add_group_id в группе которую хочешь добавить, перед этим боту нужно дать все права! Если хочешь удалить из БД: /delete_group_id\nБудут вопросы пиши: @kinoki445")
+
+    elif message.chat.type == types.ChatType.GROUP or message.chat.type == types.ChatType.SUPERGROUP:        
+        await db.db_table_group(message, bot)
+        await message.answer(f"Я успешно добавил твою группу в Базу Данных")
+
+@dp.message_handler(commands=['delete_group_id'])
+async def start(message: types.Message):
+    if message.chat.type == types.ChatType.PRIVATE:
+        await message.answer(f"Привет! Это личное сообщение. Если хочешь удалить свою группу в БД, пиши /delete_group_id в группе которую хочешь удалить, перед этим боту нужно дать все права! Если хочешь вернуть группу в БД: /add_group_id \nБудут вопросы пиши: @kinoki445")
+
+    elif message.chat.type == types.ChatType.GROUP or message.chat.type == types.ChatType.SUPERGROUP:        
+        await db.delete_group(message, bot)
+        await message.answer(f"Я успешно удалил твою группу из Базы Данных")
+
+
 # ============== Admin panel ==============
 
 
