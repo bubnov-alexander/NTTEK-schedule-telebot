@@ -5,5 +5,8 @@ bot (telebot)/db/1.db
 bot (telebot)/db/2.db
 bot (telebot)/db/database.db
 bot (telebot)/Key.py
+
 bot(aiogram)/venv
 bot(aiogram)/.env
+bot(aiogram)/data/database.db
+
