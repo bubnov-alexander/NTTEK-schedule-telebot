@@ -56,7 +56,7 @@ async def send_newshuld(bot, sitedate):
     while count != len(lol):
         for row in lol:
             try:
-                await bot.send_message(chat_id=row[0], text=f'Добавили новое расписание!\nЕсли тебе не нравится это уведомление ты всегда можешь выключить его в настройках /menu')
+                await bot.send_message(chat_id=row[0], text=f'Добавили новое расписание /schedule!\nЕсли тебе не нравится это уведомление ты всегда можешь выключить его в настройках /menu')
                 count += 1
             except:
                 count += 1
@@ -105,7 +105,7 @@ async def change_schedule_notif(type, bot, callback):
 
 async def check_group(bot, callback, parimiy):
     cursor.execute(
-        f'SELECT f_group FROM users WHERE user_id = {callback.message.from_user.id}')
+        f'SELECT f_group FROM users WHERE user_id = {callback.from_user.id}')
     data = cursor.fetchone()
     if data == None:
         cursor.execute(
@@ -121,6 +121,10 @@ async def check_group(bot, callback, parimiy):
     except Exception as e:
         print(e)
         await bot.send_message(callback.message.chat.id, 'Какая-то ошибка, пиши @Kinoki445', parse_mode='html')
+
+
+
+
 
 # ============== Send all users message ==============
 

@@ -56,6 +56,10 @@ async def cmd_start(message: types.Message):
     else:
         await message.answer(f'Вот что я могу сделать: ', reply_markup=kb.main)
 
+@dp.message_handler(commands=['schedule'])
+async def schedule_command(message: types.Message):
+    await db.check_group(bot, message, kb.parimiy)
+
 @dp.message_handler(commands=['add_group_id'])
 async def start(message: types.Message):
     if message.chat.type == types.ChatType.PRIVATE:

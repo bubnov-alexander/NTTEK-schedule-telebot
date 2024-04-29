@@ -80,6 +80,25 @@ async def getpari(date, group, group_name, bot, callback, type):
                 text = ''
                 for i in data['schedule']:
                     lesson = i['lesson']
+
+                    if lesson == '1' or lesson =='1-2':
+                        lesson = (i['lesson'] + ' 8:30 - 9:50')
+                    elif lesson == '3':
+                        lesson = (i['lesson'] + ' 10:00 - 10:40')
+                    elif lesson == '4':
+                        lesson = (i['lesson'] + ' 10:40 - 11:20')
+                    elif lesson == '5':
+                        lesson = (i['lesson'] + ' 11:20 - 12:00')
+                    elif lesson == '6-7':
+                        lesson = (i['lesson'] + ' 12:10 - 13:30')
+                    elif lesson == '8-9':
+                        lesson = (i['lesson'] + ' 13:40 - 15:00')
+                    elif lesson == '10-11':
+                        lesson = (i['lesson'] + ' 15:15 - 16:35')
+                    elif lesson == '12-13':
+                        lesson = (i['lesson'] + ' 16:40 - 18:00')
+                    else:
+                        lesson = i['lesson']
                     name = i['name']
                     room = i['rooms']
                     teacher = i['teachers']
